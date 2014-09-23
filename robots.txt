@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://strivingboy.github.io/sitemap.xml 
