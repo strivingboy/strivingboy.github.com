@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: git使用 | 小孩的技术博客]]></title>
+  <link href="http://strivingboy.github.io/blog/categories/gitshi-yong/atom.xml" rel="self"/>
+  <link href="http://strivingboy.github.io/"/>
+  <updated>2014-09-29T15:05:20+08:00</updated>
+  <id>http://strivingboy.github.io/</id>
+  <author>
+    <name><![CDATA[strivingboy]]></name>
+    <email><![CDATA[striving_boy@163.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[更好的git log]]></title>
+    <link href="http://strivingboy.github.io/blog/2014/09/29/git-chang-yong-bie-ming/"/>
+    <updated>2014-09-29T11:05:41+08:00</updated>
+    <id>http://strivingboy.github.io/blog/2014/09/29/git-chang-yong-bie-ming</id>
+    <content type="html"><![CDATA[<p><code>git log</code>对于使用git的&#8221;码农&#8221;们一定非常熟悉，如：</p>
+
+<p> git log  命令是查看全部提交日志</p>
+
+<p> git log -2  查看最近2次的提交日志</p>
+
+<p> git log -p  查看历史纪录以来哪几行被修改</p>
+
+<p> git log &ndash;pretty=oneline 查看历史提交日志，单行显示</p>
+
+<p>以上是我们经常使用过的命令，接下来将谈谈如何更好的使用git log来解决使用过程中遇到的需求：（相信大家也回遇到&hellip;）</p>
+
+<p><strong>1.更清楚的显示单行提交历史</strong></p>
+
+<p>git log &ndash;pretty=online</p>
+
+<p><img src="http://strivingboy.github.com/_posts/image/online.png" alt="git log --pretty=online" /></p>
+
+<p><strong> 参考链接 </strong></p>
+
+<ul>
+<li><p><u><a href="https://www.kernel.org/pub/software/scm/git/docs/git-log.html">https://www.kernel.org/pub/software/scm/git/docs/git-log.html</a> </u></p></li>
+<li><p><u><a href="https://coderwall.com/p/euwpig">https://coderwall.com/p/euwpig</a> </u></p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
