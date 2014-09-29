@@ -17,7 +17,7 @@ categories: IOS开发
 ```objective-c
 	#import <LocalAuthentication/LAContext.h> 
 ```
-
+<!--more-->
 **Step2).** 使用API，我们需要创建一个Authentication Context
 
 ```objective-c

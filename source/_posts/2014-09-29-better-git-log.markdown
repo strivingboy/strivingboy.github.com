@@ -15,6 +15,7 @@ categories: Git使用
 
  git log --pretty=oneline 查看历史提交日志，单行显示
 
+<!--more-->
 
 以上是我们经常使用过的命令，接下来将谈谈如何更好的使用git log来解决使用过程中遇到的需求：（大家有木有遇到呢...）
 
