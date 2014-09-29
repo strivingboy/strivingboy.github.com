@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git使用 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/gitshi-yong/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-09-29T15:05:20+08:00</updated>
+  <updated>2014-09-29T15:09:56+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -32,7 +32,7 @@
 
 <p><strong>1.更清楚的显示单行提交历史</strong></p>
 
-<p>git log &ndash;pretty=online</p>
+<p>git log &ndash;pretty=online 回显示如下：</p>
 
 <p><img src="http://strivingboy.github.com/_posts/image/online.png" alt="git log --pretty=online" /></p>
 
