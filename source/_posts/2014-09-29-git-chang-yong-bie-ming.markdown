@@ -22,7 +22,7 @@ categories: Git使用
 
 git log --pretty=online 回显示如下：
 
-![git log --pretty=online](http://strivingboy.github.com/_posts/image/online.png)
+![git log --pretty=online](http://strivingboy.github.com/images/online.png)
 
 
 ** 参考链接 ** 
