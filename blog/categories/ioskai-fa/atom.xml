@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ios开发 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/ioskai-fa/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-09-29T18:45:17+08:00</updated>
+  <updated>2014-09-29T19:57:44+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -30,6 +30,9 @@
 
 <pre><code class="objective-c">    #import &lt;LocalAuthentication/LAContext.h&gt; 
 </code></pre>
+
+<!--more-->
+
 
 <p><strong>Step2).</strong> 使用API，我们需要创建一个Authentication Context</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-09-29T18:45:17+08:00</updated>
+  <updated>2014-09-29T19:57:44+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -27,6 +27,9 @@
 <p> git log -p  查看历史纪录以来哪几行被修改</p>
 
 <p> git log &ndash;pretty=oneline 查看历史提交日志，单行显示</p>
+
+<!--more-->
+
 
 <p>以上是我们经常使用过的命令，接下来将谈谈如何更好的使用git log来解决使用过程中遇到的需求：（大家有木有遇到呢&hellip;）</p>
 
@@ -88,6 +91,9 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="cp">#import &lt;LocalAuthentication/LAContext.h&gt; </span>
 </span></code></pre></td></tr></table></div></figure>
+
+
+<!--more-->
 
 
 <p><strong>Step2).</strong> 使用API，我们需要创建一个Authentication Context</p>
