@@ -20,21 +20,33 @@ categories: Git使用
 
 **更清楚的显示单行提交历史**
 
-git log --pretty=online 显示如下：
+`git log --pretty=online` 显示如下：
 
 ![git log --pretty=online](http://strivingboy.github.com/images/2014-09-29-oneline.png)
 
 如何图形化显示更清晰的提交历史呢？
 
-git log --graph --decorate --pretty=oneline --abbrev-commit --all
+`git log --graph --decorate --pretty=oneline --abbrev-commit --all`
 
 ![git log lola](http://strivingboy.github.com/images/2014-09-29-lola.png)
 
 能不能再清楚点呢？比如：显示提交时间、作者.....当然可以啦
 
-git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+`git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit`
 
-![git log lola](http://strivingboy.github.com/images/2014-09-29-lola.png)
+![git log lola](http://strivingboy.github.com/images/2014-09-29-lg.png)
+
+是不是漂亮了很多，每次打完包我们都回写下change log, 之前每次都是根据git log 复制后编辑，汗...这体力活，有了上面的命令轻松修改下：
+
+`git log --pretty=format:'%s  %C(bold blue)(%an)%Creset' --abbrev-commit`
+
+![git log lola](http://strivingboy.github.com/images/2014-09-29-changelog.png)
+
+上面的命令这么长，每次敲岂不累死（前提是要记得住，哈哈）我们可以使用linux 下的 alias,手册见：<u>http://en.wikipedia.org/wiki/Alias_(command) </u>
+
+`git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"`
+
+现在你每次在终端输入git lg 就可以啦.
 
 
 ** 参考链接 ** 
