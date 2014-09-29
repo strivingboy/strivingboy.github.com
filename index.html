@@ -130,21 +130,33 @@
 
 <p><strong>更清楚的显示单行提交历史</strong></p>
 
-<p>git log &ndash;pretty=online 显示如下：</p>
+<p><code>git log --pretty=online</code> 显示如下：</p>
 
 <p><img src="http://strivingboy.github.com/images/2014-09-29-oneline.png" alt="git log --pretty=online" /></p>
 
 <p>如何图形化显示更清晰的提交历史呢？</p>
 
-<p>git log &ndash;graph &ndash;decorate &ndash;pretty=oneline &ndash;abbrev-commit &ndash;all</p>
+<p><code>git log --graph --decorate --pretty=oneline --abbrev-commit --all</code></p>
 
 <p><img src="http://strivingboy.github.com/images/2014-09-29-lola.png" alt="git log lola" /></p>
 
 <p>能不能再清楚点呢？比如：显示提交时间、作者&hellip;..当然可以啦</p>
 
-<p>git log &ndash;graph &ndash;pretty=format:&lsquo;%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an>%Creset&rsquo; &ndash;abbrev-commit</p>
+<p><code>git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit</code></p>
 
-<p><img src="http://strivingboy.github.com/images/2014-09-29-lola.png" alt="git log lola" /></p>
+<p><img src="http://strivingboy.github.com/images/2014-09-29-lg.png" alt="git log lola" /></p>
+
+<p>是不是漂亮了很多，每次打完包我们都回写下change log, 之前每次都是根据git log 复制后编辑，汗 ..这体力活，有了上面的命令轻松修改下：</p>
+
+<p><code>git log --pretty=format:'%s  %C(bold blue)(%an)%Creset' --abbrev-commit</code></p>
+
+<p><img src="http://strivingboy.github.com/images/2014-09-29-changelog.png" alt="git log lola" /></p>
+
+<p>上面的命令这么长，每次敲岂不累死（前提是要记得住，哈哈）我们可以使用linux 下的 alias,手册见：<u><a href="http://en.wikipedia.org/wiki/Alias_">http://en.wikipedia.org/wiki/Alias_</a>(command) </u></p>
+
+<p><code>git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit"</code></p>
+
+<p>现在你每次在终端输入git lg 就可以啦.</p>
 
 <p><strong> 参考链接 </strong></p>
 
