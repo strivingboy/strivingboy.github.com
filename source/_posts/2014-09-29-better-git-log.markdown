@@ -43,11 +43,11 @@ categories: Git使用
 
 ![git log lola](http://strivingboy.github.com/images/2014-09-29-changelog.png)
 
-上面的命令这么长，每次敲岂不累死（前提是要记得住，哈哈）我们可以使用linux 下的 alias,手册见：<u>http://en.wikipedia.org/wiki/Alias_(command) </u>
+上面的命令这么长，每次敲岂不累死（前提是要记得住，哈哈）我们可以使用linux 下的 alias,详见：<u>http://en.wikipedia.org/wiki/Alias_(command) </u>
 
 `git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"`
 
-现在你每次在终端输入git lg 就可以啦.
+现在你每次在终端输入git lg 就可以啦. 关于git 别名，可以看下 [让Git命令更简单（Git alias)](blog/2014/09/03/git-aliase/)
 
 
 ** 参考链接 ** 
