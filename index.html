@@ -182,6 +182,55 @@
 
 </article>
 
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-03T11:10:44+08:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/gitshi-yong/'>git使用</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/09/03/git-aliase/" itemprop="url">让Git命令更简单（Git Alias）</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>简单使用 git 命令的方式莫过于添加别名了，alias时linux下一个常用命令详见：<u><a href="http://en.wikipedia.org/wiki/Alias_">http://en.wikipedia.org/wiki/Alias_</a>(command) </u></p>
+
+<p><strong>如何添加别名</strong></p>
+
+<p>假设我们想用 <code>git ci</code>代替<code>git commit</code>, 我们可以添加如下命令到 <code>~/.gitconfig</code> 文件中</p>
+
+<pre><code>［alias］
+    ci = commit
+</code></pre>
+
+<p>如果不习惯手动编辑 config 文件，也可以使用命令 <code>git config alias.ci commit</code>来代替，如果想在自己机器的任何地方都使用改别名，则可添加 <code>--global</code> 标记</p>
+
+<pre><code>git config --global alias.ci commit
+</code></pre>
+
+
+		
+		<a href="/blog/2014/09/03/git-aliase/" class="more-link">继续阅读 &rarr;</a>
+	</div>
+
+</article>
+
 </div>
 <nav id="pagenavi">
     

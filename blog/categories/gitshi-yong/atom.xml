@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git使用 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/gitshi-yong/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-09-29T19:57:44+08:00</updated>
+  <updated>2014-09-30T17:41:08+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -57,17 +57,95 @@
 
 <p><img src="http://strivingboy.github.com/images/2014-09-29-changelog.png" alt="git log lola" /></p>
 
-<p>上面的命令这么长，每次敲岂不累死（前提是要记得住，哈哈）我们可以使用linux 下的 alias,手册见：<u><a href="http://en.wikipedia.org/wiki/Alias_">http://en.wikipedia.org/wiki/Alias_</a>(command) </u></p>
+<p>上面的命令这么长，每次敲岂不累死（前提是要记得住，哈哈）我们可以使用linux 下的 alias,详见：<u><a href="http://en.wikipedia.org/wiki/Alias_">http://en.wikipedia.org/wiki/Alias_</a>(command) </u></p>
 
 <p><code>git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit"</code></p>
 
-<p>现在你每次在终端输入git lg 就可以啦.</p>
+<p>现在你每次在终端输入git lg 就可以啦. 关于git 别名，可以看下 <a href="http:/strivingboy.github.com/blog/2014/09/03/git-aliase/">让Git命令更简单（Git alias)</a></p>
 
 <p><strong> 参考链接 </strong></p>
 
 <ul>
 <li><p><u><a href="https://www.kernel.org/pub/software/scm/git/docs/git-log.html">https://www.kernel.org/pub/software/scm/git/docs/git-log.html</a> </u></p></li>
 <li><p><u><a href="https://coderwall.com/p/euwpig">https://coderwall.com/p/euwpig</a> </u></p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[让Git命令更简单（Git alias）]]></title>
+    <link href="http://strivingboy.github.io/blog/2014/09/03/git-aliase/"/>
+    <updated>2014-09-03T11:10:44+08:00</updated>
+    <id>http://strivingboy.github.io/blog/2014/09/03/git-aliase</id>
+    <content type="html"><![CDATA[<p>简单使用 git 命令的方式莫过于添加别名了，alias时linux下一个常用命令详见：<u><a href="http://en.wikipedia.org/wiki/Alias_">http://en.wikipedia.org/wiki/Alias_</a>(command) </u></p>
+
+<p><strong>如何添加别名</strong></p>
+
+<p>假设我们想用 <code>git ci</code>代替<code>git commit</code>, 我们可以添加如下命令到 <code>~/.gitconfig</code> 文件中</p>
+
+<pre><code>［alias］
+    ci = commit
+</code></pre>
+
+<p>如果不习惯手动编辑 config 文件，也可以使用命令 <code>git config alias.ci commit</code>来代替，如果想在自己机器的任何地方都使用改别名，则可添加 <code>--global</code> 标记</p>
+
+<pre><code>git config --global alias.ci commit
+</code></pre>
+
+<!--more-->
+
+
+<p><strong>常用别名</strong></p>
+
+<pre><code>[alias]
+  st = status
+  ci = commit
+  br = branch
+  co = checkout
+  df = diff
+  ad=add
+  cp = cherry-pick
+  lg = log -p
+</code></pre>
+
+<p><strong>其他别名</strong></p>
+
+<p>1.初始化git仓库</p>
+
+<p><code>this = !git init &amp;&amp; git add . &amp;&amp; git commit -m \"initial commit\"</code></p>
+
+<p>2.暂存</p>
+
+<p><code>sl = stash list</code></p>
+
+<p><code>sa = stash apply</code></p>
+
+<p><code>ss = stash save</code></p>
+
+<p>2.删除已经删除的文件</p>
+
+<p><code>rd  = !git ls-files -z --deleted | xargs -0 git rm</code></p>
+
+<p>3.清空未暂存的文件</p>
+
+<p><code>cd = git clean -df</code></p>
+
+<p>4.撤销本地所有修改</p>
+
+<p><code>cl = git checkout .</code></p>
+
+<p>5.列出所有别名</p>
+
+<p><code>alias = config --get-regexp 'alias.*'</code></p>
+
+<p>以上是我的常用git 别名，其他有意思的请在下面评论哈&hellip;..</p>
+
+<p><strong> 参考链接 </strong></p>
+
+<ul>
+<li><u><a href="http://en.wikipedia.org/wiki/Alias_">http://en.wikipedia.org/wiki/Alias_</a>(command) </u></li>
+<li><u><a href="http://git-scm.com/docs/">http://git-scm.com/docs/</a> </u></li>
 </ul>
 
 ]]></content>
