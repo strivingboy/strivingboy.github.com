@@ -4,7 +4,7 @@
   <title><![CDATA[小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-09-30T17:55:13+08:00</updated>
+  <updated>2014-09-30T18:09:55+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -61,7 +61,7 @@
 
 <p><code>git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit"</code></p>
 
-<p>现在你每次在终端输入git lg 就可以啦. 关于git 别名，可以看下 <a href="blog/2014/09/03/git-aliase/">让Git命令更简单（Git alias)</a></p>
+<p>现在你每次在终端输入git lg 就可以啦. 关于git 别名，可以看下 <a href="http:/strivingboy.github.com/blog/2014/09/03/git-aliase/">让Git命令更简单（Git alias)</a></p>
 
 <p><strong> 参考链接 </strong></p>
 
