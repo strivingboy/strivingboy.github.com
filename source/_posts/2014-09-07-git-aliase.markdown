@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "让Git命令更简单（Git alias）"
-date: 2014-09-03 11:10:44 +0800
+date: 2014-09-07 11:10:44 +0800
 comments: true
 categories: Git使用
 ---
