@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Git 使用基础"
+title: "Git 使用基础(一)"
 date: 2014-08-31 10:33:16 +0800
 comments: true
 categories: Git使用
@@ -100,10 +100,84 @@ categories: Git使用
 为git命令创建简洁的别名，更多请参考：
 **[让Git命令更简单（Git alias)](http://strivingboy.github.com/blog/2014/09/03/git-aliase/)**
 
-****
+**git add**
 
+`git add` 命令用来跟踪本地修改，为接下来的提交做准备
 
+用法：
+	
+	git add <file>
+	
+跟踪对文件file的修改
 
+	git add <directory>
+	
+跟踪对目录directory下所有修改
+
+	git add .
+
+跟踪本地工作目录下所有修改
+
+例子：
+	
+	git add hello.txt
+	git commit
+	
+**git commit**
+
+`git commit`命令用来将本地跟踪的修改添加到本地仓库历史
+
+用法：
+
+	git commit
+	
+提交本地修改，启动文本编辑器，编辑提交信息
+
+	git commit -m"message"
+	
+提交本地修改，直接编辑提交信息，不启动文本编辑器
+
+	git commit -a 
+	
+提交本地工作目录下搜有修改，而不需要先 `git add `,相当于：`git add` 和 `git commit`
+
+	git commit -a -m"message"
+	
+同上直接编辑提交信息
+
+**git status**
+
+`git status` 命令用于查看当前工作区和暂存区的状态信息
+
+用法：
+	
+	git status
+
+列出暂存过、未暂存过、未跟踪的文件 
+
+例子：
+
+```
+# On branch master
+# Changes to be committed:
+# (use "git reset HEAD <file>..." to unstage)
+#
+#modified: hello.txt
+#
+# Changes not staged for commit:
+# (use "git add <file>..." to update what will be committed)
+# (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#new: test.txt
+#
+# Untracked files:
+# (use "git add <file>..." to include in what will be committed)
+#
+
+```
+**git log**
+
+关于`git log` 请参考：**[更好的git log](http://strivingboy.github.com/blog/2014/09/29/better-git-log/)**
 
 
 

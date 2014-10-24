@@ -13,11 +13,21 @@ categories: Git使用
 
  git log -p  查看历史纪录以来哪几行被修改
 
- git log --pretty=oneline 查看历史提交日志，单行显示
+ git log --oneline 查看历史提交日志，单行显示
 
 <!--more-->
 
 以上是我们经常使用过的命令，接下来将谈谈如何更好的使用git log来解决使用过程中遇到的需求：（大家有木有遇到呢...）
+
+**提交历史搜索**
+
+`git log --author="<pattern>"`
+
+根据提交作者，搜索提交历史 pattern 可以是字符串或这则表达式
+
+`git log --grep="<pattern>"`
+
+搜索提交历史 同上pattern 可以是字符串或这则表达式
 
 **更清楚的显示单行提交历史**
 

@@ -52,7 +52,7 @@ categories: Git使用
 
 2.删除已经删除的文件
 
-`rd  = !git ls-files -z --deleted | xargs -0 git rm`
+`rd = git rm $(git ls-files --deleted)  `
 
 3.清空未暂存的文件
 
