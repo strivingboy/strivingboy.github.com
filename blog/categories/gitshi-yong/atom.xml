@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git使用 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/gitshi-yong/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-10-08T22:45:56+08:00</updated>
+  <updated>2014-10-24T22:43:32+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -26,12 +26,22 @@
 
 <p> git log -p  查看历史纪录以来哪几行被修改</p>
 
-<p> git log &ndash;pretty=oneline 查看历史提交日志，单行显示</p>
+<p> git log &ndash;oneline 查看历史提交日志，单行显示</p>
 
 <!--more-->
 
 
 <p>以上是我们经常使用过的命令，接下来将谈谈如何更好的使用git log来解决使用过程中遇到的需求：（大家有木有遇到呢&hellip;）</p>
+
+<p><strong>提交历史搜索</strong></p>
+
+<p><code>git log --author="&lt;pattern&gt;"</code></p>
+
+<p>根据提交作者，搜索提交历史 pattern 可以是字符串或这则表达式</p>
+
+<p><code>git log --grep="&lt;pattern&gt;"</code></p>
+
+<p>搜索提交历史 同上pattern 可以是字符串或这则表达式</p>
 
 <p><strong>更清楚的显示单行提交历史</strong></p>
 
@@ -77,9 +87,9 @@
   
   <entry>
     <title type="html"><![CDATA[让Git命令更简单（Git alias）]]></title>
-    <link href="http://strivingboy.github.io/blog/2014/09/03/git-aliase/"/>
-    <updated>2014-09-03T11:10:44+08:00</updated>
-    <id>http://strivingboy.github.io/blog/2014/09/03/git-aliase</id>
+    <link href="http://strivingboy.github.io/blog/2014/09/07/git-aliase/"/>
+    <updated>2014-09-07T11:10:44+08:00</updated>
+    <id>http://strivingboy.github.io/blog/2014/09/07/git-aliase</id>
     <content type="html"><![CDATA[<p>简单使用 git 命令的方式莫过于添加别名了，alias时linux下一个常用命令详见：<u><a href="http://en.wikipedia.org/wiki/Alias_">http://en.wikipedia.org/wiki/Alias_</a>(command) </u></p>
 
 <p><strong>如何添加别名</strong></p>
@@ -127,7 +137,7 @@
 
 <p>2.删除已经删除的文件</p>
 
-<p><code>rd  = !git ls-files -z --deleted | xargs -0 git rm</code></p>
+<p><code>rd = git rm $(git ls-files --deleted) </code></p>
 
 <p>3.清空未暂存的文件</p>
 
@@ -150,6 +160,209 @@
 <li><u><a href="http://git-scm.com/docs/">http://git-scm.com/docs/</a> </u></li>
 </ul>
 
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Git 使用基础(一)]]></title>
+    <link href="http://strivingboy.github.io/blog/2014/08/31/git-ji-chu/"/>
+    <updated>2014-08-31T10:33:16+08:00</updated>
+    <id>http://strivingboy.github.io/blog/2014/08/31/git-ji-chu</id>
+    <content type="html"><![CDATA[<p>对于git的学习推荐一下资料：</p>
+
+<ul>
+<li>GitPro:<u><a href="http://git-scm.com/book/zh">http://git-scm.com/book/zh</a> </u> 很不错的入门书籍</li>
+<li>Git命令在线文档: <u><a href="http://git-scm.com/docs/">http://git-scm.com/docs/</a> </u>非常全面</li>
+<li>Git权威指南: <u><a href="http://book.douban.com/subject/6526452/">http://book.douban.com/subject/6526452/</a> </u> 中国人写的比较不错的Git书籍</li>
+</ul>
+
+
+<p>如果不想敲 git 命令来使用 git，推荐一个非常不错的 git 图形画工具:</p>
+
+<p><u> <a href="http://www.sourcetreeapp.com/">http://www.sourcetreeapp.com/</a> </u>  各个平台下都有，更新也非常快</p>
+
+<p>要高效快速的使用git,还是建议学习使用git 命令，使用git 也有一段时间了，也准备开始写写技术博客，于是搭建了自己的github博客，记录下自己的学习以及思考，也方便自己查阅。</p>
+
+<!--more-->
+
+
+<p>本文参考：<u><a href="https://www.atlassian.com/git/tutorials/setting-up-a-repository">https://www.atlassian.com/git/tutorials/setting-up-a-repository</a> </u></p>
+
+<p><strong>git init</strong></p>
+
+<p><code>git init</code> 命令用来创建一个新的git仓库，git 大部分命令都是再git仓库下运行</p>
+
+<p>用法：</p>
+
+<pre><code>git init
+</code></pre>
+
+<p>将当前目录转换为 git 仓库</p>
+
+<pre><code>git init &lt;directory&gt;
+</code></pre>
+
+<p>将特定目录转换为 git 仓库</p>
+
+<pre><code>git init --bare 
+</code></pre>
+
+<p>初始化一个空的（裸的） git 仓库，它不包含工作目录，并且不能提交编辑和提交修改，该仓库主要用于远端服务器管理代码，保存git历史提交的版本信息，防止冲突。如下说明：</p>
+
+<p>比如:A用户在该目录（就称为远端仓库）下执行git操作，且有两个分支(master 和 branchA)，当前在master分支下。B用户想把自己在本地仓库（就称为本地仓库）的master分支的更新提交到远端仓库的master分支，想当然的使用：</p>
+
+<pre><code>git push origin master:master
+</code></pre>
+
+<p>于是乎出现问题：因为远端仓库的A用户正在master的分支上操作，而B又要把更新提交到这个master分支上，当然会出现错误(冲突)。但如果是往远端仓库中空闲的分支上提交还是可以的，比如</p>
+
+<pre><code>git push origin master:branchB 
+</code></pre>
+
+<p>还是可以成功的, 解决办法就是使用”git init –bare”方法创建一个所谓的裸仓库,也是最好把远端仓库初始化成bare仓库的原因，服务器上部署git 请参考：<a href="http://git-scm.com/book/zh/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2-Git">服务器上部署 Git</a></p>
+
+<p>例子：</p>
+
+<pre><code>cd path/repo
+git init
+</code></pre>
+
+<p><strong>git clone</strong></p>
+
+<p><code>git clone</code> 命令用来复制一个已经存在的 git 仓库，相当于 <code>svn checkout</code></p>
+
+<p>用法：</p>
+
+<pre><code>git clone &lt;repo&gt;
+</code></pre>
+
+<p>复制远端仓库 repo 到本地机器</p>
+
+<pre><code>git clone &lt;repo&gt; &lt;directory&gt;
+</code></pre>
+
+<p>复制远端仓库 repo directory目录到本地机器</p>
+
+<p>例子：</p>
+
+<pre><code>git clone https://example.com/path/project_name.git ~/project/
+cd ~/project/project_name
+#Start working on the project
+</code></pre>
+
+<p><strong>git config</strong></p>
+
+<p><code>git config</code> 命令用来配置本地安装的git</p>
+
+<p>用法：</p>
+
+<pre><code>git config user.name &lt;name&gt;
+</code></pre>
+
+<p>配置当前仓库修改提交作者名</p>
+
+<pre><code>git config --global user.name &lt;name&gt;
+</code></pre>
+
+<p>通常情况下使用 &ndash;global 标记来配置本地所有仓库提交作者名</p>
+
+<pre><code>git config --global user.email &lt;email&gt;
+</code></pre>
+
+<p>配置本地所有仓库提交email地址</p>
+
+<pre><code>git config --global alias.&lt;alias-name&gt; &lt;git-command&gt;
+</code></pre>
+
+<p>为git命令创建简洁的别名，更多请参考：
+<strong><a href="http://strivingboy.github.com/blog/2014/09/03/git-aliase/">让Git命令更简单（Git alias)</a></strong></p>
+
+<p><strong>git add</strong></p>
+
+<p><code>git add</code> 命令用来跟踪本地修改，为接下来的提交做准备</p>
+
+<p>用法：</p>
+
+<pre><code>git add &lt;file&gt;
+</code></pre>
+
+<p>跟踪对文件file的修改</p>
+
+<pre><code>git add &lt;directory&gt;
+</code></pre>
+
+<p>跟踪对目录directory下所有修改</p>
+
+<pre><code>git add .
+</code></pre>
+
+<p>跟踪本地工作目录下所有修改</p>
+
+<p>例子：</p>
+
+<pre><code>git add hello.txt
+git commit
+</code></pre>
+
+<p><strong>git commit</strong></p>
+
+<p><code>git commit</code>命令用来将本地跟踪的修改添加到本地仓库历史</p>
+
+<p>用法：</p>
+
+<pre><code>git commit
+</code></pre>
+
+<p>提交本地修改，启动文本编辑器，编辑提交信息</p>
+
+<pre><code>git commit -m"message"
+</code></pre>
+
+<p>提交本地修改，直接编辑提交信息，不启动文本编辑器</p>
+
+<pre><code>git commit -a 
+</code></pre>
+
+<p>提交本地工作目录下搜有修改，而不需要先 <code>git add</code>,相当于：<code>git add</code> 和 <code>git commit</code></p>
+
+<pre><code>git commit -a -m"message"
+</code></pre>
+
+<p>同上直接编辑提交信息</p>
+
+<p><strong>git status</strong></p>
+
+<p><code>git status</code> 命令用于查看当前工作区和暂存区的状态信息</p>
+
+<p>用法：</p>
+
+<pre><code>git status
+</code></pre>
+
+<p>列出暂存过、未暂存过、未跟踪的文件</p>
+
+<p>例子：</p>
+
+<pre><code># On branch master
+# Changes to be committed:
+# (use "git reset HEAD &lt;file&gt;..." to unstage)
+#
+#modified: hello.txt
+#
+# Changes not staged for commit:
+# (use "git add &lt;file&gt;..." to update what will be committed)
+# (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+#
+#new: test.txt
+#
+# Untracked files:
+# (use "git add &lt;file&gt;..." to include in what will be committed)
+#
+</code></pre>
+
+<p><strong>git log</strong></p>
+
+<p>关于<code>git log</code> 请参考：<strong><a href="http://strivingboy.github.com/blog/2014/09/29/better-git-log/">更好的git log</a></strong></p>
 ]]></content>
   </entry>
   

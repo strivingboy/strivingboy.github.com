@@ -9,7 +9,7 @@
 	<meta name="author" content="strivingboy">
 
 	
-	<meta name="description" content="更好的git Log git log对于使用git的"码农们"一定非常熟悉，如： git log 命令是查看全部提交日志 git log -2 查看最近2次的提交日志 git log -p 查看历史纪录以来哪几行被修改 git log &ndash;pretty=oneline 查看历史提交日志 &hellip;">
+	<meta name="description" content="更好的git Log git log对于使用git的"码农们"一定非常熟悉，如： git log 命令是查看全部提交日志 git log -2 查看最近2次的提交日志 git log -p 查看历史纪录以来哪几行被修改 git log &ndash;oneline 查看历史提交日志，单行显示 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -96,12 +96,22 @@
 
 <p> git log -p  查看历史纪录以来哪几行被修改</p>
 
-<p> git log &ndash;pretty=oneline 查看历史提交日志，单行显示</p>
+<p> git log &ndash;oneline 查看历史提交日志，单行显示</p>
 
 <!--more-->
 
 
 <p>以上是我们经常使用过的命令，接下来将谈谈如何更好的使用git log来解决使用过程中遇到的需求：（大家有木有遇到呢&hellip;）</p>
+
+<p><strong>提交历史搜索</strong></p>
+
+<p><code>git log --author="&lt;pattern&gt;"</code></p>
+
+<p>根据提交作者，搜索提交历史 pattern 可以是字符串或这则表达式</p>
+
+<p><code>git log --grep="&lt;pattern&gt;"</code></p>
+
+<p>搜索提交历史 同上pattern 可以是字符串或这则表达式</p>
 
 <p><strong>更清楚的显示单行提交历史</strong></p>
 
