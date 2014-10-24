@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git使用 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/gitshi-yong/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-10-24T23:54:27+08:00</updated>
+  <updated>2014-10-24T23:59:21+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -184,6 +184,9 @@
 
 <p>将本地文件file 更新到 commit 次提交</p>
 
+<!--more-->
+
+
 <p>例子：</p>
 
 <pre><code>git log --oneline 查看下历史提交如下：
@@ -316,7 +319,7 @@ cd ~/project/project_name
 </code></pre>
 
 <p>为git命令创建简洁的别名，更多请参考：
-<strong><a href="http://strivingboy.github.com/blog/2014/09/03/git-aliase/">让Git命令更简单（Git alias)</a></strong></p>
+<strong><a href="http://strivingboy.github.com/blog/2014/09/07/git-aliase/">让Git命令更简单（Git alias)</a></strong></p>
 
 <p><strong>git add</strong></p>
 
