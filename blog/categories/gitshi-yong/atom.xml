@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git使用 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/gitshi-yong/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-10-25T00:01:42+08:00</updated>
+  <updated>2014-11-03T00:02:25+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -194,16 +194,154 @@
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-<span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>ad90c97 modify link
-</span><span class='line'>2f00900 modify author
-</span><span class='line'>9de0669 add online.png
+</span><span class='line'>9de0669 add oneline.png
 </span><span class='line'>b83c889 modify test.txt</span></code></pre></td></tr></table></div></figure>
 
 git checkout ad90c97 查看修改内容
 
 git checkout b83c889 test.txt 查看对test.txt 文件的修改
 </code></pre>
+
+<p><strong>git revert</strong></p>
+
+<p><code>git revert</code> 命令用来撤销历史中的某次提交，并且不会撤销其后面的提交历史</p>
+
+<p>用法：</p>
+
+<pre><code>git revert &lt;commit&gt;
+</code></pre>
+
+<p>撤销 commit 次提交</p>
+
+<p><strong>git reset</strong></p>
+
+<p><code>git reset</code> 命令用来撤销历史中的某次提交，也会撤销其后面的提交历史以</p>
+
+<p>用法：</p>
+
+<pre><code>git revert &lt;commit&gt;
+</code></pre>
+
+<p>撤销 commit 次提交</p>
+
+<pre><code>git revert --hard &lt;commit&gt;
+</code></pre>
+
+<p>将当前分之会退到 commit 提交，并且会撤销本地未提交的修改（不安全）</p>
+
+<p><strong>git clean</strong></p>
+
+<p><code>git clean</code> 命令用来移除本地未暂存的文件，相当于<code>git reset --hard</code></p>
+
+<p>用法：</p>
+
+<pre><code>git clean -df
+</code></pre>
+
+<p>移除本地未暂存的修改以及文件</p>
+
+<p><strong>git rebase</strong></p>
+
+<p><code>git rebase</code> 命令用来将一个分支移动到某个分支（如B分支），在B分支上作为最新的提交（结果相当于 git merge）</p>
+
+<p>用法：</p>
+
+<pre><code>git rebase &lt;base&gt;
+</code></pre>
+
+<p>将当前分支移动到base分支</p>
+
+<p><strong>git merge</strong></p>
+
+<p><code>git merge</code> 命令用来将一个分支合并到某个分支,合并的结果作为一次新的提交</p>
+
+<p>用法：</p>
+
+<pre><code>git merge &lt;branch&gt;
+</code></pre>
+
+<p>合并branch分支合并到当前分支，和<code>git rebase</code>的区别以及各自优缺点见这里: <strong><a href="http://git-scm.com/book/zh/v1/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%9A%84%E8%A1%8D%E5%90%88">git rebase vs git merge</a></strong></p>
+
+<p><strong>git fetch</strong></p>
+
+<p><code>git fetch</code> 命令用来获取远端仓库最新代码到本地,不会自动合并（相当于开了一个tmp分支）</p>
+
+<p>用法：</p>
+
+<pre><code>git fetch &lt;remote&gt; 或 git fetch &lt;remote&gt; &lt;branch&gt;
+</code></pre>
+
+<p><strong>git pull</strong></p>
+
+<p><code>git pull</code> 命令用来获取远端仓库最新代码并且和本地代码自动合并</p>
+
+<p>用法：</p>
+
+<pre><code>git pull &lt;remote&gt; 
+</code></pre>
+
+<p>相当于：git fetch <remote> ＋ git merge origin/<current-branch>.</p>
+
+<pre><code>git pull --rebase &lt;remote&gt;
+</code></pre>
+
+<p>相当于：git fetch <remote> + git rebase origin/<current-branch>.</p>
+
+<p>实际上，很多开发者都使用 <code>git pull --rebase</code> git 也提供了对应的配置如下：</p>
+
+<pre><code>git config --global branch.autosetuprebase always
+</code></pre>
+
+<p>详细理由见这里： <strong><a href="http://stackoverflow.com/questions/18930527/difference-between-git-pull-and-git-pull-rebase">git pull 和 git pull &ndash;rebase的不同</a></strong></p>
+
+<p><strong>git push</strong></p>
+
+<p><code>git push</code> 命令用来将本地提交推送到远程仓库</p>
+
+<p>用法：</p>
+
+<pre><code>git push &lt;remote&gt; &lt;branch&gt;
+</code></pre>
+
+<p><code>git push &lt;remote&gt; --tags</code> 将本地标签推送到远端，默认标签不会自动推送</p>
+
+<p><strong>git remote</strong></p>
+
+<p><code>git remote</code> 命令用来列出每个远程库的简短名字</p>
+
+<p>用法：</p>
+
+<pre><code>git remote
+</code></pre>
+
+<p>要查看当前配置有哪些远程仓库，可以用<code>git remote</code>命令，它会列出每个远程库的简短名字。在克隆完某个项目后，至少可以看到一个名为 origin 的远程库，Git 默认使用这个名字来标识你所克隆的原始仓库</p>
+
+<pre><code>git remote -v 
+</code></pre>
+
+<p>结果如下：</p>
+
+<pre><code>origin  https://github.com/strivingboy/strivingboy.github.com.git (fetch)
+origin  https://github.com/strivingboy/strivingboy.github.com.git (push)
+</code></pre>
+
+<p>显示对应的克隆地址</p>
+
+<pre><code>git remote add &lt;shortname&gt; &lt;url&gt;
+</code></pre>
+
+<p>添加一个新的远程仓库，可以指定一个简单的名字 shortname，以便将来引用</p>
+
+<pre><code>git remote rm &lt;shortname&gt;
+</code></pre>
+
+<p>删除远端名为shortname的仓库</p>
+
+<pre><code>git remote rename &lt;old-name&gt; &lt;new-name&gt;
+</code></pre>
+
+<p>将远程仓库 old-name 重命名为 new-name</p>
 ]]></content>
   </entry>
   
