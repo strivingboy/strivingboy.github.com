@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Git 使用基础(一)"
-date: 2014-08-31 10:33:16 +0800
+date: 2014-08-03 10:33:16 +0800
 comments: true
 categories: Git使用
 ---
@@ -98,7 +98,7 @@ categories: Git使用
 	git config --global alias.<alias-name> <git-command>
 	
 为git命令创建简洁的别名，更多请参考：
-**[让Git命令更简单（Git alias)](http://strivingboy.github.com/blog/2014/09/03/git-aliase/)**
+**[让Git命令更简单（Git alias)](http://strivingboy.github.com/blog/2014/09/07/git-aliase/)**
 
 **git add**
 
@@ -178,6 +178,8 @@ categories: Git使用
 **git log**
 
 关于`git log` 请参考：**[更好的git log](http://strivingboy.github.com/blog/2014/09/29/better-git-log/)**
+
+下一篇：[Git 使用基础(二)](http://strivingboy.github.com/blog/2014/08/09/git-ji-chu-er/)
 
 
 
