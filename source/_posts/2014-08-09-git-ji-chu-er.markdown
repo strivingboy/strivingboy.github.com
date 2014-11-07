@@ -160,6 +160,6 @@ categories: Git使用
 
 将远程仓库 old-name 重命名为 new-name
 
-
+下一篇：[Git 使用基础(三)](http://strivingboy.github.com/blog/2014/08/17/git-ji-chu-san/)
 
 
