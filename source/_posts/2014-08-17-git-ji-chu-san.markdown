@@ -11,7 +11,7 @@ categories: Git使用
 
 **1、Merging VS Rebasing**
 
-`git merge` 和 `git rebase` 命令都是用来将一个分支合并到另一个分支，只是用不同的方式罢了。下面我们它们的不同：
+`git merge` 和 `git rebase` 命令都是用来将一个分支合并到另一个分支，只是用不同的方式罢了。下面看下它们的不同：
 
 <!--more-->
 
