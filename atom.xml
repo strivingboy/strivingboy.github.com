@@ -4,7 +4,7 @@
   <title><![CDATA[小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-11-03T00:02:25+08:00</updated>
+  <updated>2014-11-07T11:43:46+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -472,6 +472,99 @@
 <li><u><a href="http://git-scm.com/docs/">http://git-scm.com/docs/</a> </u></li>
 </ul>
 
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Git 基础(三)]]></title>
+    <link href="http://strivingboy.github.io/blog/2014/08/17/git-ji-chu-san/"/>
+    <updated>2014-08-17T19:34:55+08:00</updated>
+    <id>http://strivingboy.github.io/blog/2014/08/17/git-ji-chu-san</id>
+    <content type="html"><![CDATA[<p>前两篇文章介绍了git的常用命令，基本已经能够满足我们的日常使用，这篇将谈谈使用过程中疑惑的地方，比如：何时使用<code>git rebase</code>何时使用<code>git merge</code>等</p>
+
+<p><strong>1、Merging VS Rebasing</strong></p>
+
+<p><code>git merge</code> 和 <code>git rebase</code> 命令都是用来将一个分支合并到另一个分支，只是用不同的方式罢了。下面我们它们的不同：</p>
+
+<!--more-->
+
+
+<p><strong>Case:</strong></p>
+
+<p>当你开发一个独立的功能，为此建立了一个特性分支（假设是feature_branch）提交代码，其他团队成员在master分支上提交，结果必然有一个分叉的提交历史,现在假设你发现master分支上新的提交和你开发的功能有关系，为了将这些新的提交合并到feature_branch,于是就有两种选择：merging 或 rebasing</p>
+
+<p><strong>Merging</strong></p>
+
+<p>最简单的操作就是将master分支合并到feature_branch，如下：</p>
+
+<pre><code>git checkout feature_branch
+git merge master
+</code></pre>
+
+<p>或者</p>
+
+<pre><code>git merge master feature_branch
+</code></pre>
+
+<p>最终会在feature_branch上创建一个新的合并提交记录。</p>
+
+<p><code>merging</code> 是一个友好的命令，因为它是一个没有破坏性的操作，现有的分支不会有任何形式的改变，因此也就避免了<code>rebasing</code> 一些潜在的缺陷, 相反，这就意味着每一次<code>merging</code>都会在feature_branch会遗留一次额外的提交，当master分支非常活跃时，这将导致feature_branch分支的历史记录初步变大，这时查看工程历史记录，就会发现各种分叉，很难理解。</p>
+
+<p><strong>Rebasing</strong></p>
+
+<p>作为<code>merging</code>的替代方法，我们也可以将feature_branch分支 rebase到master分支，命令如下：</p>
+
+<pre><code>git checkout feature_branch
+git rebase master
+</code></pre>
+
+<p>结果将feature_branch上所有提交移动到了master分支的最前面，很高效，但与 merge 不同的是 rebase会重写工程提交历史，就像是在master上重新提交了一遍一样,而不是想mege那样创建一个新的合并提交记录。</p>
+
+<p><code>rebasing</code>最大的优点便是它可以得到一个很清晰的历史记录，首先，它避免了<code>merging</code>产生的那个不必要的提交记录，其次，<code>rebasing</code>的结果是一个完美的线型提交历史，可以很清楚的看到工程的变化。当然：<code>rebasing</code>也存在潜在的问题：1、安全性（在下面的rebase黄金法则中介绍） 2、可追溯性，即：<code>rebasing</code>或失去 <code>merging</code>创建的合并记录，从而无法查看合并记录点。</p>
+
+<p><strong>Rebasing黄金法则</strong></p>
+
+<p>理解了<code>rebasing</code>的使用，下来就是何时使用:<code>The golden rule is to never use it on public branches.</code></p>
+
+<p>举个例子：
+假设你讲 master 分支rebase 到 feature_brauch分支,结果将master上所有提交移动到feature_brauch的最前面，问题是：这次合并操作只影响feature_brauch分支，所有其他开发这依然在original master分支上工作，由于<code>rebasing</code>是重写提交历史，git 会认为所有历史提交已经与其他开发者提交的不同，同步这两个分支唯一的办法是将feature_brauch分支又<code>merging</code>到master分支，结果是两次提交集合中大部分包含了相同的修改，不用说,这是一个非常混乱的局面。因此，当执行<code>rebasing</code>操作时，时常问下自己：<code>是不是有其他人在关注改分支？</code>如果是，则考虑其它方式，否则则可以安全使用<code>rebasing</code>。</p>
+
+<p><strong>2、Reset, Checkout, and Revert</strong></p>
+
+<p><code>git reset</code>、<code>git checkout</code>和<code>git revert</code>都是用来撤销对代码仓库的各种修改，前两个命令可以操作提交或单个文件，他们如此相似，在某种场合下容易混谣，下面我们将谈谈它们的区别。</p>
+
+<p>我们都知道git 有三个主要的组件：1、工作区（Working Directory）2、暂存区（Staged Snapshot）3、提交历史(Commit History),理解这三个组件就不难掌握<code>git reset</code>、<code>git checkout</code>和<code>git revert</code>的区别，</p>
+
+<p><code>Reset</code>:命令可以撤销当前分支的某些提交，如：</p>
+
+<pre><code>git checkout feature_branch
+git reset HEAD^2
+</code></pre>
+
+<p>上面的命令将当前分支回退了两次提交，<code>Reset</code>命令对于想撤销某些提交（前提是当前分支只有自己提交）时非常方便，<code>Reset</code>命令有一下标记：</p>
+
+<ul>
+<li>&ndash;soft:使用该标记不会影响暂存区和工作区</li>
+<li>&ndash;mixed:使用该标记后，暂存区会更新到了指定的提交，工作区不影响，该标记是默认的</li>
+<li>&ndash;hard:暂存区和工作区均更新到指定提交</li>
+</ul>
+
+
+<p><em>git reset &ndash;mixed HEAD</em> 会将本地暂存的修改从暂存区取出来，如果想彻底删除未提交的修改，可以使用<em>git reset &ndash;hard HEAD</em> （危险：本地修改将不会恢复了哦）这是<code>Reset</code>常用的两种方式。</p>
+
+<p><code>Checkout</code>:应该非常熟悉了，首先就是切换分支：</p>
+
+<pre><code>git checkout master
+</code></pre>
+
+<p>git 内部会将HEAD游标移动到master分支，并且更新工作区，因为它会重写本地修改，所以git强制我们在<code>Checkout</code>之前去提交或暂存工作区中的修改。</p>
+
+<pre><code>git checkout .
+</code></pre>
+
+<p>注意该命令危险！它和 <em>git reset &ndash;hard HEAD</em> 类似，会彻底删除未提交的修改,不可恢复。</p>
+
+<p><code>Revert</code>:命令是用一个新的提交来撤销某次历史提交，不会重写提交历史，是安全可恢复的。因此可用于公开提交的分支，这点与<code>Reset</code>不同，<code>Reset</code>仅用于私有特性分支。</p>
 ]]></content>
   </entry>
   
