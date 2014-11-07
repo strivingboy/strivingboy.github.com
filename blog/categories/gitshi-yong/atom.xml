@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git使用 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/gitshi-yong/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-11-07T12:53:11+08:00</updated>
+  <updated>2014-11-07T20:01:27+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -435,6 +435,8 @@ origin  https://github.com/strivingboy/strivingboy.github.com.git (push)
 </code></pre>
 
 <p>将远程仓库 old-name 重命名为 new-name</p>
+
+<p>下一篇：<a href="http://strivingboy.github.com/blog/2014/08/17/git-ji-chu-san/">Git 使用基础(三)</a></p>
 ]]></content>
   </entry>
   
