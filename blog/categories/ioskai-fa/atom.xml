@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ios开发 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/ioskai-fa/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-11-07T20:01:27+08:00</updated>
+  <updated>2014-11-09T23:16:53+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -12,6 +12,213 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS使用AVFoundation实现二维码扫描]]></title>
+    <link href="http://strivingboy.github.io/blog/2014/11/08/scan-qrcode/"/>
+    <updated>2014-11-08T14:30:57+08:00</updated>
+    <id>http://strivingboy.github.io/blog/2014/11/08/scan-qrcode</id>
+    <content type="html"><![CDATA[<p>关于二维码扫描有不少优秀第三方库如：</p>
+
+<ul>
+<li><p><a href="http://zbar.sourceforge.net/iphone/sdkdoc/index.html">ZBar SDK</a> 里面有详细的文档，相应介绍也非常多，如：<u><a href="http://rdcworld-iphone.blogspot.in/2013/03/how-to-use-barcode-scanner-br-and-qr-in.html">http://rdcworld-iphone.blogspot.in/2013/03/how-to-use-barcode-scanner-br-and-qr-in.html</a></u></p></li>
+<li><p><a href="https://github.com/zxing/zxing">ZXing</a> google推出的开源项目，相应介绍如：<u><a href="http://blog.devtang.com/blog/2012/12/23/use-zxing-library/">http://blog.devtang.com/blog/2012/12/23/use-zxing-library/</a></u></p></li>
+</ul>
+
+
+<p>最近项目需要，看了下使用ios7自带的 AVFoundation Framework 来实现二维码扫描，Demo 见：<a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_deomo</a></p>
+
+<p><strong>关于AVFoundation</strong></p>
+
+<!--more-->
+
+
+<p>AVFoundation 是一个很大基础库，用来创建基于时间的视听媒体，可以使用它来检查,创建、编辑或媒体文件。也可以输入流从设备和操作视频实时捕捉和回放。详细框架介绍见官网：<a href="https://developer.apple.com/library/mac/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">About AV Foundation</a>，本文只是介绍如果使用AVFoundation获取二维码。</p>
+
+<p>首先获取流媒体信息我们需要<code>AVCaptureSession</code>对象来管理输入流和输出流，<code>AVCaptureVideoPreviewLayer</code>对象来显示信息，基本流程如下图所示：
+<img src="http://strivingboy.github.com/images/2014-11-08-flow" alt="scan_qr_code_flow" /></p>
+
+<p>注：</p>
+
+<ul>
+<li><code>AVCaptureSession</code> 管理输入(AVCaptureInput)和输出(AVCaptureOutput)流，包含开启和停止会话方法。</li>
+<li><code>AVCaptureDeviceInput</code> 是AVCaptureInput的子类,可以作为输入捕获会话，用AVCaptureDevice实例初始化。</li>
+<li><code>AVCaptureDevice</code> 代表了物理捕获设备如:摄像机。用于配置等底层硬件设置相机的自动对焦模式。</li>
+<li><code>AVCaptureMetadataOutput</code> 是AVCaptureOutput的子类，处理输出捕获会话。捕获的对象传递给一个委托实现AVCaptureMetadataOutputObjectsDelegate协议。协议方法在指定的派发队列（dispatch queue）上执行。</li>
+<li><code>AVCaptureVideoPreviewLayer</code>CALayer的一个子类，显示捕获到的相机输出流。</li>
+</ul>
+
+
+<p>下面看下实现过程如下：</p>
+
+<p><strong>Step1:</strong>需要导入：AVFoundation Framework 包含头文件：</p>
+
+<pre><code>#import &lt;AVFoundation/AVFoundation.h&gt;
+</code></pre>
+
+<p><strong>Step2:设置捕获会话</strong></p>
+
+<p>设置 AVCaptureSession 和 AVCaptureVideoPreviewLayer 成员</p>
+
+<pre><code class="objective-c">
+    #import &lt;AVFoundation/AVFoundation.h&gt;
+
+    static const char *kScanQRCodeQueueName = "ScanQRCodeQueue";
+
+    @interface ViewController () &lt;AVCaptureMetadataOutputObjectsDelegate&gt;
+    .....
+    @property (nonatomic) AVCaptureSession *captureSession;
+    @property (nonatomic) AVCaptureVideoPreviewLayer *videoPreviewLayer;
+    @property (nonatomic) BOOL lastResut;
+    @end
+</code></pre>
+
+<p><strong>Step3:创建会话，读取输入流</strong></p>
+
+<pre><code class="objective-c">
+    - (BOOL)startReading
+    {
+        // 获取 AVCaptureDevice 实例
+        NSError * error;
+        AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        // 初始化输入流
+        AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:captureDevice error:&amp;error];
+        if (!input) {
+            NSLog(@"%@", [error localizedDescription]);
+            return NO;
+        }
+        // 创建会话
+        _captureSession = [[AVCaptureSession alloc] init];
+        // 添加输入流
+        [_captureSession addInput:input];
+        // 初始化输出流
+        AVCaptureMetadataOutput *captureMetadataOutput = [[AVCaptureMetadataOutput alloc] init];
+        // 添加输出流
+        [_captureSession addOutput:captureMetadataOutput];
+
+        // 创建dispatch queue.
+        dispatch_queue_t dispatchQueue;
+        dispatchQueue = dispatch_queue_create(kScanQRCodeQueueName, NULL);
+        [captureMetadataOutput setMetadataObjectsDelegate:self queue:dispatchQueue];
+        // 设置元数据类型 AVMetadataObjectTypeQRCode
+        [captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObject:AVMetadataObjectTypeQRCode]];
+
+        // 创建输出对象
+        _videoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_captureSession];
+        [_videoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
+        [_videoPreviewLayer setFrame:_sanFrameView.layer.bounds];
+        [_sanFrameView.layer addSublayer:_videoPreviewLayer];
+        // 开始会话
+        [_captureSession startRunning];
+
+        return YES;
+    }
+</code></pre>
+
+<p><strong>Step4:停止读取</strong></p>
+
+<pre><code class="objective-c">
+    - (void)stopReading
+    {
+        // 停止会话
+        [_captureSession stopRunning];
+        _captureSession = nil;
+    }
+</code></pre>
+
+<p><strong>Step5:获取捕获数据</strong></p>
+
+<pre><code class="objective-c">
+    -(void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects
+      fromConnection:(AVCaptureConnection *)connection
+    {
+        if (metadataObjects != nil &amp;&amp; [metadataObjects count] &gt; 0) {
+            AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
+            NSString *result;
+            if ([[metadataObj type] isEqualToString:AVMetadataObjectTypeQRCode]) {
+                result = metadataObj.stringValue;
+            } else {
+                NSLog(@"不是二维码");
+            }
+            [self performSelectorOnMainThread:@selector(reportScanResult:) withObject:result waitUntilDone:NO];
+        }
+    }
+</code></pre>
+
+<p><strong>Step6:处理结果</strong></p>
+
+<pre><code class="objective-c">
+    - (void)reportScanResult:(NSString *)result
+    {
+        [self stopReading];
+        if (!_lastResut) {
+            return;
+        }
+        _lastResut = NO;
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"二维码扫描"
+                                                        message:result
+                                                       delegate:nil
+                                              cancelButtonTitle:@"取消"
+                                              otherButtonTitles: nil];
+        [alert show];
+        // 以及处理了结果，下次扫描
+        _lastResut = YES;
+    }
+</code></pre>
+
+<p>以上基本就是二维码的获取流程，和扫一扫二维码伴随的就是开启系统照明，这个比较简单，也是利用 <code>AVCaptureDevice</code>,请看如下实现：</p>
+
+<pre><code class="objective-c">
+    - (void)systemLightSwitch:(BOOL)open
+    {
+        AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        if ([device hasTorch]) {
+            [device lockForConfiguration:nil];
+            if (open) {
+                [device setTorchMode:AVCaptureTorchModeOn];
+            } else {
+                [device setTorchMode:AVCaptureTorchModeOff];
+            }
+            [device unlockForConfiguration];
+        }
+    }
+</code></pre>
+
+<p>以上就是本文介绍的大部分内容，详细代码请看demo <a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_deomo</a></p>
+
+<p>实现过程中遇到一下两个问题：</p>
+
+<p>1、扫描一个二维码，输出流回重复调用，代理方法头文件介绍：</p>
+
+<pre><code class="objective-c">
+     /*!
+     @method captureOutput:didOutputMetadataObjects:fromConnection:
+     .....  
+     @discussion
+        Delegates receive this message whenever the output captures and emits new objects, as specified by
+        its metadataObjectTypes property. Delegates can use the provided objects in conjunction with other APIs
+        for further processing. This method will be called on the dispatch queue specified by the output's
+        metadataObjectsCallbackQueue property. **This method may be called frequently** so it must be efficient to 
+        prevent capture performance problems, including dropped metadata objects.
+
+        Clients that need to reference metadata objects outside of the scope of this method must retain them and
+        then release them when they are finished with them.
+    */
+</code></pre>
+
+<p>代理方法会频繁调用，我暂且用一个标记（@property (nonatomic) BOOL lastResut）表示是否是第一次扫描成功，来处理。</p>
+
+<p>2、AVFoundation 改库不能扫描相册中的二维码图片，不知为啥苹果没有支持，有知道实现的麻烦告诉我哈。</p>
+
+<p><strong> 参考链接 </strong></p>
+
+<ul>
+<li><p><u><a href="http://useyourloaf.com/blog/2014/05/13/reading-qr-codes.html">http://useyourloaf.com/blog/2014/05/13/reading-qr-codes.html</a></u></p></li>
+<li><p><u><a href="http://www.appcoda.com/qr-code-ios-programming-tutorial/">http://www.appcoda.com/qr-code-ios-programming-tutorial/</a> </u></p></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ios 8 Touch ID 使用]]></title>

@@ -4,7 +4,7 @@
   <title><![CDATA[小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-11-07T20:01:27+08:00</updated>
+  <updated>2014-11-09T23:16:53+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -12,6 +12,324 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS使用AVFoundation实现二维码扫描]]></title>
+    <link href="http://strivingboy.github.io/blog/2014/11/08/scan-qrcode/"/>
+    <updated>2014-11-08T14:30:57+08:00</updated>
+    <id>http://strivingboy.github.io/blog/2014/11/08/scan-qrcode</id>
+    <content type="html"><![CDATA[<p>关于二维码扫描有不少优秀第三方库如：</p>
+
+<ul>
+<li><p><a href="http://zbar.sourceforge.net/iphone/sdkdoc/index.html">ZBar SDK</a> 里面有详细的文档，相应介绍也非常多，如：<u><a href="http://rdcworld-iphone.blogspot.in/2013/03/how-to-use-barcode-scanner-br-and-qr-in.html">http://rdcworld-iphone.blogspot.in/2013/03/how-to-use-barcode-scanner-br-and-qr-in.html</a></u></p></li>
+<li><p><a href="https://github.com/zxing/zxing">ZXing</a> google推出的开源项目，相应介绍如：<u><a href="http://blog.devtang.com/blog/2012/12/23/use-zxing-library/">http://blog.devtang.com/blog/2012/12/23/use-zxing-library/</a></u></p></li>
+</ul>
+
+
+<p>最近项目需要，看了下使用ios7自带的 AVFoundation Framework 来实现二维码扫描，Demo 见：<a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_deomo</a></p>
+
+<p><strong>关于AVFoundation</strong></p>
+
+<!--more-->
+
+
+<p>AVFoundation 是一个很大基础库，用来创建基于时间的视听媒体，可以使用它来检查,创建、编辑或媒体文件。也可以输入流从设备和操作视频实时捕捉和回放。详细框架介绍见官网：<a href="https://developer.apple.com/library/mac/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">About AV Foundation</a>，本文只是介绍如果使用AVFoundation获取二维码。</p>
+
+<p>首先获取流媒体信息我们需要<code>AVCaptureSession</code>对象来管理输入流和输出流，<code>AVCaptureVideoPreviewLayer</code>对象来显示信息，基本流程如下图所示：
+<img src="http://strivingboy.github.com/images/2014-11-08-flow" alt="scan_qr_code_flow" /></p>
+
+<p>注：</p>
+
+<ul>
+<li><code>AVCaptureSession</code> 管理输入(AVCaptureInput)和输出(AVCaptureOutput)流，包含开启和停止会话方法。</li>
+<li><code>AVCaptureDeviceInput</code> 是AVCaptureInput的子类,可以作为输入捕获会话，用AVCaptureDevice实例初始化。</li>
+<li><code>AVCaptureDevice</code> 代表了物理捕获设备如:摄像机。用于配置等底层硬件设置相机的自动对焦模式。</li>
+<li><code>AVCaptureMetadataOutput</code> 是AVCaptureOutput的子类，处理输出捕获会话。捕获的对象传递给一个委托实现AVCaptureMetadataOutputObjectsDelegate协议。协议方法在指定的派发队列（dispatch queue）上执行。</li>
+<li><code>AVCaptureVideoPreviewLayer</code>CALayer的一个子类，显示捕获到的相机输出流。</li>
+</ul>
+
+
+<p>下面看下实现过程如下：</p>
+
+<p><strong>Step1:</strong>需要导入：AVFoundation Framework 包含头文件：</p>
+
+<pre><code>#import &lt;AVFoundation/AVFoundation.h&gt;
+</code></pre>
+
+<p><strong>Step2:设置捕获会话</strong></p>
+
+<p>设置 AVCaptureSession 和 AVCaptureVideoPreviewLayer 成员</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>    <span class="cp">#import &lt;AVFoundation/AVFoundation.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">static</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">kScanQRCodeQueueName</span> <span class="o">=</span> <span class="s">&quot;ScanQRCodeQueue&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">@interface</span> <span class="nc">ViewController</span> <span class="p">()</span> <span class="o">&lt;</span><span class="bp">AVCaptureMetadataOutputObjectsDelegate</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="p">.....</span>
+</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">)</span> <span class="bp">AVCaptureSession</span> <span class="o">*</span><span class="n">captureSession</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">)</span> <span class="bp">AVCaptureVideoPreviewLayer</span> <span class="o">*</span><span class="n">videoPreviewLayer</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">lastResut</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Step3:创建会话，读取输入流</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>    <span class="o">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="n">startReading</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// 获取 AVCaptureDevice 实例</span>
+</span><span class='line'>        <span class="bp">NSError</span> <span class="o">*</span> <span class="n">error</span><span class="p">;</span>
+</span><span class='line'>        <span class="bp">AVCaptureDevice</span> <span class="o">*</span><span class="n">captureDevice</span> <span class="o">=</span> <span class="p">[</span><span class="bp">AVCaptureDevice</span> <span class="nl">defaultDeviceWithMediaType</span><span class="p">:</span><span class="n">AVMediaTypeVideo</span><span class="p">];</span>
+</span><span class='line'>        <span class="c1">// 初始化输入流</span>
+</span><span class='line'>        <span class="bp">AVCaptureDeviceInput</span> <span class="o">*</span><span class="n">input</span> <span class="o">=</span> <span class="p">[</span><span class="bp">AVCaptureDeviceInput</span> <span class="nl">deviceInputWithDevice</span><span class="p">:</span><span class="n">captureDevice</span> <span class="nl">error</span><span class="p">:</span><span class="o">&amp;</span><span class="n">error</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">input</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">error</span> <span class="n">localizedDescription</span><span class="p">]);</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="c1">// 创建会话</span>
+</span><span class='line'>        <span class="n">_captureSession</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">AVCaptureSession</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>        <span class="c1">// 添加输入流</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">_captureSession</span> <span class="nl">addInput</span><span class="p">:</span><span class="n">input</span><span class="p">];</span>
+</span><span class='line'>        <span class="c1">// 初始化输出流</span>
+</span><span class='line'>        <span class="bp">AVCaptureMetadataOutput</span> <span class="o">*</span><span class="n">captureMetadataOutput</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">AVCaptureMetadataOutput</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>        <span class="c1">// 添加输出流</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">_captureSession</span> <span class="nl">addOutput</span><span class="p">:</span><span class="n">captureMetadataOutput</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// 创建dispatch queue.</span>
+</span><span class='line'>        <span class="kt">dispatch_queue_t</span> <span class="n">dispatchQueue</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">dispatchQueue</span> <span class="o">=</span> <span class="n">dispatch_queue_create</span><span class="p">(</span><span class="n">kScanQRCodeQueueName</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">captureMetadataOutput</span> <span class="nl">setMetadataObjectsDelegate</span><span class="p">:</span><span class="nb">self</span> <span class="nl">queue</span><span class="p">:</span><span class="n">dispatchQueue</span><span class="p">];</span>
+</span><span class='line'>        <span class="c1">// 设置元数据类型 AVMetadataObjectTypeQRCode</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">captureMetadataOutput</span> <span class="nl">setMetadataObjectTypes</span><span class="p">:[</span><span class="bp">NSArray</span> <span class="nl">arrayWithObject</span><span class="p">:</span><span class="n">AVMetadataObjectTypeQRCode</span><span class="p">]];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// 创建输出对象</span>
+</span><span class='line'>        <span class="n">_videoPreviewLayer</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">AVCaptureVideoPreviewLayer</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithSession</span><span class="p">:</span><span class="n">_captureSession</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">_videoPreviewLayer</span> <span class="nl">setVideoGravity</span><span class="p">:</span><span class="n">AVLayerVideoGravityResizeAspectFill</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">_videoPreviewLayer</span> <span class="nl">setFrame</span><span class="p">:</span><span class="n">_sanFrameView</span><span class="p">.</span><span class="n">layer</span><span class="p">.</span><span class="n">bounds</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">_sanFrameView</span><span class="p">.</span><span class="n">layer</span> <span class="nl">addSublayer</span><span class="p">:</span><span class="n">_videoPreviewLayer</span><span class="p">];</span>
+</span><span class='line'>        <span class="c1">// 开始会话</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">_captureSession</span> <span class="n">startRunning</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Step4:停止读取</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>    <span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">stopReading</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// 停止会话</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">_captureSession</span> <span class="n">stopRunning</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">_captureSession</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Step5:获取捕获数据</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">captureOutput:</span><span class="p">(</span><span class="bp">AVCaptureOutput</span> <span class="o">*</span><span class="p">)</span><span class="nv">captureOutput</span> <span class="nf">didOutputMetadataObjects:</span><span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">metadataObjects</span>
+</span><span class='line'>  <span class="nf">fromConnection:</span><span class="p">(</span><span class="bp">AVCaptureConnection</span> <span class="o">*</span><span class="p">)</span><span class="nv">connection</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">metadataObjects</span> <span class="o">!=</span> <span class="nb">nil</span> <span class="o">&amp;&amp;</span> <span class="p">[</span><span class="n">metadataObjects</span> <span class="n">count</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="bp">AVMetadataMachineReadableCodeObject</span> <span class="o">*</span><span class="n">metadataObj</span> <span class="o">=</span> <span class="p">[</span><span class="n">metadataObjects</span> <span class="nl">objectAtIndex</span><span class="p">:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>        <span class="bp">NSString</span> <span class="o">*</span><span class="n">result</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">([[</span><span class="n">metadataObj</span> <span class="n">type</span><span class="p">]</span> <span class="nl">isEqualToString</span><span class="p">:</span><span class="n">AVMetadataObjectTypeQRCode</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">result</span> <span class="o">=</span> <span class="n">metadataObj</span><span class="p">.</span><span class="n">stringValue</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;不是二维码&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="p">[</span><span class="nb">self</span> <span class="nl">performSelectorOnMainThread</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">reportScanResult</span><span class="p">:)</span> <span class="nl">withObject</span><span class="p">:</span><span class="n">result</span> <span class="nl">waitUntilDone</span><span class="p">:</span><span class="nb">NO</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Step6:处理结果</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  <span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">reportScanResult</span><span class="p">:(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">result</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="p">[</span><span class="nb">self</span> <span class="n">stopReading</span><span class="p">];</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_lastResut</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="n">_lastResut</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>      <span class="bp">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle</span><span class="p">:</span><span class="s">@&quot;二维码扫描&quot;</span>
+</span><span class='line'>                                                      <span class="nl">message</span><span class="p">:</span><span class="n">result</span>
+</span><span class='line'>                                                     <span class="nl">delegate</span><span class="p">:</span><span class="nb">nil</span>
+</span><span class='line'>                                            <span class="nl">cancelButtonTitle</span><span class="p">:</span><span class="s">@&quot;取消&quot;</span>
+</span><span class='line'>                                            <span class="nl">otherButtonTitles</span><span class="p">:</span> <span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>      <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
+</span><span class='line'>      <span class="c1">// 以及处理了结果，下次扫描</span>
+</span><span class='line'>      <span class="n">_lastResut</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上基本就是二维码的获取流程，和扫一扫二维码伴随的就是开启系统照明，这个比较简单，也是利用 <code>AVCaptureDevice</code>,请看如下实现：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  <span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">systemLightSwitch</span><span class="p">:(</span><span class="kt">BOOL</span><span class="p">)</span><span class="n">open</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="bp">AVCaptureDevice</span> <span class="o">*</span><span class="n">device</span> <span class="o">=</span> <span class="p">[</span><span class="bp">AVCaptureDevice</span> <span class="nl">defaultDeviceWithMediaType</span><span class="p">:</span><span class="n">AVMediaTypeVideo</span><span class="p">];</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">([</span><span class="n">device</span> <span class="n">hasTorch</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>          <span class="p">[</span><span class="n">device</span> <span class="nl">lockForConfiguration</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">open</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="p">[</span><span class="n">device</span> <span class="nl">setTorchMode</span><span class="p">:</span><span class="n">AVCaptureTorchModeOn</span><span class="p">];</span>
+</span><span class='line'>          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>              <span class="p">[</span><span class="n">device</span> <span class="nl">setTorchMode</span><span class="p">:</span><span class="n">AVCaptureTorchModeOff</span><span class="p">];</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="p">[</span><span class="n">device</span> <span class="n">unlockForConfiguration</span><span class="p">];</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上就是本文介绍的大部分内容，详细代码请看demo <a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_deomo</a></p>
+
+<p>实现过程中遇到一下两个问题：</p>
+
+<p>1、扫描一个二维码，输出流回重复调用，代理方法头文件介绍：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>   <span class="cm">/*!</span>
+</span><span class='line'><span class="cm">  @method captureOutput:didOutputMetadataObjects:fromConnection:</span>
+</span><span class='line'><span class="cm">  .....  </span>
+</span><span class='line'><span class="cm">  @discussion</span>
+</span><span class='line'><span class="cm">     Delegates receive this message whenever the output captures and emits new objects, as specified by</span>
+</span><span class='line'><span class="cm">     its metadataObjectTypes property. Delegates can use the provided objects in conjunction with other APIs</span>
+</span><span class='line'><span class="cm">     for further processing. This method will be called on the dispatch queue specified by the output&#39;s</span>
+</span><span class='line'><span class="cm">     metadataObjectsCallbackQueue property. **This method may be called frequently** so it must be efficient to </span>
+</span><span class='line'><span class="cm">     prevent capture performance problems, including dropped metadata objects.</span>
+</span><span class='line'><span class="cm"> </span>
+</span><span class='line'><span class="cm">     Clients that need to reference metadata objects outside of the scope of this method must retain them and</span>
+</span><span class='line'><span class="cm">     then release them when they are finished with them.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>代理方法会频繁调用，我暂且用一个标记（@property (nonatomic) BOOL lastResut）表示是否是第一次扫描成功，来处理。</p>
+
+<p>2、AVFoundation 改库不能扫描相册中的二维码图片，不知为啥苹果没有支持，有知道实现的麻烦告诉我哈。</p>
+
+<p><strong> 参考链接 </strong></p>
+
+<ul>
+<li><p><u><a href="http://useyourloaf.com/blog/2014/05/13/reading-qr-codes.html">http://useyourloaf.com/blog/2014/05/13/reading-qr-codes.html</a></u></p></li>
+<li><p><u><a href="http://www.appcoda.com/qr-code-ios-programming-tutorial/">http://www.appcoda.com/qr-code-ios-programming-tutorial/</a> </u></p></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[更好的git log]]></title>
