@@ -4,7 +4,7 @@
   <title><![CDATA[小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-11-09T23:16:53+08:00</updated>
+  <updated>2014-11-09T23:36:02+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -36,7 +36,7 @@
 <p>AVFoundation 是一个很大基础库，用来创建基于时间的视听媒体，可以使用它来检查,创建、编辑或媒体文件。也可以输入流从设备和操作视频实时捕捉和回放。详细框架介绍见官网：<a href="https://developer.apple.com/library/mac/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">About AV Foundation</a>，本文只是介绍如果使用AVFoundation获取二维码。</p>
 
 <p>首先获取流媒体信息我们需要<code>AVCaptureSession</code>对象来管理输入流和输出流，<code>AVCaptureVideoPreviewLayer</code>对象来显示信息，基本流程如下图所示：
-<img src="http://strivingboy.github.com/images/2014-11-08-flow" alt="scan_qr_code_flow" /></p>
+<img src="http://strivingboy.github.com/images/2014-11-08-flow.jpg" alt="scan_qr_code_flow" /></p>
 
 <p>注：</p>
 
