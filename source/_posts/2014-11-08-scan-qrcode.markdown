@@ -20,7 +20,7 @@ categories: IOS开发
 AVFoundation 是一个很大基础库，用来创建基于时间的视听媒体，可以使用它来检查,创建、编辑或媒体文件。也可以输入流从设备和操作视频实时捕捉和回放。详细框架介绍见官网：[About AV Foundation](https://developer.apple.com/library/mac/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html)，本文只是介绍如果使用AVFoundation获取二维码。
 
 首先获取流媒体信息我们需要`AVCaptureSession`对象来管理输入流和输出流，`AVCaptureVideoPreviewLayer`对象来显示信息，基本流程如下图所示：
-![scan_qr_code_flow](http://strivingboy.github.com/images/2014-11-08-flow)
+![scan_qr_code_flow](http://strivingboy.github.com/images/2014-11-08-flow.jpg)
 
 注：
 
