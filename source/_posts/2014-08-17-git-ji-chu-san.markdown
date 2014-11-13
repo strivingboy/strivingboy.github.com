@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Git 基础(三)"
+description: "Git 使用基础"
 date: 2014-08-17 19:34:55 +0800
 comments: true
 categories: Git使用

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "iOS使用AVFoundation实现二维码扫描"
+description: "ios AVFoundation 二维码扫描 "
 date: 2014-11-08 14:30:57 +0800
 comments: true
 categories: IOS开发
@@ -179,7 +180,7 @@ AVFoundation 是一个很大基础库，用来创建基于时间的视听媒体�
 
 ```
 
-以上就是本文介绍的大部分内容，详细代码请看demo [scan_qrcode_deomo](https://github.com/strivingboy/scan_qrcode_demo.git)
+以上就是本文介绍的大部分内容，详细代码请看demo [scan_qrcode_deomo](https://github.com/strivingboy/scan_qrcode_demo.git) 界面效果如下：
 
 实现过程中遇到一下两个问题：
 

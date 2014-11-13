@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "更好的git log"
+description: "Git 使用 漂亮的Git log"
 date: 2014-09-29 11:05:41 +0800
 comments: true
 categories: Git使用

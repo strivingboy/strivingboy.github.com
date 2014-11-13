@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "ios 8 Touch ID 使用"
+description: "ios 8 Touch Id API 实践"
 date: 2014-09-23 13:14:06 +0800
 comments: true
 categories: IOS开发
