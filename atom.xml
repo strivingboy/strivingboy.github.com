@@ -4,7 +4,7 @@
   <title><![CDATA[小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-11-09T23:40:18+08:00</updated>
+  <updated>2014-11-13T17:47:46+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -283,7 +283,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>以上就是本文介绍的大部分内容，详细代码请看demo <a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_deomo</a></p>
+<p>以上就是本文介绍的大部分内容，详细代码请看demo <a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_deomo</a> 界面效果如下：</p>
 
 <p>实现过程中遇到一下两个问题：</p>
 
