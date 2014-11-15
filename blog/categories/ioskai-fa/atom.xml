@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ios开发 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/ioskai-fa/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-11-13T19:26:32+08:00</updated>
+  <updated>2014-11-15T10:43:21+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -402,6 +402,8 @@ typedef void(^TouchIdEvaluateCallback)(TouchIdEvaluateResult result);
 <p>1.指纹识别3次错误会弹出系统“输入密码”数字键盘，而且这3次错误机会是系统所有应用共享</p>
 
 <p>2.不要在 <code>evaluatePolicy:</code>方法中调用 <code>canEvaluatePolicy</code> <code>&lt;LocalAuthentication/LAContext.h&gt;</code>中有说明</p>
+
+<p><strong> Demo 见：<a href="https://github.com/strivingboy/touchid.git">TouchIdTest</a></strong></p>
 
 <p><strong> 参考链接 </strong></p>
 
