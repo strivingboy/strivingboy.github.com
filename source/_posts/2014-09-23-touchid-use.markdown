@@ -180,6 +180,9 @@ reply:验证成功 success == YES, 否则返回error,根据**error.code**可以�
 
 2.不要在 `evaluatePolicy:`方法中调用 `canEvaluatePolicy` `<LocalAuthentication/LAContext.h>`中有说明
 
+
+** Demo 见：[TouchIdTest](https://github.com/strivingboy/touchid.git)**
+
 ** 参考链接 ** 
 
 - <u>https://developer.apple.com/library/ios/documentation/LocalAuthentication/Reference/LAContext_Class/index.html#//apple_ref/occ/cl/LAContext </u>
