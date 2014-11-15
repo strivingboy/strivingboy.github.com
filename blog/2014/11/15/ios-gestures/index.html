@@ -1,0 +1,478 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="baidu-site-verification" content="xMu1n6Qhoi" />
+	<meta name="google-site-verification" content="sQM_5H8xp83FnR7Rxee_d5ockt0dT7vE5mtPr3r3eXE" />
+	<title>ios 手势（UIGestureRecognizer）操作 - 小孩的技术博客</title>
+	<meta name="author" content="strivingboy">
+
+	
+	<meta name="description" content="ios UIGestureRecognizer 手势操作 ">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="小孩的技术博客" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://strivingboy.github.io/blog/2014/11/15/ios-gestures/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("striving_boy@163.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+		});
+	</script>
+	
+</div>
+<h1><a href="/">奋斗的小孩</a></h1>
+<p>keep it simple and stupid!<br>donot repeat yourself!</p>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">首页</a></li>
+    <li><a href="/blog/archives">所有文章</a></li>
+    <li><a href="/about.html">关于我</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:striving_boy@163.com" title="Email">Email</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Ios 手势（UIGestureRecognizer）操作</h1>
+	<div class="entry-content" itemprop="articleBody"><p>本文摘自：<a href="http://www.appcoda.com/ios-gesture-recognizers/">AppCoda</a></p>
+
+<p>UIKit中包含了UIGestureRecognizer类来处理手势识别，UIGestureRecognizer是一个抽象类，用于检测发生在UIView上预定义的手势。UIGestureRecognizer 提供了一些子类来处理具体的手势行为，如下：</p>
+
+<ol>
+<li><p>UITapGestureRecognizer: 该类处理View上的点击<em>Tap</em>操作（任意手指、任意次数的点击）该操作很常见</p></li>
+<li><p>UISwipeGestureRecognizer: 该类处理滑动<em>Swipe</em>操作（上、下、左、右）如：照片应用中滑动查看下一张照片</p></li>
+<li><p>UIPanGestureRecognizer: 该类处理拖拽<em>Pan</em>操作，如：将一个View从一个点拖拽到另一个点</p></li>
+</ol>
+
+
+<!--more-->
+
+
+<ol>
+<li><p>UIPinchGestureRecognizer: 该类处理向里或向外捏和<em>Pinch</em>操作 (任意方向)如：放大或缩小某张图片</p></li>
+<li><p>UIRotationGestureRecognizer: 该类处理旋转<em>Rotation</em>操作，如：双指旋转某个view</p></li>
+<li><p>UILongPressGestureRecognizer: 该类处理长按<em>LongPress</em>操作</p></li>
+<li><p>UIScreenEdgePanGestureRecognizer:该类是ios7上添加的，看起来像<em>Pan</em>手势,它是检测屏幕边缘的pan手势的，系统在某些controller转场的时候会使用这个手势。</p></li>
+</ol>
+
+
+<p>所有的手势对象都会执行<em>perform</em>一个响应事件<em>action</em>,手势对象会带有相关属性设置，如：手指数目，点击次数等，我们将手势处理事件定义如下：</p>
+
+<pre><code>    -(void)handleMyTapGestureWithGestureRecognizer:(UITapGestureRecognizer *)gestureRecognizer;
+</code></pre>
+
+<p>下面简单说下各个手势的例子，详细代码请查看原文,在原文demo上我添加了UIScreenEdgePanGestureRecognizer的例子,见github：<a href="https://github.com/strivingboy/GestureDemo.git">GestureDemo</a>。</p>
+
+<ul>
+<li>UITapGestureRecognizer 代码片段</li>
+</ul>
+
+
+<p>初始化手势：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="c1">// 创建 单个手指单次点击 手势对象</span>
+</span><span class='line'><span class="bp">UITapGestureRecognizer</span> <span class="o">*</span><span class="n">singleTapGestureRecognizer</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UITapGestureRecognizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">handleSingleTapGesture</span><span class="p">:)];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">testView</span> <span class="nl">addGestureRecognizer</span><span class="p">:</span><span class="n">singleTapGestureRecognizer</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 创建 双手指两次点击 手势对象</span>
+</span><span class='line'><span class="bp">UITapGestureRecognizer</span> <span class="o">*</span><span class="n">doubleTapGestureRecognizer</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UITapGestureRecognizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">handleDoubleTapGesture</span><span class="p">:)];</span>
+</span><span class='line'><span class="n">doubleTapGestureRecognizer</span><span class="p">.</span><span class="n">numberOfTapsRequired</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'><span class="n">doubleTapGestureRecognizer</span><span class="p">.</span><span class="n">numberOfTouchesRequired</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">testView</span> <span class="nl">addGestureRecognizer</span><span class="p">:</span><span class="n">doubleTapGestureRecognizer</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>手势响应事件</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  
+</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">handleSingleTapGesture:</span><span class="p">(</span><span class="bp">UITapGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">tapGestureRecognizer</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// 处理单次点击事件</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">handleDoubleTapGesture:</span><span class="p">(</span><span class="bp">UITapGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">tapGestureRecognizer</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">// 处理双手指两次点击事件</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>UISwipeGestureRecognizer 代码片段</li>
+</ul>
+
+
+<p>初始化手势：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="c1">// 创建 滑动 手势对象</span>
+</span><span class='line'><span class="bp">UISwipeGestureRecognizer</span> <span class="o">*</span><span class="n">swipeRightOrange</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UISwipeGestureRecognizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">slideToRightWithGestureRecognizer</span><span class="p">:)];</span>
+</span><span class='line'><span class="c1">// 滑动方向</span>
+</span><span class='line'><span class="n">swipeRightOrange</span><span class="p">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">UISwipeGestureRecognizerDirectionRight</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">viewOrange</span> <span class="nl">addGestureRecognizer</span><span class="p">:</span><span class="n">swipeRightOrange</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>手势响应事件</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  
+</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">slideToRightWithGestureRecognizer:</span><span class="p">(</span><span class="bp">UISwipeGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">gestureRecognizer</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// 处理向右滑动事件</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>UIPanGestureRecognizer 代码片段</li>
+</ul>
+
+
+<p>初始化手势：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="c1">// 创建 拖拽 手势对象</span>
+</span><span class='line'><span class="bp">UIPanGestureRecognizer</span> <span class="o">*</span><span class="n">panGestureRecognizer</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIPanGestureRecognizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">moveViewWithGestureRecognizer</span><span class="p">:)];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">testView</span> <span class="nl">addGestureRecognizer</span><span class="p">:</span><span class="n">panGestureRecognizer</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>手势响应事件</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  
+</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">moveViewWithGestureRecognizer:</span><span class="p">(</span><span class="bp">UIPanGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">panGestureRecognizer</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// 处理拖拽事件</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>UIPinchGestureRecognizer 代码片段</li>
+</ul>
+
+
+<p>初始化手势：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="c1">// 创建 捏合 手势对象</span>
+</span><span class='line'><span class="bp">UIPinchGestureRecognizer</span> <span class="o">*</span><span class="n">pinchGestureRecognizer</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIPinchGestureRecognizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">handlePinchWithGestureRecognizer</span><span class="p">:)];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">testView</span> <span class="nl">addGestureRecognizer</span><span class="p">:</span><span class="n">pinchGestureRecognizer</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>手势响应事件</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  
+</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">handlePinchWithGestureRecognizer:</span><span class="p">(</span><span class="bp">UIPinchGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">pinchGestureRecognizer</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// 处理捏合事件</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>UIRotationGestureRecognizer 代码片段</li>
+</ul>
+
+
+<p>初始化手势：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="c1">// 创建 旋转 手势对象</span>
+</span><span class='line'><span class="bp">UIRotationGestureRecognizer</span> <span class="o">*</span><span class="n">rotationGestureRecognizer</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIRotationGestureRecognizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">handleRotationWithGestureRecognizer</span><span class="p">:)];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">testView</span> <span class="nl">addGestureRecognizer</span><span class="p">:</span><span class="n">rotationGestureRecognizer</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>手势响应事件</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  
+</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">handleRotationWithGestureRecognizer:</span><span class="p">(</span><span class="bp">UIRotationGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">rotationGestureRecognizer</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// 处理旋转事件</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>UILongPressGestureRecognizer 代码片段</li>
+</ul>
+
+
+<p>初始化手势：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="c1">// 创建 长按 手势对象</span>
+</span><span class='line'><span class="bp">UILongPressGestureRecognizer</span> <span class="o">*</span><span class="n">longPressGestureRecognizer</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UILongPressGestureRecognizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">handleLongPressWithGestureRecognizer</span><span class="p">:)];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">testView</span> <span class="nl">addGestureRecognizer</span><span class="p">:</span><span class="n">longPressGestureRecognizer</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>手势响应事件</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  
+</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">handleLongPressWithGestureRecognizer:</span><span class="p">(</span><span class="bp">UILongPressGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">longPressGestureRecognizer</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// 处理长按事件</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>UIScreenEdgePanGestureRecognizer 代码片段</li>
+</ul>
+
+
+<p>初始化手势：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'> <span class="c1">// 创建屏幕边缘手势(优先级高于其他手势)</span>
+</span><span class='line'><span class="bp">UIScreenEdgePanGestureRecognizer</span> <span class="o">*</span><span class="n">edgePanGestureRecognizer</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIScreenEdgePanGestureRecognizer</span> <span class="n">alloc</span><span class="p">]</span>
+</span><span class='line'>                                                              <span class="nl">initWithTarget</span><span class="p">:</span><span class="nb">self</span>
+</span><span class='line'>                                                              <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">handleEdgePanWithGestureRecognizer</span><span class="p">:)];</span>
+</span><span class='line'><span class="n">edgePanGestureRecognizer</span><span class="p">.</span><span class="n">edges</span> <span class="o">=</span> <span class="n">UIRectEdgeLeft</span><span class="p">;</span>           <span class="c1">// 左侧边缘响应</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addGestureRecognizer</span><span class="p">:</span><span class="n">edgePanGestureRecognizer</span><span class="p">];</span> <span class="c1">// view添到self.view上</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>手势响应事件</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">handleEdgePanWithGestureRecognizer:</span><span class="p">(</span><span class="bp">UIScreenEdgePanGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">gesture</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">UIGestureRecognizerStateBegan</span> <span class="o">==</span> <span class="n">gesture</span><span class="p">.</span><span class="n">state</span> <span class="o">||</span>
+</span><span class='line'>       <span class="n">UIGestureRecognizerStateChanged</span> <span class="o">==</span> <span class="n">gesture</span><span class="p">.</span><span class="n">state</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// 根据被触摸手势的view计算得出坐标值</span>
+</span><span class='line'>        <span class="bp">CGPoint</span> <span class="n">translation</span> <span class="o">=</span> <span class="p">[</span><span class="n">gesture</span> <span class="nl">translationInView</span><span class="p">:</span><span class="n">gesture</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">_showView</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">CGPointMake</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">translation</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	
+	  
+		<h2>分享</h2>  
+	  	<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1394259472270132" charset="utf-8"></script>
+<!-- JiaThis Button END -->  
+	  
+	<div class="addthis_toolbox addthis_default_style ">
+	<!-- <a class="addthis_counter addthis_pill_style"></a> &#8211;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+  
+  <section>  
+    <h1>Comments</h1>  
+    <div id="comments" aria-live="polite"><!-- 多说评论框 start -->
+	<div class="ds-thread"</div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"strivingboy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+</div>  
+  </section>  
+ </div>
+			</div>
+			<footer id="footer" class="inner"><p>Copyright &copy; 2014
+
+    strivingboy
+
+
+<span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+</footer>
+		</div>
+	</div>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+<script src="/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.tweet.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.instagram.js" type="text/javascript"></script>
+<script src="/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+<script src="/javascripts/custom.js" type="text/javascript"></script>
+
+
+</body>
+</html>
