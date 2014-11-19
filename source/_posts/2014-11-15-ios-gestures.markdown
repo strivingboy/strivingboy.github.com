@@ -11,21 +11,21 @@ categories: IOS开发
 
 UIKit中包含了UIGestureRecognizer类来处理手势识别，UIGestureRecognizer是一个抽象类，用于检测发生在UIView上预定义的手势。UIGestureRecognizer 提供了一些子类来处理具体的手势行为，如下：
 
-1. UITapGestureRecognizer: 该类处理View上的点击*Tap*操作（任意手指、任意次数的点击）该操作很常见
++ UITapGestureRecognizer: 该类处理View上的点击*Tap*操作（任意手指、任意次数的点击）该操作很常见
 
-2. UISwipeGestureRecognizer: 该类处理滑动*Swipe*操作（上、下、左、右）如：照片应用中滑动查看下一张照片
++ UISwipeGestureRecognizer: 该类处理滑动*Swipe*操作（上、下、左、右）如：照片应用中滑动查看下一张照片
 
-3. UIPanGestureRecognizer: 该类处理拖拽*Pan*操作，如：将一个View从一个点拖拽到另一个点
++ UIPanGestureRecognizer: 该类处理拖拽*Pan*操作，如：将一个View从一个点拖拽到另一个点
 
 <!--more-->
 
-4.  UIPinchGestureRecognizer: 该类处理向里或向外捏和*Pinch*操作 (任意方向)如：放大或缩小某张图片
++ UIPinchGestureRecognizer: 该类处理向里或向外捏和*Pinch*操作 (任意方向)如：放大或缩小某张图片
 
-5.  UIRotationGestureRecognizer: 该类处理旋转*Rotation*操作，如：双指旋转某个view
++ UIRotationGestureRecognizer: 该类处理旋转*Rotation*操作，如：双指旋转某个view
 
-6.  UILongPressGestureRecognizer: 该类处理长按*LongPress*操作
++ UILongPressGestureRecognizer: 该类处理长按*LongPress*操作
 
-7.  UIScreenEdgePanGestureRecognizer:该类是ios7上添加的，看起来像*Pan*手势,它是检测屏幕边缘的pan手势的，系统在某些controller转场的时候会使用这个手势。
++ UIScreenEdgePanGestureRecognizer:该类是ios7上添加的，看起来像*Pan*手势,它是检测屏幕边缘的pan手势的，系统在某些controller转场的时候会使用这个手势。
 
 所有的手势对象都会执行*perform*一个响应事件*action*,手势对象会带有相关属性设置，如：手指数目，点击次数等，我们将手势处理事件定义如下：
 	
@@ -54,19 +54,17 @@ UIKit中包含了UIGestureRecognizer类来处理手势识别，UIGestureRecogniz
 手势响应事件
 
 ```objective-c
-		
-	-(void)handleSingleTapGesture:(UITapGestureRecognizer *)tapGestureRecognizer
+	
+    -(void)handleSingleTapGesture:(UITapGestureRecognizer *)tapGestureRecognizer
     {
 	    // 处理单次点击事件
 	    ...
 	}
-	
-	
 	-(void)handleDoubleTapGesture:(UITapGestureRecognizer *)tapGestureRecognizer
     {
 		// 处理双手指两次点击事件
 		...
-	 }
+	}
 	
 ```
 
@@ -88,7 +86,7 @@ UIKit中包含了UIGestureRecognizer类来处理手势识别，UIGestureRecogniz
 手势响应事件
 
 ```objective-c
-		
+
 	-(void)slideToRightWithGestureRecognizer:(UISwipeGestureRecognizer *)gestureRecognizer
     {
 	    // 处理向右滑动事件
@@ -96,7 +94,6 @@ UIKit中包含了UIGestureRecognizer类来处理手势识别，UIGestureRecogniz
 	}
 	
 ```
-
 
 + UIPanGestureRecognizer 代码片段
 
@@ -113,7 +110,7 @@ UIKit中包含了UIGestureRecognizer类来处理手势识别，UIGestureRecogniz
 手势响应事件
 
 ```objective-c
-		
+
 	-(void)moveViewWithGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer
     {
 	    // 处理拖拽事件
@@ -205,8 +202,6 @@ UIKit中包含了UIGestureRecognizer类来处理手势识别，UIGestureRecogniz
                                                                   action:@selector(handleEdgePanWithGestureRecognizer:)];
     edgePanGestureRecognizer.edges = UIRectEdgeLeft;           // 左侧边缘响应
     [self.view addGestureRecognizer:edgePanGestureRecognizer]; // view添到self.view上
-
-
 ```
 
 手势响应事件
