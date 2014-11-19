@@ -43,8 +43,8 @@
 	<script src="/javascripts/md5.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			$('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("striving_boy@163.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
-		});
+			$('.profilepic').append("<img alt='Profile Picture' src='/images/avatar.png' style='width:160px;'/>");
+		});	
 	</script>
 	
 </div>
@@ -122,11 +122,11 @@
 
 <p>UIKit中包含了UIGestureRecognizer类来处理手势识别，UIGestureRecognizer是一个抽象类，用于检测发生在UIView上预定义的手势。UIGestureRecognizer 提供了一些子类来处理具体的手势行为，如下：</p>
 
-<ol>
+<ul>
 <li><p>UITapGestureRecognizer: 该类处理View上的点击<em>Tap</em>操作（任意手指、任意次数的点击）该操作很常见</p></li>
 <li><p>UISwipeGestureRecognizer: 该类处理滑动<em>Swipe</em>操作（上、下、左、右）如：照片应用中滑动查看下一张照片</p></li>
 <li><p>UIPanGestureRecognizer: 该类处理拖拽<em>Pan</em>操作，如：将一个View从一个点拖拽到另一个点</p></li>
-</ol>
+</ul>
 
 
 

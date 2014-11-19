@@ -4,7 +4,7 @@
   <title><![CDATA[小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2014-11-15T17:11:37+08:00</updated>
+  <updated>2014-11-19T20:39:41+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -22,22 +22,22 @@
 
 <p>UIKit中包含了UIGestureRecognizer类来处理手势识别，UIGestureRecognizer是一个抽象类，用于检测发生在UIView上预定义的手势。UIGestureRecognizer 提供了一些子类来处理具体的手势行为，如下：</p>
 
-<ol>
+<ul>
 <li><p>UITapGestureRecognizer: 该类处理View上的点击<em>Tap</em>操作（任意手指、任意次数的点击）该操作很常见</p></li>
 <li><p>UISwipeGestureRecognizer: 该类处理滑动<em>Swipe</em>操作（上、下、左、右）如：照片应用中滑动查看下一张照片</p></li>
 <li><p>UIPanGestureRecognizer: 该类处理拖拽<em>Pan</em>操作，如：将一个View从一个点拖拽到另一个点</p></li>
-</ol>
+</ul>
 
 
 <!--more-->
 
 
-<ol>
+<ul>
 <li><p>UIPinchGestureRecognizer: 该类处理向里或向外捏和<em>Pinch</em>操作 (任意方向)如：放大或缩小某张图片</p></li>
 <li><p>UIRotationGestureRecognizer: 该类处理旋转<em>Rotation</em>操作，如：双指旋转某个view</p></li>
 <li><p>UILongPressGestureRecognizer: 该类处理长按<em>LongPress</em>操作</p></li>
 <li><p>UIScreenEdgePanGestureRecognizer:该类是ios7上添加的，看起来像<em>Pan</em>手势,它是检测屏幕边缘的pan手势的，系统在某些controller转场的时候会使用这个手势。</p></li>
-</ol>
+</ul>
 
 
 <p>所有的手势对象都会执行<em>perform</em>一个响应事件<em>action</em>,手势对象会带有相关属性设置，如：手指数目，点击次数等，我们将手势处理事件定义如下：</p>
@@ -87,22 +87,16 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  
-</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">handleSingleTapGesture:</span><span class="p">(</span><span class="bp">UITapGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">tapGestureRecognizer</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">handleSingleTapGesture:</span><span class="p">(</span><span class="bp">UITapGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">tapGestureRecognizer</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="c1">// 处理单次点击事件</span>
 </span><span class='line'>    <span class="p">...</span>
 </span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>
 </span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">handleDoubleTapGesture:</span><span class="p">(</span><span class="bp">UITapGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">tapGestureRecognizer</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>  <span class="c1">// 处理双手指两次点击事件</span>
 </span><span class='line'>  <span class="p">...</span>
-</span><span class='line'> <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -136,12 +130,12 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  
-</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">slideToRightWithGestureRecognizer:</span><span class="p">(</span><span class="bp">UISwipeGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">gestureRecognizer</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 处理向右滑动事件</span>
-</span><span class='line'>    <span class="p">...</span>
-</span><span class='line'><span class="p">}</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  <span class="o">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">slideToRightWithGestureRecognizer</span><span class="p">:(</span><span class="bp">UISwipeGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="n">gestureRecognizer</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// 处理向右滑动事件</span>
+</span><span class='line'>      <span class="p">...</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -169,12 +163,12 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  
-</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">moveViewWithGestureRecognizer:</span><span class="p">(</span><span class="bp">UIPanGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">panGestureRecognizer</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 处理拖拽事件</span>
-</span><span class='line'>    <span class="p">...</span>
-</span><span class='line'><span class="p">}</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  <span class="o">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">moveViewWithGestureRecognizer</span><span class="p">:(</span><span class="bp">UIPanGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="n">panGestureRecognizer</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// 处理拖拽事件</span>
+</span><span class='line'>      <span class="p">...</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
 </span></code></pre></td></tr></table></div></figure>
 
 
