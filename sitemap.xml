@@ -3,6 +3,22 @@
   
   
   <url>
+    <loc>http://strivingboy.github.io/blog/2014/11/27/ios8daybyday-swfit/</loc>
+    
+    <lastmod>2014-11-27T16:21:13+08:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://strivingboy.github.io/blog/2014/11/27/ios8daybyday/</loc>
+    
+    <lastmod>2014-11-27T14:12:43+08:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://strivingboy.github.io/blog/2014/11/15/ios-gestures/</loc>
     
     <lastmod>2014-11-15T14:14:19+08:00</lastmod>
@@ -69,21 +85,21 @@
   
   <url>
     <loc>http://strivingboy.github.io/blog/archives/</loc>
-    <lastmod>2014-11-19T21:22:34+08:00</lastmod>
+    <lastmod>2014-11-28T00:33:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://strivingboy.github.io/</loc>
-    <lastmod>2014-11-19T21:22:34+08:00</lastmod>
+    <lastmod>2014-11-28T00:33:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://strivingboy.github.io/blog/categories/</loc>
-    <lastmod>2014-11-19T21:22:34+08:00</lastmod>
+    <lastmod>2014-11-28T00:33:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

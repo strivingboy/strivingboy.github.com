@@ -1,0 +1,509 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="baidu-site-verification" content="xMu1n6Qhoi" />
+	<meta name="google-site-verification" content="sQM_5H8xp83FnR7Rxee_d5ockt0dT7vE5mtPr3r3eXE" />
+	<title>iOS8 Day-by-Day :: Day 1 :: swift学习指南 - 小孩的技术博客</title>
+	<meta name="author" content="strivingboy">
+
+	
+	<meta name="description" content="iOS8 Day-by-Day Day 1 swfit 学习指南">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="小孩的技术博客" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://strivingboy.github.io/blog/2014/11/27/ios8daybyday-swfit/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.profilepic').append("<img alt='Profile Picture' src='/images/avatar.png' style='width:160px;'/>");
+		});	
+	</script>
+	
+</div>
+<h1><a href="/">奋斗的小孩</a></h1>
+<p>keep it simple and stupid!<br>donot repeat yourself!</p>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">首页</a></li>
+    <li><a href="/blog/archives">所有文章</a></li>
+    <li><a href="/about.html">关于我</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:striving_boy@163.com" title="Email">Email</a>
+		
+		
+		
+		
+		
+			<a class="github" href="https://github.com/strivingboy" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">iOS8 Day-by-Day :: Day 1 :: Swift学习指南</h1>
+	<div class="entry-content" itemprop="articleBody"><p>这篇文章是iOS8 Day-by-Day系列的一部分，你可以查看完整的系列目录：<a href="/blog/2014/11/27/ios8daybyday/">iOS8 Day-by-Day 系列文章</a></p>
+
+<p><strong>介绍</strong></p>
+
+<p>今年的WWDC大会真让人难以置信,除了宣布iOS8之外,他们还引入了一个新的编程语言Swfit。这跟objective-c这种强类型的语言有很大的不同,它包括了现代语言一些常见特性。</p>
+
+<p>怀着拥抱一切新东西的心情,这系列的博客将使用swfit。有大量的信息关于如何学习swfit语言,以及如何与cocoa交互——事实上下面这两本官方的书籍不能错过:</p>
+
+<ul>
+<li><a href="https://itunes.apple.com/cn/book/swift-programming-language/id881256329?mt=11">The Swift Programming Language</a></li>
+<li><a href="https://itunes.apple.com/us/book/using-swift-cocoa-objective/id888894773?mt=11&amp;ls=1">Using Swift with Cocoa and Objective-C</a></li>
+</ul>
+
+
+<p>这两本书的中文版见 github: <a href="https://github.com/CocoaChina-editors/Welcome-to-Swift">Welcome-to-Swift</a></p>
+
+<!--more-->
+
+
+<p>同时可以参考苹果的<a href="https://developer.apple.com/swift/blog/">Swfit官方博客</a> 以及其它<a href="https://developer.apple.com/swift/resources/">swfit 资源</a></p>
+
+<p>正因为有如此多关于Swfit的资源，本篇文章不会去介绍所有swfit的知识，而是介绍首次使用Swfit容易遇到的一些重要的陷阱以及潜在的问题，特别是和系统框架相关部分。</p>
+
+<p>本章的实例程序github访问地址:<a href="https://github.com/ShinobiControls/iOS8-day-by-day/">github.com/ShinobiControls/iOS8-day-by-day/</a></p>
+
+<p><strong>初始化</strong></p>
+
+<p>关于初始化，swfit 和 objective-c 有很大的不同如下：</p>
+
+<p>objective-c代码:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">instancetype</span><span class="p">)</span><span class="nf">init</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nb">self</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Do some stuff</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>对应的swfit代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">init</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">variableA</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="nb">super</span><span class="p">.</span><span class="n">init</span><span class="p">()</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>objective-c 的初始化方法负责 创建和返回<em>self</em> 而swfit没有<em>return</em> 语句，这就意味着swfit没有任何方式去返回<em>nil</em>对象。
+<em>nil</em> 对象在objective-c中通常表示一个失败的初始化，这显然在接下来发布的swfit更新中有可能改掉。</p>
+
+<p><strong>可变对象与不可变对象</strong></p>
+
+<p>可变或不可变对象的概念对Cocoa开发者已经非常熟悉如：<em>NSArray</em> 和 <em>NSMutableArray</em> 在swfit中，<em>let</em>关键字来定义不可变对象，如：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">let</span> <span class="n">a</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">()</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="n">MySecondClass</span><span class="p">()</span> <span class="c1">// Not allowed</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这就意味这不能重新赋值给<em>let</em>关键字指定的实例。实例的引用能不能重新赋值取决于对象的类型，如果一个实例是<strong>value type</strong>（如结构体）引用了<em>let</em>关键字指定的实例，改实例依然是不可变的，如果引用是一个<strong>class</strong>实例, 则改引用是可变的，具体看下面的例子：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">struct</span> <span class="n">MyStruct</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">let</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">12</span>
+</span><span class='line'>  <span class="n">var</span> <span class="nl">u</span><span class="p">:</span> <span class="n">String</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果使用<em>var</em>关键字定义一个变量<em>struct1</em> ,你将得到如下行为：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">var</span> <span class="n">struct1</span> <span class="o">=</span> <span class="n">MyStruct</span><span class="p">(</span><span class="nl">t</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="nl">u</span><span class="p">:</span> <span class="s">&quot;Hello&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">struct1</span><span class="p">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">13</span> <span class="c1">// Error: t is an immutable property</span>
+</span><span class='line'><span class="n">struct1</span><span class="p">.</span><span class="n">u</span> <span class="o">=</span> <span class="s">&quot;GoodBye&quot;</span>
+</span><span class='line'><span class="n">struct1</span> <span class="o">=</span> <span class="n">MyStruct</span><span class="p">(</span><span class="nl">t</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nl">u</span><span class="p">:</span> <span class="s">&quot;You&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>你可以改变属性<em>u</em>，因为它是通过<em>var</em>关键字定义的，同时也可以变量<em>struct1</em>本身，同样是因为通过<em>var</em>关键字定义的，而不能改变属性<em>t</em>,因为它是通过<em>let</em>关键字定义的，让我们看下使用<em>let</em>关键字定义的一个<em>struct</em>：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">let</span> <span class="n">struct2</span> <span class="o">=</span> <span class="n">MyStruct</span><span class="p">(</span><span class="nl">t</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="nl">u</span><span class="p">:</span> <span class="s">&quot;World&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">struct2</span><span class="p">.</span><span class="n">u</span> <span class="o">=</span> <span class="s">&quot;Planet&quot;</span> <span class="c1">// Error: struct2 is immutable</span>
+</span><span class='line'><span class="n">struct2</span> <span class="o">=</span> <span class="n">MyStruct</span><span class="p">(</span><span class="nl">t</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nl">u</span><span class="p">:</span> <span class="s">&quot;Defeat&quot;</span><span class="p">)</span> <span class="c1">// Error: struct2 is an immutable ref</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在，不仅是<em>struct2</em>不可变，而去属性<em>u</em>也是不可变的，这是因为结构体是一个 <strong>value type</strong></p>
+
+<p>对于一个<strong>class</strong>上述行为则有点不同，如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">class</span> <span class="n">MyClass</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">let</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">12</span>
+</span><span class='line'>  <span class="n">var</span> <span class="nl">u</span><span class="p">:</span> <span class="n">String</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">init</span><span class="p">(</span><span class="nl">t</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="nl">u</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过<em>var</em>关键字定义一个<em>class</em>实例，行为和使用objective-c类似：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">var</span> <span class="n">class1</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">(</span><span class="nl">t</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="nl">u</span><span class="p">:</span> <span class="s">&quot;Hello&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">class1</span><span class="p">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">13</span> <span class="c1">// Error: t is an immutable property</span>
+</span><span class='line'><span class="n">class1</span><span class="p">.</span><span class="n">u</span> <span class="o">=</span> <span class="s">&quot;GoodBye&quot;</span>
+</span><span class='line'><span class="n">class1</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">(</span><span class="nl">t</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nl">u</span><span class="p">:</span> <span class="s">&quot;You&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在不仅引用自己是可变的，而且所有通过<em>var</em>关键字定义的属性也是可变的，只是通过<em>let</em>关键字定义的属性是不可变的。作为比较我们来看下使用<em>let</em>关键字定义的实例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">let</span> <span class="n">class2</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">(</span><span class="nl">t</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="nl">u</span><span class="p">:</span> <span class="s">&quot;World&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">class2</span><span class="p">.</span><span class="n">u</span> <span class="o">=</span> <span class="s">&quot;Planet&quot;</span> <span class="c1">// No error</span>
+</span><span class='line'><span class="n">class2</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">(</span><span class="nl">t</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="nl">u</span><span class="p">:</span> <span class="s">&quot;Geoid&quot;</span><span class="p">)</span> <span class="nl">Error</span><span class="p">:</span> <span class="n">class2</span> <span class="n">is</span> <span class="n">an</span> <span class="n">immutable</span> <span class="n">reference</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在自己的引用就是不可变的了，但是<em>var</em>关键字定义的属性是可变的，这是因为一个<em>class</em>是 <strong>reference type</strong></p>
+
+<p>上述行为时比较容易理解的，因为大部分有引用类型的语言书籍都有详细的解释，当使用swfit 集合类型是上述行为就有点困惑，一个 <em>NSArray</em> 是一个<strong>reference type</strong>,也就是说当你创建一个<em>NSArray</em>实例时，就是创建了一指针指向数组所在的一块内存区域（根据objective-c 的定义），如果你根据上面介绍的&#8221;reference type&#8221;不难推理出<em>NSArray</em>的实例也是可变的，实际上，如果要创建一个可变数组，再objective-c中完我们要使用<em>NSMutableArray</em>
+Swfit 数组与此不同，它使用<strong>value types</strong> 来代替 <strong>reference types</strong>, 也就意味着在swfit中的行为类似一<em>struct</em>而不是一个<em>class</em>,因此关键字 <em>let</em> 或者<em>var</em> 不仅可以指定变量是否可以重定义，而且还可以指定一个数组实例是否可变。
+通过 <em>var</em>定义的数组既可以重新赋值也是可变的：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">var</span> <span class="n">array1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+</span><span class='line'><span class="n">array1</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1">// [1,2,3,4,5]array1[0] = 27    // [27,2,3,4,5]</span>
+</span><span class='line'><span class="n">array1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>    <span class="c1">// [3,2]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过 <em>var</em>定义的数组两者都不可以：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">let</span> <span class="n">array2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+</span><span class='line'><span class="n">array2</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">// Error: array2 is immutablearray2[2] = 36   // Error: array2 is immutable</span>
+</span><span class='line'><span class="n">array2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>   <span class="c1">// Error: cannot reassign an immutable reference</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>哦，my god,都晕了，这不仅完全改变了我们对集合可变的认识，而且混谣了上面说的两个概念的区别，这个有个可能在后面swfit语言的发展中会修改，因此保持关注swfit语言的定义。</p>
+
+<p>结论：由于arrays 是 值类型，所以它们通过拷贝来传递，<em>NSArray</em>实例是通过引用来传递，如果在一个方法中传递一个swfit array ，它将对这个数组进行拷贝，至于是深拷贝还是潜拷贝取决于数组中存储的对象。</p>
+
+<p><strong>强类型和任意对象(AnyObject)</strong></p>
+
+<p>强类型是swfit一个很大的特性，使用它可以写出更安全的代码，这使得objective-c在运行时的异常可以在编译时捕获。</p>
+
+<p>这是很强大，但是在objective-c 中我们经常用到 <em>id</em>类型，swfit中对应的就是<em>AnyObject</em>，<em>AnyObject</em> 感觉不像swfit的风格(un-swfit-like)，它允许你调用任何它能找到的方法，但是这将在运行时导致异常。实际上，它的行为和objective-c的<em>id</em>非常相似，区别在于，如果<em>AnyObject</em>对象上没有相应的属性或方法，它将返回<em>nil</em>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">let</span> <span class="nl">myString</span><span class="p">:</span> <span class="n">AnyObject</span> <span class="o">=</span> <span class="s">&quot;hello&quot;</span>
+</span><span class='line'><span class="n">myString</span><span class="p">.</span><span class="n">cornerRadius</span> <span class="c1">// Returns nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>为了更像Cocoa APIs中的 swfit 风格（swfit-like），下面是很常见的代码模式：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">func</span> <span class="n">someFunc</span><span class="p">(</span><span class="nl">parameter</span><span class="p">:</span> <span class="n">AnyObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnyObject</span><span class="o">!</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">let</span> <span class="n">castedParameter</span> <span class="o">=</span> <span class="n">parameter</span> <span class="n">as</span><span class="o">?</span> <span class="bp">NSString</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Now I know I have a string :)</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果你完全确定传递一个字符串，你没有必要做如上的代码保护，可以直接这样写：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">let</span> <span class="n">castedParameter</span> <span class="o">=</span> <span class="n">parameter</span> <span class="n">as</span> <span class="bp">NSString</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Swift 协议（protocol）</strong></p>
+
+<p>Protocol 在swift中很容易理解如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">protocol</span> <span class="n">MyProtocol</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">func</span> <span class="n">myProtocolMethod</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Bool</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一个常见的情况就是检测一个对象是否符合指定的协议，你可能写下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">if</span> <span class="n">let</span> <span class="n">class1AsMyProtocol</span> <span class="o">=</span> <span class="n">class1</span> <span class="n">as</span><span class="o">?</span> <span class="n">MyProtocol</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// We&#39;re in</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然而它会导致错误，因为为了检查是否符合某个协议，改协议必须是objective-c 协议，即通过 <em>@objc</em>来指定的协议：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">@</span><span class="n">objc</span> <span class="n">protocol</span> <span class="n">MyNewProtocol</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">func</span> <span class="n">myProtocolMethod</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Bool</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">let</span> <span class="n">class1AsMyNewProtocol</span> <span class="o">=</span> <span class="n">class1</span> <span class="n">as</span><span class="o">?</span> <span class="n">MyNewProtocol</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// We&#39;re in</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果Swift类继承自Objective-C的类，则它里面的方法和属性都能够作为Objective-C的选择器使用。而如果不是Objective-C的子类，需要使用@objc属性修饰。</p>
+
+<p><strong>枚举</strong></p>
+
+<p>枚举在swfit中变化很大，不仅可以枚举有关联的值（可以使不同类型），而且还方法也可以枚举。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">enum</span> <span class="n">MyEnum</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">case</span> <span class="n">FirstType</span>
+</span><span class='line'>  <span class="k">case</span> <span class="n">IntType</span> <span class="p">(</span><span class="n">Int</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">case</span> <span class="n">StringType</span> <span class="p">(</span><span class="n">String</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">case</span> <span class="n">TupleType</span> <span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">String</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">func</span> <span class="n">prettyFormat</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">String</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">switch</span> <span class="nb">self</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">case</span> <span class="p">.</span><span class="nl">FirstType</span><span class="p">:</span>
+</span><span class='line'>      <span class="k">return</span> <span class="s">&quot;No params&quot;</span>
+</span><span class='line'>    <span class="k">case</span> <span class="p">.</span><span class="n">IntType</span><span class="p">(</span><span class="n">let</span> <span class="n">value</span><span class="p">)</span><span class="o">:</span>      <span class="k">return</span> <span class="s">&quot;One param: \(value)&quot;</span>    <span class="k">case</span> <span class="p">.</span><span class="n">StringType</span><span class="p">(</span><span class="n">let</span> <span class="n">value</span><span class="p">)</span><span class="o">:</span>
+</span><span class='line'>      <span class="k">return</span> <span class="s">&quot;One param: \(value)&quot;</span>
+</span><span class='line'>    <span class="k">case</span> <span class="p">.</span><span class="n">TupleType</span><span class="p">(</span><span class="n">let</span> <span class="n">v1</span><span class="p">,</span> <span class="n">let</span> <span class="n">v2</span><span class="p">)</span><span class="o">:</span>
+</span><span class='line'>      <span class="k">return</span> <span class="s">&quot;Some params: \(v1), \(v2)&quot;</span>
+</span><span class='line'>    <span class="k">default</span><span class="o">:</span>
+</span><span class='line'>      <span class="k">return</span> <span class="s">&quot;Nothing to see here&quot;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>真是强大，可以如下使用：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">var</span> <span class="n">enum1</span> <span class="o">=</span> <span class="n">MyEnum</span><span class="p">.</span><span class="n">FirstType</span>
+</span><span class='line'><span class="n">enum1</span><span class="p">.</span><span class="n">prettyFormat</span><span class="p">()</span> <span class="c1">// &quot;No params&quot;</span>
+</span><span class='line'><span class="n">enum1</span> <span class="o">=</span> <span class="p">.</span><span class="n">TupleType</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="s">&quot;Hello&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">enum1</span><span class="p">.</span><span class="n">prettyFormat</span><span class="p">()</span> <span class="c1">// &quot;Some params: 12, Hello&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>总结</strong></p>
+
+<p>Swfit 是一门功能强大的语言，掌握它的最佳实践、惯用方法以及模式需要一段时间，这篇文章列出了一些从objective-c到swfit常见的困惑.</p>
+
+<p>本文翻译自：<a href="http://www.shinobicontrols.com/blog/posts/2014/07/17/ios8-day-by-day-day-1-blaggers-guide-to-swift">ios8-day-by-day-day-1-blaggers-guide-to-swift</a></p>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	
+	  
+		<h2>分享</h2>  
+	  	<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1394259472270132" charset="utf-8"></script>
+<!-- JiaThis Button END -->  
+	  
+	<div class="addthis_toolbox addthis_default_style ">
+	<!-- <a class="addthis_counter addthis_pill_style"></a> &#8211;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+  
+  <section>  
+    <h1>Comments</h1>  
+    <div id="comments" aria-live="polite"><!-- 多说评论框 start -->
+	<div class="ds-thread"</div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"strivingboy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+</div>  
+  </section>  
+ </div>
+			</div>
+			<footer id="footer" class="inner"><p>Copyright &copy; 2014
+
+    strivingboy
+
+
+<span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+</footer>
+		</div>
+	</div>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+<script src="/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.tweet.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.instagram.js" type="text/javascript"></script>
+<script src="/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+<script src="/javascripts/custom.js" type="text/javascript"></script>
+
+
+</body>
+</html>
