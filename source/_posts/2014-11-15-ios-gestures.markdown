@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "ios 手势（UIGestureRecognizer）操作"
+title: "iOS 手势（UIGestureRecognizer）操作"
 description: "ios UIGestureRecognizer 手势操作 "
 date: 2014-11-15 14:14:19 +0800
 comments: true
