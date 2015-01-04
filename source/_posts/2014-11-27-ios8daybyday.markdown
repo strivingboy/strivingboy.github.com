@@ -13,5 +13,4 @@ categories: iOS8,Day-by-Day,翻译
 **iOS8 Day-by-Day** 系列文章基本包含了iOS开发者需要知道的所有iOS8新特性以及新技术，下面就逐个介绍这些特性：
 
 + [Day 1 :: swfit 学习指南](/blog/2014/11/27/ios8daybyday-swfit/)
-<!-- + Day 2 :: 分享应用扩展<!--more--> -->
-<!-- + Day 3 :: 分享应用扩展 -->
+<!--more-->
