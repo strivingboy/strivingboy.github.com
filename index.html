@@ -11,7 +11,7 @@
 	<meta name="author" content="strivingboy">
 
 	
-	<meta name="description" content="Nov 27 2014 ios8,day-by-day,翻译 iOS8 Day-by-Day :: Day 1 :: Swift学习指南 这篇文章是iOS8 Day-by-Day系列的一部分，你可以查看完整的系列目录：iOS8 Day-by-Day 系列文章 介绍 &hellip;">
+	<meta name="description" content="Dec 7 2014 ios, 技术点 Ios7 在自定义leftBarButtonItem情况下的右滑返回问题 最近在做项目时发现一个问题：在自定义navigation 的 leftBarButtonItem后，右滑pop 手势失效了，google 了一把，解决过程如下，在此记录下： 问题： &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,6 +108,83 @@
   
 
 
+<time datetime="2014-12-07T20:35:54+08:00" data-updated="true" itemprop="datePublished">Dec  7 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/ios/'>ios</a>, <a class='category' href='/blog/categories/ji-zhu-dian/'>技术点</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/12/07/ios7-interactive-pop-with-custom-back-button/" itemprop="url">Ios7 在自定义leftBarButtonItem情况下的右滑返回问题</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>最近在做项目时发现一个问题：在自定义navigation 的 leftBarButtonItem后，右滑pop 手势失效了，google 了一把，解决过程如下，在此记录下：</p>
+
+<p>问题：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nb">self</span><span class="p">.</span><span class="n">navigationItem</span><span class="p">.</span><span class="n">leftBarButtonItem</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="n">backButton</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">UIBarButtonItem</span> <span class="o">*</span><span class="p">)</span><span class="nf">backButton</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="bp">UIImage</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:</span><span class="s">@&quot;back_button&quot;</span><span class="p">];</span>
+</span><span class='line'>  <span class="bp">CGRect</span> <span class="n">buttonFrame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">image</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="n">image</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="bp">UIButton</span> <span class="o">*</span><span class="n">button</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIButton</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">buttonFrame</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">button</span> <span class="nl">addTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="n">backButtonPressed</span><span class="p">)</span> <span class="nl">forControlEvents</span><span class="p">:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">button</span> <span class="nl">setImage</span><span class="p">:[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:</span><span class="n">normalImage</span><span class="p">]</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="bp">UIBarButtonItem</span> <span class="o">*</span><span class="n">item</span><span class="p">;</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIBarButtonItem</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithCustomView</span><span class="p">:</span><span class="n">button</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="n">item</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+		
+		<a href="/blog/2014/12/07/ios7-interactive-pop-with-custom-back-button/" class="more-link">继续阅读 &rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
 <time datetime="2014-11-27T16:21:13+08:00" data-updated="true" itemprop="datePublished">Nov 27 2014</time></div>
 		<div class="tags">
 
@@ -180,7 +257,7 @@
 </ul>
 
 
-
+<!-- + Day 2 :: 分享应用扩展
 		
 		<a href="/blog/2014/11/27/ios8daybyday/" class="more-link">继续阅读 &rarr;</a>
 	</div>
@@ -510,63 +587,16 @@
 
 </article>
 
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-03T10:33:16+08:00" data-updated="true" itemprop="datePublished">Aug  3 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/gitshi-yong/'>git使用</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/08/03/git-ji-chu/" itemprop="url">Git 使用基础(一)</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>对于git的学习推荐一下资料：</p>
-
-<ul>
-<li>GitPro:<u><a href="http://git-scm.com/book/zh">http://git-scm.com/book/zh</a> </u> 很不错的入门书籍</li>
-<li>Git命令在线文档: <u><a href="http://git-scm.com/docs/">http://git-scm.com/docs/</a> </u>非常全面</li>
-<li>Git权威指南: <u><a href="http://book.douban.com/subject/6526452/">http://book.douban.com/subject/6526452/</a> </u> 中国人写的比较不错的Git书籍</li>
-</ul>
-
-
-<p>如果不想敲 git 命令来使用 git，推荐一个非常不错的 git 图形画工具:</p>
-
-<p><u> <a href="http://www.sourcetreeapp.com/">http://www.sourcetreeapp.com/</a> </u>  各个平台下都有，更新也非常快</p>
-
-<p>要高效快速的使用git,还是建议学习使用git 命令，使用git 也有一段时间了，也准备开始写写技术博客，于是搭建了自己的github博客，记录下自己的学习以及思考，也方便自己查阅。</p>
-
-
-		
-		<a href="/blog/2014/08/03/git-ji-chu/" class="more-link">继续阅读 &rarr;</a>
-	</div>
-
-</article>
-
 </div>
 <nav id="pagenavi">
     
     
+        <a href="2" class="next">下一页</a>
+    
     <div class="center"><a href="/blog/archives">所有文章</a></div>
 </nav></div>
 			</div>
-			<footer id="footer" class="inner"><p>Copyright &copy; 2014
+			<footer id="footer" class="inner"><p>Copyright &copy; 2015
 
     strivingboy
 

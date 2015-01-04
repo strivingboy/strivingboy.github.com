@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ios | 小孩的技术博客]]></title>
+  <link href="http://strivingboy.github.io/blog/categories/ios/atom.xml" rel="self"/>
+  <link href="http://strivingboy.github.io/"/>
+  <updated>2015-01-04T21:14:57+08:00</updated>
+  <id>http://strivingboy.github.io/</id>
+  <author>
+    <name><![CDATA[strivingboy]]></name>
+    <email><![CDATA[striving_boy@163.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ios7 在自定义leftBarButtonItem情况下的右滑返回问题]]></title>
+    <link href="http://strivingboy.github.io/blog/2014/12/07/ios7-interactive-pop-with-custom-back-button/"/>
+    <updated>2014-12-07T20:35:54+08:00</updated>
+    <id>http://strivingboy.github.io/blog/2014/12/07/ios7-interactive-pop-with-custom-back-button</id>
+    <content type="html"><![CDATA[<p>最近在做项目时发现一个问题：在自定义navigation 的 leftBarButtonItem后，右滑pop 手势失效了，google 了一把，解决过程如下，在此记录下：</p>
+
+<p>问题：</p>
+
+<pre><code class="objective-c">
+- (void)viewDidLoad
+{
+  self.navigationItem.leftBarButtonItem = [self backButton];
+}
+
+- (UIBarButtonItem *)backButton
+{
+  UIImage *image = [UIImage imageNamed:@"back_button"];
+  CGRect buttonFrame = CGRectMake(0, 0, image.size.width, image.size.height);
+
+  UIButton *button = [[UIButton alloc] initWithFrame:buttonFrame];
+  [button addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+  [button setImage:[UIImage imageNamed:normalImage] forState:UIControlStateNormal];
+
+  UIBarButtonItem *item; = [[UIBarButtonItem alloc] initWithCustomView:button];
+
+  return item;
+}
+</code></pre>
+
+<!--more-->
+
+
+<p>当写完上述代码后，就会发现，iOS7提供的右滑返回手势不起作用了，这篇<a href="http://stuartkhall.com/posts/ios-7-development-tips-tricks-hacks">ios 7 Tips</a>文章中给出了一个快速的解决方法：</p>
+
+<pre><code class="objective-c">
+self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
+                                             initWithImage:img
+                                             style:UIBarButtonItemStylePlain
+                                             target:self
+                                             action:@selector(onBack:)];
+self.navigationController.interactivePopGestureRecognizer.delegate = (id&lt;UIGestureRecognizerDelegate&gt;)self;
+</code></pre>
+
+<p>经过测试发现当 push 一个 viewController后快速 右滑返回会导致崩溃， 也就是说在当push动画还没完成时去滑动返回， navigation controller 还在引用 viewController， 调试模式下回看到如下log:</p>
+
+<p><em>nested pop animation can result in corrupted navigation bar</em></p>
+
+<p>下来就是想办法在动画过程中禁止滑动手势，于是就有了下面的解决方法：</p>
+
+<pre><code class="objective-c">@interface BaseNavigationController : UINavigationController &lt;UINavigationControllerDelegate, UIGestureRecognizerDelegate&gt;
+@end
+
+@implementation BaseNavigationController
+
+- (void)viewDidLoad
+{
+  __weak BaseNavigationController *weakSelf = self;
+
+  if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)])
+  {
+    self.interactivePopGestureRecognizer.delegate = weakSelf;
+    self.delegate = weakSelf;
+  }
+}
+
+// Hijack the push method to disable the gesture
+
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+  if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)])
+    self.interactivePopGestureRecognizer.enabled = NO;
+
+  [super pushViewController:viewController animated:animated];
+}
+
+#pragma mark UINavigationControllerDelegate
+
+- (void)navigationController:(UINavigationController *)navigationController
+       didShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animate
+{
+  // Enable the gesture again once the new controller is shown
+
+  if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)])
+    self.interactivePopGestureRecognizer.enabled = YES;
+}
+@end
+</code></pre>
+
+<p><strong> 参考链接 </strong></p>
+
+<ul>
+<li><u><a href="http://stuartkhall.com/posts/ios-7-development-tips-tricks-hacks">http://stuartkhall.com/posts/ios-7-development-tips-tricks-hacks</a> </u></li>
+<li><u><a href="http://keighl.com/post/ios7-interactive-pop-gesture-custom-back-button/">http://keighl.com/post/ios7-interactive-pop-gesture-custom-back-button/</a> </u></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
