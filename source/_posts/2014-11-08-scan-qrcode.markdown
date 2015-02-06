@@ -12,7 +12,7 @@ categories: IOS开发
 
 + [ZXing](https://github.com/zxing/zxing) google推出的开源项目，相应介绍如：<u>http://blog.devtang.com/blog/2012/12/23/use-zxing-library/</u>
 
-最近项目需要，看了下使用ios7自带的 AVFoundation Framework 来实现二维码扫描，Demo 见：[scan_qrcode_deomo](https://github.com/strivingboy/scan_qrcode_demo.git)
+最近项目需要，看了下使用ios7自带的 AVFoundation Framework 来实现二维码扫描，Demo 见：[scan_qrcode_demo](https://github.com/strivingboy/scan_qrcode_demo.git)
 
 **关于AVFoundation**
 
@@ -206,7 +206,8 @@ AVFoundation 是一个很大基础库，用来创建基于时间的视听媒体�
 
 代理方法会频繁调用，我暂且用一个标记（@property (nonatomic) BOOL lastResut）表示是否是第一次扫描成功，来处理。
 
-2、AVFoundation 改库不能扫描相册中的二维码图片，不知为啥苹果没有支持，有知道实现的麻烦告诉我哈。
+2、AVFoundation 
+该库不能扫描相册中的二维码图片，不知为啥苹果没有支持，有知道实现的麻烦告诉我哈。
 
 
 ** 参考链接 ** 
