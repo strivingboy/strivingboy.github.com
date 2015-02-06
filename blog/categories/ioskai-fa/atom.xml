@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ios开发 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/ioskai-fa/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2015-01-04T23:17:15+08:00</updated>
+  <updated>2015-02-06T10:49:54+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -245,7 +245,7 @@
 </ul>
 
 
-<p>最近项目需要，看了下使用ios7自带的 AVFoundation Framework 来实现二维码扫描，Demo 见：<a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_deomo</a></p>
+<p>最近项目需要，看了下使用ios7自带的 AVFoundation Framework 来实现二维码扫描，Demo 见：<a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_demo</a></p>
 
 <p><strong>关于AVFoundation</strong></p>
 
@@ -428,7 +428,8 @@
 
 <p>代理方法会频繁调用，我暂且用一个标记（@property (nonatomic) BOOL lastResut）表示是否是第一次扫描成功，来处理。</p>
 
-<p>2、AVFoundation 改库不能扫描相册中的二维码图片，不知为啥苹果没有支持，有知道实现的麻烦告诉我哈。</p>
+<p>2、AVFoundation
+该库不能扫描相册中的二维码图片，不知为啥苹果没有支持，有知道实现的麻烦告诉我哈。</p>
 
 <p><strong> 参考链接 </strong></p>
 
