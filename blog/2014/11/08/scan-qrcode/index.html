@@ -153,7 +153,7 @@
 </span><span class='line'>    <span class="p">.....</span>
 </span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">)</span> <span class="bp">AVCaptureSession</span> <span class="o">*</span><span class="n">captureSession</span><span class="p">;</span>
 </span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">)</span> <span class="bp">AVCaptureVideoPreviewLayer</span> <span class="o">*</span><span class="n">videoPreviewLayer</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">lastResut</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">lastResult</span><span class="p">;</span>
 </span><span class='line'>    <span class="k">@end</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -310,7 +310,7 @@
 </pre></td><td class='code'><pre><code class='objective-c'><span class='line'>  <span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">reportScanResult</span><span class="p">:(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">result</span>
 </span><span class='line'>  <span class="p">{</span>
 </span><span class='line'>      <span class="p">[</span><span class="nb">self</span> <span class="n">stopReading</span><span class="p">];</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_lastResut</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_lastResult</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>          <span class="k">return</span><span class="p">;</span>
 </span><span class='line'>      <span class="p">}</span>
 </span><span class='line'>      <span class="n">_lastResut</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
@@ -320,8 +320,8 @@
 </span><span class='line'>                                            <span class="nl">cancelButtonTitle</span><span class="p">:</span><span class="s">@&quot;取消&quot;</span>
 </span><span class='line'>                                            <span class="nl">otherButtonTitles</span><span class="p">:</span> <span class="nb">nil</span><span class="p">];</span>
 </span><span class='line'>      <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
-</span><span class='line'>      <span class="c1">// 以及处理了结果，下次扫描</span>
-</span><span class='line'>      <span class="n">_lastResut</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'>      <span class="c1">// 以下处理了结果，继续下次扫描</span>
+</span><span class='line'>      <span class="n">_lastResult</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
 </span><span class='line'>  <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -357,7 +357,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>以上就是本文介绍的大部分内容，详细代码请看demo <a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_deomo</a> 界面效果如下：</p>
+<p>以上就是本文介绍的大部分内容，详细代码请看demo <a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_deomo</a></p>
 
 <p>实现过程中遇到一下两个问题：</p>
 
@@ -392,7 +392,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>代理方法会频繁调用，我暂且用一个标记（@property (nonatomic) BOOL lastResut）表示是否是第一次扫描成功，来处理。</p>
+<p>代理方法会频繁调用，我暂且用一个标记（@property (nonatomic) BOOL lastResult）表示是否是第一次扫描成功，来处理。</p>
 
 <p>2、AVFoundation
 该库不能扫描相册中的二维码图片，不知为啥苹果没有支持，有知道实现的麻烦告诉我哈。</p>

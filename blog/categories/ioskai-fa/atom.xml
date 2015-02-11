@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ios开发 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/ioskai-fa/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2015-02-06T10:49:54+08:00</updated>
+  <updated>2015-02-11T10:26:04+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -289,7 +289,7 @@
     .....
     @property (nonatomic) AVCaptureSession *captureSession;
     @property (nonatomic) AVCaptureVideoPreviewLayer *videoPreviewLayer;
-    @property (nonatomic) BOOL lastResut;
+    @property (nonatomic) BOOL lastResult;
     @end
 </code></pre>
 
@@ -371,7 +371,7 @@
     - (void)reportScanResult:(NSString *)result
     {
         [self stopReading];
-        if (!_lastResut) {
+        if (!_lastResult) {
             return;
         }
         _lastResut = NO;
@@ -381,8 +381,8 @@
                                               cancelButtonTitle:@"取消"
                                               otherButtonTitles: nil];
         [alert show];
-        // 以及处理了结果，下次扫描
-        _lastResut = YES;
+        // 以下处理了结果，继续下次扫描
+        _lastResult = YES;
     }
 </code></pre>
 
@@ -404,7 +404,7 @@
     }
 </code></pre>
 
-<p>以上就是本文介绍的大部分内容，详细代码请看demo <a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_deomo</a> 界面效果如下：</p>
+<p>以上就是本文介绍的大部分内容，详细代码请看demo <a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_deomo</a></p>
 
 <p>实现过程中遇到一下两个问题：</p>
 
@@ -426,7 +426,7 @@
     */
 </code></pre>
 
-<p>代理方法会频繁调用，我暂且用一个标记（@property (nonatomic) BOOL lastResut）表示是否是第一次扫描成功，来处理。</p>
+<p>代理方法会频繁调用，我暂且用一个标记（@property (nonatomic) BOOL lastResult）表示是否是第一次扫描成功，来处理。</p>
 
 <p>2、AVFoundation
 该库不能扫描相册中的二维码图片，不知为啥苹果没有支持，有知道实现的麻烦告诉我哈。</p>
