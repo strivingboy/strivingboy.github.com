@@ -53,7 +53,7 @@ AVFoundation 是一个很大基础库，用来创建基于时间的视听媒体�
     .....
     @property (nonatomic) AVCaptureSession *captureSession;
     @property (nonatomic) AVCaptureVideoPreviewLayer *videoPreviewLayer;
-    @property (nonatomic) BOOL lastResut;
+    @property (nonatomic) BOOL lastResult;
     @end
 
 ```
@@ -143,7 +143,7 @@ AVFoundation 是一个很大基础库，用来创建基于时间的视听媒体�
 	- (void)reportScanResult:(NSString *)result
 	{
 	    [self stopReading];
-	    if (!_lastResut) {
+	    if (!_lastResult) {
 	        return;
 	    }
 	    _lastResut = NO;
@@ -153,8 +153,8 @@ AVFoundation 是一个很大基础库，用来创建基于时间的视听媒体�
 	                                          cancelButtonTitle:@"取消"
 	                                          otherButtonTitles: nil];
 	    [alert show];
-	    // 以及处理了结果，下次扫描
-	    _lastResut = YES;
+	    // 以下处理了结果，继续下次扫描
+	    _lastResult = YES;
 	}
 
 ```
@@ -180,7 +180,7 @@ AVFoundation 是一个很大基础库，用来创建基于时间的视听媒体�
 
 ```
 
-以上就是本文介绍的大部分内容，详细代码请看demo [scan_qrcode_deomo](https://github.com/strivingboy/scan_qrcode_demo.git) 界面效果如下：
+以上就是本文介绍的大部分内容，详细代码请看demo [scan_qrcode_deomo](https://github.com/strivingboy/scan_qrcode_demo.git)
 
 实现过程中遇到一下两个问题：
 
@@ -204,7 +204,7 @@ AVFoundation 是一个很大基础库，用来创建基于时间的视听媒体�
 
 ```
 
-代理方法会频繁调用，我暂且用一个标记（@property (nonatomic) BOOL lastResut）表示是否是第一次扫描成功，来处理。
+代理方法会频繁调用，我暂且用一个标记（@property (nonatomic) BOOL lastResult）表示是否是第一次扫描成功，来处理。
 
 2、AVFoundation 
 该库不能扫描相册中的二维码图片，不知为啥苹果没有支持，有知道实现的麻烦告诉我哈。
