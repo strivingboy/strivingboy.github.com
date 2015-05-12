@@ -7,11 +7,11 @@
 	<meta charset="utf-8">
 	<meta name="baidu-site-verification" content="xMu1n6Qhoi" />
 	<meta name="google-site-verification" content="sQM_5H8xp83FnR7Rxee_d5ockt0dT7vE5mtPr3r3eXE" />
-	<title>更好的git log - 小孩的技术博客</title>
+	<title>ios 循环滚动 cycleScrollView - 小孩的技术博客</title>
 	<meta name="author" content="strivingboy">
 
 	
-	<meta name="description" content="Git 使用 漂亮的Git log">
+	<meta name="description" content="iOS7 右滑返回 自定义返回按钮">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +21,7 @@
 
 	<link href="/atom.xml" rel="alternate" title="小孩的技术博客" type="application/atom+xml">
 	
-	<link rel="canonical" href="http://strivingboy.github.io/blog/2014/09/29/better-git-log/">
+	<link rel="canonical" href="http://strivingboy.github.io/blog/2015/05/11/cyclescrollview/">
 	<link href="/favicon.png" rel="shortcut icon">
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -91,71 +91,12 @@
 			
 			<div class="mid-col-container">
 				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-	<h1 class="title" itemprop="name">更好的git Log</h1>
-	<div class="entry-content" itemprop="articleBody"><p><code>git log</code>对于使用git的&#8221;码农们&#8221;一定非常熟悉，如：</p>
+	<h1 class="title" itemprop="name">Ios 循环滚动 cycleScrollView</h1>
+	<div class="entry-content" itemprop="articleBody"><p>最近项目中需要一个循环滚动的效果，做法在此记录下哈</p>
 
-<p> git log  命令是查看全部提交日志</p>
+<p>实现原理：UIScrollView适中保持三个view，即：前、中、后 三个视图，前后滑动都显示中间那个view</p>
 
-<p> git log -2  查看最近2次的提交日志</p>
-
-<p> git log -p  查看历史纪录以来哪几行被修改</p>
-
-<p> git log &ndash;oneline 查看历史提交日志，单行显示</p>
-
-<!--more-->
-
-
-<p>以上是我们经常使用过的命令，接下来将谈谈如何更好的使用git log来解决使用过程中遇到的需求：（大家有木有遇到呢&hellip;）</p>
-
-<p><strong>提交历史搜索</strong></p>
-
-<p><code>git log --author="&lt;pattern&gt;"</code></p>
-
-<p>根据提交作者，搜索提交历史 pattern 可以是字符串或这则表达式</p>
-
-<p><code>git log --grep="&lt;pattern&gt;"</code></p>
-
-<p>搜索提交历史 同上pattern 可以是字符串或这则表达式</p>
-
-<p><strong>更清楚的显示单行提交历史</strong></p>
-
-<p><code>git log --pretty=online</code> 显示如下：</p>
-
-<p><img src="http://strivingboy.github.com/images/2014-09-29-oneline.png" alt="git log --pretty=online" /></p>
-
-<p>如何图形化显示更清晰的提交历史呢？</p>
-
-<p><code>git log --graph --decorate --pretty=oneline --abbrev-commit --all</code></p>
-
-<p><img src="http://strivingboy.github.com/images/2014-09-29-lola.png" alt="git log lola" /></p>
-
-<p>能不能再清楚点呢？比如：显示提交时间、作者&hellip;..当然可以啦</p>
-
-<p><code>git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit</code></p>
-
-<p><img src="http://strivingboy.github.com/images/2014-09-29-lg.png" alt="git log lola" /></p>
-
-<p>是不是漂亮了很多，每次打完包我们都回写下change log, 之前每次都是根据git log 复制后编辑，汗&hellip;这体力活，有了上面的命令轻松修改下：</p>
-
-<p><code>git log --pretty=format:'%s  %C(bold blue)(%an)%Creset' --abbrev-commit</code></p>
-
-<p><img src="http://strivingboy.github.com/images/2014-09-29-changelog.png" alt="git log lola" /></p>
-
-<p>上面的命令这么长，每次敲岂不累死（前提是要记得住，哈哈）我们可以使用linux 下的 alias,详见：<u><a href="http://en.wikipedia.org/wiki/Alias_">http://en.wikipedia.org/wiki/Alias_</a>(command) </u></p>
-
-<p><code>git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit"</code></p>
-
-<p>现在你每次在终端输入git lg 就可以啦. 关于git 别名，可以参见：</p>
-
-<p><strong><a href="http://strivingboy.github.com/blog/2014/09/03/git-aliase/">让Git命令更简单（Git alias)</a></strong></p>
-
-<p><strong> 参考链接 </strong></p>
-
-<ul>
-<li><p><u><a href="https://www.kernel.org/pub/software/scm/git/docs/git-log.html">https://www.kernel.org/pub/software/scm/git/docs/git-log.html</a> </u></p></li>
-<li><p><u><a href="https://coderwall.com/p/euwpig">https://coderwall.com/p/euwpig</a> </u></p></li>
-</ul>
-
+<p>Demo 见：<strong><a href="https://github.com/strivingboy/CycleScrollViewDemo">CycleScrollViewDeomo</a></strong></p>
 </div>
 
 </article>

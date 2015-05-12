@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 技术点 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/ji-zhu-dian/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2015-02-11T10:26:04+08:00</updated>
+  <updated>2015-05-12T09:20:37+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ios 循环滚动 cycleScrollView]]></title>
+    <link href="http://strivingboy.github.io/blog/2015/05/11/cyclescrollview/"/>
+    <updated>2015-05-11T19:34:43+08:00</updated>
+    <id>http://strivingboy.github.io/blog/2015/05/11/cyclescrollview</id>
+    <content type="html"><![CDATA[<p>最近项目中需要一个循环滚动的效果，做法在此记录下哈</p>
+
+<p>实现原理：UIScrollView适中保持三个view，即：前、中、后 三个视图，前后滑动都显示中间那个view</p>
+
+<p>Demo 见：<strong><a href="https://github.com/strivingboy/CycleScrollViewDemo">CycleScrollViewDeomo</a></strong></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ios7 在自定义leftBarButtonItem情况下的右滑返回问题]]></title>
