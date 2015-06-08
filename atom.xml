@@ -4,7 +4,7 @@
   <title><![CDATA[小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2015-05-12T09:20:37+08:00</updated>
+  <updated>2015-06-09T00:37:58+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -12,6 +12,25 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mac 录制屏幕 & 制作gif]]></title>
+    <link href="http://strivingboy.github.io/blog/2015/06/08/gif/"/>
+    <updated>2015-06-08T23:57:55+08:00</updated>
+    <id>http://strivingboy.github.io/blog/2015/06/08/gif</id>
+    <content type="html"><![CDATA[<h3>使用QuickTime Player录制屏幕</h3>
+
+<p><strong>Step1:</strong>  打开QuickTime Player之后直接在顶部栏中QuickTime Player的文件菜单栏下找“新建屏幕录制”或直接使用快捷键“control+command+N”调出屏幕录制工具</p>
+
+<p><img src="http://strivingboy.github.io/images/step1.png" alt="" /></p>
+
+<p><strong>Step2:</strong>  调出窗口如下图，点击中间的小红点录制按钮屏幕中央也会出现“点按以录制全屏幕。拖动以录制屏幕的一部分。</p>
+
+<p><img src="http://strivingboy.github.io/images/step2.png" alt="" /></p>
+
+<p><strong>Step3:</strong>  选择好固定区域后点击屏幕中央的“开始录制”按钮即开始进行屏幕的操作录制，包括鼠标的移动。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ios 循环滚动 cycleScrollView]]></title>
