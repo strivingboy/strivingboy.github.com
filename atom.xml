@@ -4,7 +4,7 @@
   <title><![CDATA[小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2015-06-09T00:37:58+08:00</updated>
+  <updated>2015-06-09T09:26:32+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -22,13 +22,44 @@
 
 <p><strong>Step1:</strong>  打开QuickTime Player之后直接在顶部栏中QuickTime Player的文件菜单栏下找“新建屏幕录制”或直接使用快捷键“control+command+N”调出屏幕录制工具</p>
 
-<p><img src="http://strivingboy.github.io/images/step1.png" alt="" /></p>
+<div align=center>
+<img src="http://strivingboy.github.io/images/step1.png" width="392" height="335" alt="demo gif"/>
+</div>
+
 
 <p><strong>Step2:</strong>  调出窗口如下图，点击中间的小红点录制按钮屏幕中央也会出现“点按以录制全屏幕。拖动以录制屏幕的一部分。</p>
 
-<p><img src="http://strivingboy.github.io/images/step2.png" alt="" /></p>
+<div align=center>
+<img src="http://strivingboy.github.io/images/step2.png" width="718" height="284" alt="demo gif"/>
+</div>
+
 
 <p><strong>Step3:</strong>  选择好固定区域后点击屏幕中央的“开始录制”按钮即开始进行屏幕的操作录制，包括鼠标的移动。</p>
+
+<h3>使用photoshop 将视频转换为gif图片</h3>
+
+<p><strong>Step1:</strong> 使用photoshop打开视频之后, 选择［窗口］->[时间轴] 开启时间轴面板，</p>
+
+<div align=center>
+<img src="http://strivingboy.github.io/images/step3.png" width="842" height="521" alt="demo gif"/>
+</div>
+
+
+<p><strong>Step2:</strong> 点开时间轴面板右上的扩展菜单按钮，选择 [转换帧]->[转换为帧动画]</p>
+
+<div align=center>
+<img src="http://strivingboy.github.io/images/step4.png" width="773" height="372" alt="demo gif"/>
+</div>
+
+
+<p><strong>Step3:</strong>完成后选择 [文件] -> [存储为Web和设备所用格式…]，右上角下拉框中选择 GIF 格式，点击 [存储]</p>
+
+<div align=center>
+<img src="http://strivingboy.github.io/images/step5.png" width="600" height="182" alt="demo gif"/>
+</div>
+
+
+
 ]]></content>
   </entry>
   
