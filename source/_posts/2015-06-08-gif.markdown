@@ -15,6 +15,8 @@ categories: Mac 技巧
 <img src="/images/step1.png" width="392" height="335" alt="demo gif"/>
 </div>
 
+<!--more-->
+
 **Step2:**  调出窗口如下图，点击中间的小红点录制按钮屏幕中央也会出现“点按以录制全屏幕。拖动以录制屏幕的一部分。
 
 <div align=center>
@@ -25,6 +27,7 @@ categories: Mac 技巧
 **Step3:**  选择好固定区域后点击屏幕中央的“开始录制”按钮即开始进行屏幕的操作录制，包括鼠标的移动。
 
 
+
 ###使用photoshop 将视频转换为gif图片
 
 **Step1:** 使用photoshop打开视频之后, 选择［窗口］->[时间轴] 开启时间轴面板，
@@ -32,6 +35,7 @@ categories: Mac 技巧
 <div align=center>
 <img src="/images/step3.png" width="842" height="521" alt="demo gif"/>
 </div>
+
 
 **Step2:** 点开时间轴面板右上的扩展菜单按钮，选择 [转换帧]->[转换为帧动画]
 
