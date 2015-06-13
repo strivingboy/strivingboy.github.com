@@ -12,3 +12,10 @@ categories: iOS 技术点
 实现原理：UIScrollView适中保持三个view，即：前、中、后 三个视图，前后滑动都显示中间那个view
 
 Demo 见：**[CycleScrollViewDeomo](https://github.com/strivingboy/CycleScrollViewDemo)**
+
+效果如下：
+
+<div align=center>
+<img src="/images/scroll.gif" width="320" height="568" alt="demo gif"/>
+</div>
+
