@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ios | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2015-06-09T09:26:32+08:00</updated>
+  <updated>2015-06-13T22:31:14+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -23,6 +23,15 @@
 <p>实现原理：UIScrollView适中保持三个view，即：前、中、后 三个视图，前后滑动都显示中间那个view</p>
 
 <p>Demo 见：<strong><a href="https://github.com/strivingboy/CycleScrollViewDemo">CycleScrollViewDeomo</a></strong></p>
+
+<p>效果如下：</p>
+
+<div align=center>
+<img src="http://strivingboy.github.io/images/scroll.gif" width="320" height="568" alt="demo gif"/>
+</div>
+
+
+
 ]]></content>
   </entry>
   
