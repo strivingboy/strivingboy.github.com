@@ -11,8 +11,7 @@
 	<meta name="author" content="strivingboy">
 
 	
-	<meta name="description" content="Jul 12 2015 阅读 读《如何把事情做的最好》 最近阅读了《如何把事情做的最好》这本书，在此写下读书笔记，这也是第一次写读书笔记，给自己一个坚持读书的动力哈哈。 开篇：
-每个人生来都具备足够的潜力，每个人都能做到别人眼中难以企及的事情。请永远保持初学之心，勇敢面对人生挑战。 &hellip;">
+	<meta name="description" content="Jul 19 2015 ios, 技术点 iOS9 新特性介绍 本文翻译 iOS9 Day-by-Day 中对iOS9新特性简单介绍下 三种搜索API NSUserActivity: NSUserActivity是iOS 8专为Handoff推出的API，iOS 9之后得到了提升。 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -93,6 +92,57 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-07-19T15:07:13+08:00" data-updated="true" itemprop="datePublished">Jul 19 2015</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/ios/'>ios</a>, <a class='category' href='/blog/categories/ji-zhu-dian/'>技术点</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/07/19/ios9/" itemprop="url">iOS9 新特性介绍</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>本文翻译 <a href="https://www.shinobicontrols.com/blog/ios9-day-by-day-index">iOS9 Day-by-Day</a> 中对iOS9新特性简单介绍下</p>
+
+<ul>
+<li><p><strong>三种搜索API</strong></p>
+
+<p>  <strong>NSUserActivity:</strong>
+  NSUserActivity是iOS 8专为Handoff推出的API，iOS 9之后得到了提升。现在用户只需提供元数据（metadata）就能搜索不同的activity（活动）了。换言之，Spotlight可以将activity编入索引，而NSUserActivity就好比网页浏览器的历史堆栈（history stack），使用户能在Spotlight上搜到最近的活动。</p>
+
+<p>  <strong>Web Markup:</strong>
+  Web Markup在网页上显示App的内容并编入Spotlight索引，如此一来即便没有安装某个App，苹果的索引器也能在网页上搜索特别的标记（markup），在Safari或Spotlight上显示搜索结果。
+显示未安装App的搜索结果是一大亮点，有望为开发者带来更多潜在用户。公布在搜索API上的App深链接则储存在苹果的cloud index中。更多详情，请参阅苹果的（<a href="https://developer.apple.com/library/prerelease/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS9.html#//apple_ref/doc/uid/TP40016198-SW4">Web Markup使用指南</a>）”。</p>
+
+<p>  <strong>CoreSpotlight:</strong>
+  NSUserActivity帮助储存用户历史，而全新的Core Spotlight则能将App中的任何内容编入索引，实质是在用户设备上提供基础的Core Spotlight索引渠道，满足用户另外一个需求。</p></li>
+</ul>
+
+
+
+		
+		<a href="/blog/2015/07/19/ios9/" class="more-link">继续阅读 &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -539,50 +589,6 @@
 
 		
 		<a href="/blog/2014/11/08/scan-qrcode/" class="more-link">继续阅读 &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-29T11:05:41+08:00" data-updated="true" itemprop="datePublished">Sep 29 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/gitshi-yong/'>git使用</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/09/29/better-git-log/" itemprop="url">更好的git Log</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p><code>git log</code>对于使用git的&#8221;码农们&#8221;一定非常熟悉，如：</p>
-
-<p> git log  命令是查看全部提交日志</p>
-
-<p> git log -2  查看最近2次的提交日志</p>
-
-<p> git log -p  查看历史纪录以来哪几行被修改</p>
-
-<p> git log &ndash;oneline 查看历史提交日志，单行显示</p>
-
-
-		
-		<a href="/blog/2014/09/29/better-git-log/" class="more-link">继续阅读 &rarr;</a>
 	</div>
 
 </article>

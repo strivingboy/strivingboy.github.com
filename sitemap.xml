@@ -3,6 +3,14 @@
   
   
   <url>
+    <loc>http://strivingboy.github.io/blog/2015/07/19/ios9/</loc>
+    
+    <lastmod>2015-07-19T15:07:13+08:00</lastmod>
+    
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://strivingboy.github.io/blog/2015/07/12/dobetter/</loc>
     
     <lastmod>2015-07-12T10:38:11+08:00</lastmod>
@@ -125,21 +133,21 @@
   
   <url>
     <loc>http://strivingboy.github.io/blog/archives/</loc>
-    <lastmod>2015-07-14T00:14:27+08:00</lastmod>
+    <lastmod>2015-07-19T15:55:28+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://strivingboy.github.io/</loc>
-    <lastmod>2015-07-14T00:14:27+08:00</lastmod>
+    <lastmod>2015-07-19T15:55:28+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://strivingboy.github.io/blog/categories/</loc>
-    <lastmod>2015-07-14T00:14:27+08:00</lastmod>
+    <lastmod>2015-07-19T15:55:28+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
