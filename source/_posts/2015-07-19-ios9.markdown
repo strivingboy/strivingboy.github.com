@@ -1,0 +1,38 @@
+---
+layout: post
+title: "iOS9 新特性介绍"
+description: "iOS9 Search api 自定义返回按钮"
+date: 2015-07-19 15:07:13 +0800
+comments: true
+categories: iOS 技术点
+---
+
+本文翻译 [iOS9 Day-by-Day](https://www.shinobicontrols.com/blog/ios9-day-by-day-index) 中对iOS9新特性简单介绍下
+
++ **三种搜索API** 
+
+	**NSUserActivity:** 
+	NSUserActivity是iOS 8专为Handoff推出的API，iOS 9之后得到了提升。现在用户只需提供元数据（metadata）就能搜索不同的activity（活动）了。换言之，Spotlight可以将activity编入索引，而NSUserActivity就好比网页浏览器的历史堆栈（history stack），使用户能在Spotlight上搜到最近的活动。
+
+	**Web Markup:**
+	Web Markup在网页上显示App的内容并编入Spotlight索引，如此一来即便没有安装某个App，苹果的索引器也能在网页上搜索特别的标记（markup），在Safari或Spotlight上显示搜索结果。
+显示未安装App的搜索结果是一大亮点，有望为开发者带来更多潜在用户。公布在搜索API上的App深链接则储存在苹果的cloud index中。更多详情，请参阅苹果的（[Web Markup使用指南](https://developer.apple.com/library/prerelease/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS9.html#//apple_ref/doc/uid/TP40016198-SW4)）”。
+
+	**CoreSpotlight:**
+	NSUserActivity帮助储存用户历史，而全新的Core Spotlight则能将App中的任何内容编入索引，实质是在用户设备上提供基础的Core Spotlight索引渠道，满足用户另外一个需求。
+		
+	
+<!--more-->
+	
++ **UI Testing** 
+
+	在Xcode7中，苹果介绍了一种新的方式来管理你的应用界面的测试工作。UI testing 允许你对 UI 元素进行查找，交互，验证属性和状态。在 Xcode7 中，UI testing 伴随着测试报告，并且和单元测试一起运行。 XCTest 是在 Xcode 5 时融入到测试框架的，在Xcode7 中，新增了对 UI 的测试能力。允许在特定点设置断言，查看UI当时的状态。
+	
+	**Accessibility（辅助功能）:**
+	为了 UI Testing 能够工作，框架需要和你的众多元素直接建立连接，然后安排好操作。你可以设定义特别的点，或者在某个 UI 上创建 tweak，然后指定点击或者滑动操作。但是这在不同尺寸设备上就失效了。这时候 accessibility，就能提供帮助了。Accessibility 是苹果自家发布的一个框架，它可以自动记录你的操作流程，允许用户进行丰富的操作。你可以（也应该）让你的元素具备Accessibility的能力。有很多原因，比如说自定义的控件，不能够被自动发现。
+UI Testing 有能力通过你的应用提供给 Accessibility 的特性，来对不同尺寸的设备进行测试提供解决方案。也保证了你在重新组织了一下你的 UI 之后，不必全部重新写一套测试。不仅能够帮助你测试自己的 UI，同时也能够对你的应用，更好的支持有一定身体障碍的人群使用而带来帮助。
+
+	**UI 录制 :**一旦你设置好了你的 accessible UI,你将要创建 UI 的测试项。编写 UI 的测试是非常耗时，无聊的，如果你的 UI 比较复杂，也是非常困难的。感谢 Xcode7, 苹果介绍了 UI Recording. 他允许你新建、或者在已有项目中创建测试。当你打开时，测试代码会随着你在设备或模拟器上操作自动创建。
+
+
+
