@@ -11,7 +11,7 @@
 	<meta name="author" content="strivingboy">
 
 	
-	<meta name="description" content="Jul 19 2015 ios, 技术点 iOS9 新特性介绍 本文翻译 iOS9 Day-by-Day 中对iOS9新特性简单介绍下 三种搜索API NSUserActivity: NSUserActivity是iOS 8专为Handoff推出的API，iOS 9之后得到了提升。 &hellip;">
+	<meta name="description" content="Sep 27 2015 ios, 技术点 iOS9 Universal Links （通用链接） &ldquo;What is Universal Links?&rdquo; Apple 推出通用链接：一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP。 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -92,6 +92,51 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-27T15:07:13+08:00" data-updated="true" itemprop="datePublished">Sep 27 2015</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/ios/'>ios</a>, <a class='category' href='/blog/categories/ji-zhu-dian/'>技术点</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/09/27/ios9/" itemprop="url">iOS9 Universal Links （通用链接）</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p><strong>&ldquo;What is Universal Links?&rdquo;</strong></p>
+
+<p>Apple 推出通用链接：一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP。</p>
+
+<p>通过唯一的网址, 不需要特别的schema就可以链接一个特定的视图到APP 里面  。比如：在微信中使用了通用链接, 那么用户在Safari、UIWebView或者 WKWebView点击一个链接, iOS设备上的微信app怎会在微信里面自动打开这个页面, 如果没有安装则在Safrai中打开响应链接。</p>
+
+<blockquote><p>NOTE:
+Universal links let iOS 9 users open your app when they tap links to your website within WKWebView and UIWebView views and Safari pages, in addition to links that result in a call to openURL:, such as those that occur in Mail, Messages, and other apps.</p></blockquote>
+
+<p>For users who are running versions of iOS earlier than 9.0, tapping a universal link to your website opens the link in Safari.</p>
+
+
+		
+		<a href="/blog/2015/09/27/ios9/" class="more-link">继续阅读 &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -543,52 +588,6 @@
 
 		
 		<a href="/blog/2014/11/15/ios-gestures/" class="more-link">继续阅读 &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-11-08T14:30:57+08:00" data-updated="true" itemprop="datePublished">Nov  8 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/ioskai-fa/'>ios开发</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/11/08/scan-qrcode/" itemprop="url">iOS使用AVFoundation实现二维码扫描</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>关于二维码扫描有不少优秀第三方库如：</p>
-
-<ul>
-<li><p><a href="http://zbar.sourceforge.net/iphone/sdkdoc/index.html">ZBar SDK</a> 里面有详细的文档，相应介绍也非常多，如：<u><a href="http://rdcworld-iphone.blogspot.in/2013/03/how-to-use-barcode-scanner-br-and-qr-in.html">http://rdcworld-iphone.blogspot.in/2013/03/how-to-use-barcode-scanner-br-and-qr-in.html</a></u></p></li>
-<li><p><a href="https://github.com/zxing/zxing">ZXing</a> google推出的开源项目，相应介绍如：<u><a href="http://blog.devtang.com/blog/2012/12/23/use-zxing-library/">http://blog.devtang.com/blog/2012/12/23/use-zxing-library/</a></u></p></li>
-</ul>
-
-
-<p>最近项目需要，看了下使用ios7自带的 AVFoundation Framework 来实现二维码扫描，Demo 见：<a href="https://github.com/strivingboy/scan_qrcode_demo.git">scan_qrcode_demo</a></p>
-
-<p><strong>关于AVFoundation</strong></p>
-
-
-		
-		<a href="/blog/2014/11/08/scan-qrcode/" class="more-link">继续阅读 &rarr;</a>
 	</div>
 
 </article>

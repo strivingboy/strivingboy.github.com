@@ -4,7 +4,7 @@
   <title><![CDATA[小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2015-07-19T15:55:28+08:00</updated>
+  <updated>2015-09-27T21:05:16+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -12,6 +12,91 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS9  Universal Links （通用链接）]]></title>
+    <link href="http://strivingboy.github.io/blog/2015/09/27/ios9/"/>
+    <updated>2015-09-27T15:07:13+08:00</updated>
+    <id>http://strivingboy.github.io/blog/2015/09/27/ios9</id>
+    <content type="html"><![CDATA[<p><strong>&ldquo;What is Universal Links?&rdquo;</strong></p>
+
+<p>Apple 推出通用链接：一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP。</p>
+
+<p>通过唯一的网址, 不需要特别的schema就可以链接一个特定的视图到APP 里面  。比如：在微信中使用了通用链接, 那么用户在Safari、UIWebView或者 WKWebView点击一个链接, iOS设备上的微信app怎会在微信里面自动打开这个页面, 如果没有安装则在Safrai中打开响应链接。</p>
+
+<blockquote><p>NOTE:
+Universal links let iOS 9 users open your app when they tap links to your website within WKWebView and UIWebView views and Safari pages, in addition to links that result in a call to openURL:, such as those that occur in Mail, Messages, and other apps.</p></blockquote>
+
+<p>For users who are running versions of iOS earlier than 9.0, tapping a universal link to your website opens the link in Safari.</p>
+
+<!--more-->
+
+
+<p><strong>&ldquo;How to support Universal Links?&rdquo;</strong></p>
+
+<ul>
+<li><p>Step1:创建一个json 格式的apple-app-site-associatio 文件如下：</p>
+
+<pre><code class="`` ">  {
+      "applinks": {
+          "apps": [],
+          "details": [
+              {
+                  "appID": "9JA89QQLNQ.com.apple.wwdc",
+                  "paths": [ "/wwdc/news/", "/videos/wwdc/2015/*" ]
+              },
+              {
+                  "appID": "TeamID.BundleID2",
+                  "paths": [ "*" ]
+              }
+          ]
+      }
+  }
+</code></pre>
+
+<p>  根据 paths 键设定允许的路径列表, 或只是一个星号如果你想打开 APP 而不管路径是 什么</p>
+
+<p>  注意：paths 路径是大小写敏感的</p>
+
+<blockquote><p>NOTE:The website paths you specify in the paths array are case sensitive.”</p></blockquote>
+
+<p>  &ldquo;appID&#8221;组成部分：TeamID + BundleId TeamID可以从苹果开发账号页面也“Your   Account”下查看，BundleId就直接在工程里看了</p></li>
+<li><p>Step2:上传 apple-app-site-association 文件</p>
+
+<p>  注意：</p>
+
+<p>  1、上传到web server根目录下</p>
+
+<p>  2、web server 需要支持https,客户端需要通告https访问，并且不支持任何重定向</p>
+
+<blockquote><p>upload it to the root of your HTTPS web server. The file needs to be accessible via HTTPS—without any redirects—at <a href="https://">https://</a><domain>/apple-app-site-association. Next, you need to handle universal links in your app.</p></blockquote></li>
+<li><p>Step3:在 APP 里处理通用链接</p>
+
+<ul>
+<li><p>1、添加域名到 Capabilities</p>
+
+<p>  在 Xcode 的 capabilities 里 添加你的 APP 域名, 必须用 applinks: 前置它   <img src="http://strivingboy.github.io/images/domain.png" alt="" />
+  这将使APP从上门的域名请求Step2中创建的JSON 文件 apple-app-site-association。当你第一次启动 APP，它会从 <a href="https://domain.com/apple-app-site-association">https://domain.com/apple-app-site-association</a> 下载这个文件。</p></li>
+<li><p>2、在 AppDelegate 里支持通用链接</p></li>
+</ul>
+
+
+<p>  实现：
+   <code>- (BOOL)application:(UIApplication *)application
+   continueUserActivity:(NSUserActivity *)userActivity
+     restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler</code>方法，如下：</p>
+
+<p>  <img src="http://strivingboy.github.io/images/delegate.png" alt="" /></p>
+
+<p>  当 userActivity 是 NSUserActivityTypeBrowsingWeb 类型, 则意味着它已经由通用链接 API 代理。这样的话, 它保证用户打开的 URL 将有一个非空的 webpageURL 属性</p></li>
+</ul>
+
+
+<p><strong> apple 官网地址 </strong></p>
+
+<p><a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html#//apple_ref/doc/uid/TP40016308-CH12-SW2">通用链接 Universal Links</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS9 新特性介绍]]></title>
