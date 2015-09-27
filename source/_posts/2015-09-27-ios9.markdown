@@ -1,0 +1,86 @@
+---
+layout: post
+title: "iOS9  Universal Links （通用链接）"
+description: "iOS9  Universal Links （通用链接"
+date: 2015-09-27 15:07:13 +0800
+comments: true
+categories: iOS 技术点
+---
+
+**"What is Universal Links?"**
+
+Apple 推出通用链接：一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP。
+
+通过唯一的网址, 不需要特别的schema就可以链接一个特定的视图到APP 里面  。比如：在微信中使用了通用链接, 那么用户在Safari、UIWebView或者 WKWebView点击一个链接, iOS设备上的微信app怎会在微信里面自动打开这个页面, 如果没有安装则在Safrai中打开响应链接。
+
+>NOTE:
+Universal links let iOS 9 users open your app when they tap links to your website within WKWebView and UIWebView views and Safari pages, in addition to links that result in a call to openURL:, such as those that occur in Mail, Messages, and other apps.
+
+For users who are running versions of iOS earlier than 9.0, tapping a universal link to your website opens the link in Safari.
+
+<!--more-->
+
+**"How to support Universal Links?"**
+
++ Step1:创建一个json 格式的apple-app-site-associatio 文件如下：
+
+	```	
+	{
+	    "applinks": {
+	        "apps": [],
+	        "details": [
+	            {
+	                "appID": "9JA89QQLNQ.com.apple.wwdc",
+	                "paths": [ "/wwdc/news/", "/videos/wwdc/2015/*" ]
+	            },
+	            {
+	                "appID": "TeamID.BundleID2",
+	                "paths": [ "*" ]
+	            }
+	        ]
+	    }
+	}
+	```
+	根据 paths 键设定允许的路径列表, 或只是一个星号如果你想打开 APP 而不管路径是	什么
+	
+	注意：paths 路径是大小写敏感的
+
+	>NOTE:The website paths you specify in the paths array are case sensitive.”
+
+	"appID"组成部分：TeamID + BundleId TeamID可以从苹果开发账号页面也“Your 	Account”下查看，BundleId就直接在工程里看了
+
+
++ Step2:上传 apple-app-site-association 文件
+
+	注意：
+	
+	1、上传到web server根目录下
+	
+	2、web server 需要支持https,客户端需要通告https访问，并且不支持任何重定向
+	
+	>upload it to the root of your HTTPS web server. The file needs to be accessible via HTTPS—without any redirects—at https://<domain>/apple-app-site-association. Next, you need to handle universal links in your app.
+
+
++ Step3:在 APP 里处理通用链接
+	
+	+ 1、添加域名到 Capabilities
+	
+		在 Xcode 的 capabilities 里 添加你的 APP 域名, 必须用 applinks: 前置它	![](/images/domain.png)
+		这将使APP从上门的域名请求Step2中创建的JSON 文件 apple-app-site-association。当你第一次启动 APP，它会从 https://domain.com/apple-app-site-association 下载这个文件。
+
+
+		
+	+ 2、在 AppDelegate 里支持通用链接
+	
+	实现：
+	 `- (BOOL)application:(UIApplication *)application
+     continueUserActivity:(NSUserActivity *)userActivity
+       restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler`方法，如下：
+	
+	![](/images/delegate.png)
+	
+	当 userActivity 是 NSUserActivityTypeBrowsingWeb 类型, 则意味着它已经由通用链接 API 代理。这样的话, 它保证用户打开的 URL 将有一个非空的 webpageURL 属性
+	
+** apple 官网地址 ** 
+
+[通用链接 Universal Links](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html#//apple_ref/doc/uid/TP40016308-CH12-SW2)
