@@ -11,7 +11,7 @@
 	<meta name="author" content="strivingboy">
 
 	
-	<meta name="description" content="Sep 27 2015 ios, 技术点 iOS9 Universal Links （通用链接） &ldquo;What is Universal Links?&rdquo; Apple 推出通用链接：一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP。 &hellip;">
+	<meta name="description" content="Oct 9 2015 阅读 读 iOS核心动画高级技巧 1、什么是图层和视图？ 视图：一个视图就是在屏幕上显示的一个矩形块（比如图片，文字或者视频），它能够拦截类似于鼠标点击或者触摸手势等用户输入。视图在层级关系中可以互相嵌套，一个视图可以管理它的所有子视图的位置.在iOS当中， &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -92,6 +92,56 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-10-09T09:42:13+08:00" data-updated="true" itemprop="datePublished">Oct  9 2015</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/yue-du/'>阅读</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/10/09/ios/" itemprop="url">读 iOS核心动画高级技巧</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3>1、什么是图层和视图？</h3>
+
+<ul>
+<li><p>视图：一个视图就是在屏幕上显示的一个矩形块（比如图片，文字或者视频），它能够拦截类似于鼠标点击或者触摸手势等用户输入。视图在层级关系中可以互相嵌套，一个视图可以管理它的所有子视图的位置.在iOS当中，所有的视图都从一个叫做UIVIew的基类派生而来，UIView可以处理触摸事件，可以支持基于Core Graphics绘图，可以做仿射变换（例如旋转或者缩放），或者简单的类似于滑动或者渐变的动画。</p></li>
+<li><p>图层：CALayer类在概念上和UIView类似，同样也是一些被层级关系树管理的矩形块，同样也可以包含一些内容（像图片，文本或者背景色），管理子图层的位置。它们有一些方法和属性用来做动画和变换。</p></li>
+</ul>
+
+
+<h3>区别:是否处理交互</h3>
+
+<p> CAlayer和UIView最大的不同是CALayer不处理用户的交互。CALayer并不清楚具体的响应链（iOS通过视图层级关系用来传送触摸事件的机制），于是它并不能够响应事件，即使它提供了一些方法来判断是否一个触点在图层的范围之内。</p>
+
+<h3>关系:平行的层级</h3>
+
+<p>每一个UIview都有一个CALayer实例的图层属性，也就是所谓的backing layer，视图的职责就是创建并管理这个图层，以确保当子视图在层级关系中添加或者被移除的时候，他们关联的图层也同样对应在层级关系树当中有相同的操作。图层才是真正用来在屏幕上显示和做动画，UIView仅仅是对它的一个封装，提供了一些iOS类似于处理触摸的具体功能，以及Core Animation底层方法的高级接口。</p>
+
+
+		
+		<a href="/blog/2015/10/09/ios/" class="more-link">继续阅读 &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -543,51 +593,6 @@ Universal links let iOS 9 users open your app when they tap links to your websit
 
 		
 		<a href="/blog/2014/11/27/ios8daybyday/" class="more-link">继续阅读 &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-11-15T14:14:19+08:00" data-updated="true" itemprop="datePublished">Nov 15 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/ioskai-fa/'>ios开发</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/11/15/ios-gestures/" itemprop="url">iOS 手势（UIGestureRecognizer）操作</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>本文摘自：<a href="http://www.appcoda.com/ios-gesture-recognizers/">AppCoda</a></p>
-
-<p>UIKit中包含了UIGestureRecognizer类来处理手势识别，UIGestureRecognizer是一个抽象类，用于检测发生在UIView上预定义的手势。UIGestureRecognizer 提供了一些子类来处理具体的手势行为，如下：</p>
-
-<ul>
-<li><p>UITapGestureRecognizer: 该类处理View上的点击<em>Tap</em>操作（任意手指、任意次数的点击）该操作很常见</p></li>
-<li><p>UISwipeGestureRecognizer: 该类处理滑动<em>Swipe</em>操作（上、下、左、右）如：照片应用中滑动查看下一张照片</p></li>
-<li><p>UIPanGestureRecognizer: 该类处理拖拽<em>Pan</em>操作，如：将一个View从一个点拖拽到另一个点</p></li>
-</ul>
-
-
-
-		
-		<a href="/blog/2014/11/15/ios-gestures/" class="more-link">继续阅读 &rarr;</a>
 	</div>
 
 </article>

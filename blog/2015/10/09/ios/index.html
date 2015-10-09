@@ -1,0 +1,860 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="baidu-site-verification" content="xMu1n6Qhoi" />
+	<meta name="google-site-verification" content="sQM_5H8xp83FnR7Rxee_d5ockt0dT7vE5mtPr3r3eXE" />
+	<title>读 iOS核心动画高级技巧 - 小孩的技术博客</title>
+	<meta name="author" content="strivingboy">
+
+	
+	<meta name="description" content="iOS Core Animation: Advanced Techniques 知识点">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="小孩的技术博客" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://strivingboy.github.io/blog/2015/10/09/ios/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.profilepic').append("<img alt='Profile Picture' src='/images/avatar.png' style='width:160px;'/>");
+		});	
+	</script>
+	
+</div>
+<h1><a href="/">奋斗的小孩</a></h1>
+<p>keep it simple and stupid!<br>donot repeat yourself!</p>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">首页</a></li>
+    <li><a href="/blog/archives">所有文章</a></li>
+    <li><a href="/about.html">关于我</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:striving_boy@163.com" title="Email">Email</a>
+		
+		
+		
+		
+		
+			<a class="github" href="https://github.com/strivingboy" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">读 iOS核心动画高级技巧</h1>
+	<div class="entry-content" itemprop="articleBody"><h3>1、什么是图层和视图？</h3>
+
+<ul>
+<li><p>视图：一个视图就是在屏幕上显示的一个矩形块（比如图片，文字或者视频），它能够拦截类似于鼠标点击或者触摸手势等用户输入。视图在层级关系中可以互相嵌套，一个视图可以管理它的所有子视图的位置.在iOS当中，所有的视图都从一个叫做UIVIew的基类派生而来，UIView可以处理触摸事件，可以支持基于Core Graphics绘图，可以做仿射变换（例如旋转或者缩放），或者简单的类似于滑动或者渐变的动画。</p></li>
+<li><p>图层：CALayer类在概念上和UIView类似，同样也是一些被层级关系树管理的矩形块，同样也可以包含一些内容（像图片，文本或者背景色），管理子图层的位置。它们有一些方法和属性用来做动画和变换。</p></li>
+</ul>
+
+
+<h3>区别:是否处理交互</h3>
+
+<p> CAlayer和UIView最大的不同是CALayer不处理用户的交互。CALayer并不清楚具体的响应链（iOS通过视图层级关系用来传送触摸事件的机制），于是它并不能够响应事件，即使它提供了一些方法来判断是否一个触点在图层的范围之内。</p>
+
+<h3>关系:平行的层级</h3>
+
+<p>每一个UIview都有一个CALayer实例的图层属性，也就是所谓的backing layer，视图的职责就是创建并管理这个图层，以确保当子视图在层级关系中添加或者被移除的时候，他们关联的图层也同样对应在层级关系树当中有相同的操作。图层才是真正用来在屏幕上显示和做动画，UIView仅仅是对它的一个封装，提供了一些iOS类似于处理触摸的具体功能，以及Core Animation底层方法的高级接口。</p>
+
+<!--more-->
+
+
+<h3>为什么iOS要基于UIView和CALayer提供两个平行的层级关系呢？</h3>
+
+<p>原因在于要做职责分离，这样也能避免很多重复代码。在iOS和Mac OS两个平台上，事件和用户交互有很多地方的不同，基于多点触控的用户界面和基于鼠标键盘有着本质的区别，这就是为什么iOS有UIKit和UIView，但是Mac OS有AppKit和NSView的原因。他们功能上很相似，但是在实现上有着显著的区别。</p>
+
+<p>绘图，布局和动画，相比之下就是类似Mac笔记本和桌面系列一样应用于iPhone和iPad触屏的概念。把这种功能的逻辑分开并应用到独立的Core Animation框架，苹果就能够在iOS和Mac OS之间共享代码，使得对苹果自己的OS开发团队和第三方开发者去开发两个平台的应用更加便捷。</p>
+
+<p>实际上，这里并不是两个层级关系，而是四个，每一个都扮演不同的角色，除了视图层级和图层树之外，还存在<strong>呈现树</strong>和<strong>渲染树</strong>。</p>
+
+<h3>2、图层的能力</h3>
+
+<p>如果说CALayer是UIView内部实现细节，那我们为什么要全面地了解它呢？苹果当然为我们提供了优美简洁的UIView接口，那么我们是否就没必要直接去处理Core Animation的细节了呢？</p>
+
+<p>某种意义上说的确是这样，对一些简单的需求来说，我们确实没必要处理CALayer，因为苹果已经通过UIView的高级API间接地使得动画变得很简单。</p>
+
+<p>但是这种简单会不可避免地带来一些灵活上的缺陷。如果你略微想在底层做一些改变，或者使用一些苹果没有在UIView上实现的接口功能，这时除了介入Core Animation底层之外别无选择。</p>
+
+<p>我们已经证实了图层不能像视图那样处理触摸事件，那么他能做哪些视图不能做的呢？这里有一些UIView没有暴露出来的CALayer的功能：</p>
+
+<ul>
+<li>阴影，圆角，带颜色的边框</li>
+<li>3D变换</li>
+<li>非矩形范围</li>
+<li>透明遮罩</li>
+<li>多级非线性动画</li>
+</ul>
+
+
+<h4>CALayer contents属性</h4>
+
+<p>CALayer 有一个属性叫做contents，这个属性的类型被定义为id，意味着它可以是任何类型的对象。在这种情况下，你可以给contents属性赋任何值，你的app仍然能够编译通过。但是，在实践中，如果你给contents赋的不是CGImage，那么你得到的图层将是空白的。</p>
+
+<p>contents这个奇怪的表现是由Mac OS的历史原因造成的。它之所以被定义为id类型，是因为在Mac OS系统上，这个属性对CGImage和NSImage类型的值都起作用。如果你试图在iOS平台上将UIImage的值赋给它，只能得到一个空白的图层。一些初识Core Animation的iOS开发者可能会对这个感到困惑。</p>
+
+<p>头疼的不仅仅是我们刚才提到的这个问题。事实上，你真正要赋值的类型应该是CGImageRef，它是一个指向CGImage结构的指针。UIImage有一个CGImage属性，它返回一个&#8221;CGImageRef&#8221;,如果你想把这个值直接赋值给CALayer的contents，那你将会得到一个编译错误。因为CGImageRef并不是一个真正的Cocoa对象，而是一个Core Foundation类型。</p>
+
+<p>尽管Core Foundation类型跟Cocoa对象在运行时貌似很像（被称作toll-free bridging），它们并不是类型兼容的，不过你可以通过bridged关键字转换。如果要给图层的寄宿图赋值，你可以按照以下这个方法：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">layer</span><span class="p">.</span><span class="n">contents</span> <span class="o">=</span> <span class="p">(</span><span class="k">__bridge</span> <span class="kt">id</span><span class="p">)</span><span class="n">image</span><span class="p">.</span><span class="bp">CGImage</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>CALayer contentGravity属性</h4>
+
+<p>我们加载的图片被拉伸的问题，解决方法就是把contentMode属性设置成更合适的值，像这样：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">view</span><span class="p">.</span><span class="n">contentMode</span> <span class="o">=</span> <span class="n">UIViewContentModeScaleAspectFit</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>UIView大多数视觉相关的属性比如<code>contentMode</code>，对这些属性的操作其实是对对应图层的操作。</p>
+
+<p>CALayer与<code>contentMode</code>对应的属性叫做<code>contentsGravity</code>，但是它是一个NSString类型，而不是像对应的UIKit部分，那里面的值是枚举。<code>contentsGravity</code>可选的常量值有以下一些：</p>
+
+<ul>
+<li><p>kCAGravityCenter</p></li>
+<li><p>kCAGravityTop</p></li>
+<li><p>kCAGravityBottom</p></li>
+<li><p>kCAGravityLeft</p></li>
+<li><p>kCAGravityRight</p></li>
+<li><p>kCAGravityTopLeft</p></li>
+<li><p>kCAGravityTopRight</p></li>
+<li><p>kCAGravityBottomLeft</p></li>
+<li><p>kCAGravityBottomRight</p></li>
+<li><p>kCAGravityResize</p></li>
+<li><p>kCAGravityResizeAspect</p></li>
+<li><p>kCAGravityResizeAspectFill</p></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">layerView</span><span class="p">.</span><span class="n">layer</span><span class="p">.</span><span class="n">contentsGravity</span> <span class="o">=</span> <span class="n">kCAGravityResizeAspect</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### CALayer maskToBounds属性</span>
+</span><span class='line'><span class="err">现在我们的雪人总算是显示了正确的大小，不过你也许已经发现了另外一些事情：它超出了视图的边界。默认情况下，</span><span class="bp">UIView</span><span class="err">仍然会绘制超过边界的内容或是子视图，在</span><span class="bp">CALayer</span><span class="err">下也是这样的。</span>
+</span><span class='line'>
+</span><span class='line'><span class="bp">UIView</span><span class="err">有一个叫做</span><span class="n">clipsToBounds</span><span class="err">的属性可以用来决定是否显示超出边界的内容，</span><span class="bp">CALayer</span><span class="err">对应的属性叫做</span><span class="n">masksToBounds</span><span class="err">，把它设置为</span><span class="nb">YES</span><span class="err">，就会裁剪掉超过边界的部分。</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### CALayer contentsRect属性</span>
+</span><span class='line'><span class="bp">CALayer</span><span class="err">的</span><span class="n">contentsRect</span><span class="err">属性允许我们在图层边框里显示寄宿图的一个子域。这涉及到图片是如何显示和拉伸的，所以要比</span><span class="n">contentsGravity</span><span class="err">灵活多了</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">和</span><span class="n">bounds</span><span class="err">，</span><span class="n">frame</span><span class="err">不同，</span><span class="n">contentsRect</span><span class="err">不是按点来计算的，它使用了单位坐标，单位坐标指定在</span><span class="mi">0</span><span class="err">到</span><span class="mi">1</span><span class="err">之间，是一个相对值（像素和点就是绝对值）。所以它们是相对与寄宿图的尺寸的。</span><span class="n">iOS</span><span class="err">使用了以下的坐标系统：</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">+</span> <span class="err">点</span> <span class="err">——</span> <span class="err">在</span><span class="n">iOS</span><span class="err">和</span><span class="n">Mac</span> <span class="n">OS</span><span class="err">中最常见的坐标体系。点就像是虚拟的像素，也被称作逻辑像素。在标准设备上，一个点就是一个像素，但是在</span><span class="n">Retina</span><span class="err">设备上，一个点等于</span><span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="err">个像素。</span><span class="n">iOS</span><span class="err">用点作为屏幕的坐标测算体系就是为了在</span><span class="n">Retina</span><span class="err">设备和普通设备上能有一致的视觉效果。</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">+</span> <span class="err">像素</span> <span class="err">——</span> <span class="err">物理像素坐标并不会用来屏幕布局，但是仍然与图片有相对关系。</span><span class="bp">UIImage</span><span class="err">是一个屏幕分辨率解决方案，所以指定点来度量大小。但是一些底层的图片表示如</span><span class="bp">CGImage</span><span class="err">就会使用像素，所以你要清楚在</span><span class="n">Retina</span><span class="err">设备和普通设备上，它们表现出来了不同的大小。</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">+</span> <span class="err">单位</span> <span class="err">——</span> <span class="err">对于与图片大小或是图层边界相关的显示，单位坐标是一个方便的度量方式，</span> <span class="err">当大小改变的时候，也不需要再次调整。单位坐标在</span><span class="n">OpenGL</span><span class="err">这种纹理坐标系统中用得很多，</span><span class="n">Core</span> <span class="n">Animation</span><span class="err">中也用到了单位坐标。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">默认的</span><span class="n">contentsRect</span><span class="err">是</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span><span class="err">，这意味着整个寄宿图默认都是可见的，如果我们指定一个小一点的矩形，图片就会被裁剪</span><span class="p">.</span>
+</span><span class='line'><span class="err">事实上给</span><span class="n">contentsRect</span><span class="err">设置一个负数的原点或是大于</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span><span class="err">的尺寸也是可以的。这种情况下，最外面的像素会被拉伸以填充剩下的区域。</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">contentsRect</span><span class="err">在</span><span class="n">app</span><span class="err">中最有趣的地方在于一个叫做</span><span class="n">image</span> <span class="n">sprites</span><span class="err">（图片拼合）的用法。如果你有游戏编程的经验，那么你一定对图片拼合的概念很熟悉，图片能够在屏幕上独立地变更位置。抛开游戏编程不谈，这个技术常用来指代载入拼合的图片，跟移动图片一点关系也没有。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">典型地，图片拼合后可以打包整合到一张大图上一次性载入。相比多次载入不同的图片，这样做能够带来很多方面的好处：内存使用，载入时间，渲染性能等等</span>
+</span><span class='line'>
+</span><span class='line'><span class="mi">2</span><span class="n">D</span><span class="err">游戏引擎入</span><span class="n">Cocos2D</span><span class="err">使用了拼合技术，它使用</span><span class="n">OpenGL</span><span class="err">来显示图片。不过我们可以使用拼合在一个普通的</span><span class="n">UIKit</span><span class="err">应用中，对！就是使用</span><span class="n">contentsRect</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">首先，我们需要一个拼合后的图表</span> <span class="err">——</span> <span class="err">一个包含小一些的拼合图的大图片</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### CALayer contentsRect属性</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">`</span><span class="n">contentsCenter</span><span class="err">`其实是一个</span><span class="bp">CGRect</span><span class="err">，它定义了一个固定的边框和一个在图层上可拉伸的区域。</span> <span class="err">改变`</span><span class="n">contentsCenter</span><span class="err">`的值并不会影响到寄宿图的显示，除非这个图层的大小改变了，你才看得到效果。默认情况下，`</span><span class="n">contentsCenter</span><span class="err">`是</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span><span class="err">，这意味着如果大小（由`</span><span class="n">conttensGravity</span><span class="err">`决定）改变了</span><span class="p">,</span><span class="err">那么寄宿图将会均匀地拉伸开</span><span class="p">,</span><span class="err">这意味着我们可以随意重设尺寸，边框仍然会是连续的。它工作起来的效果和</span><span class="bp">UIImage</span><span class="err">里的</span><span class="o">-</span><span class="nl">resizableImageWithCapInsets</span><span class="p">:</span> <span class="err">方法效果非常类似，只是它可以运用到任何寄宿图</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### Custom Drawing</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">给</span><span class="n">contents</span><span class="err">赋</span><span class="bp">CGImage</span><span class="err">的值不是唯一的设置寄宿图的方法。我们也可以直接用</span><span class="n">Core</span> <span class="n">Graphics</span><span class="err">直接绘制寄宿图。能够通过继承</span><span class="bp">UIView</span><span class="err">并实现</span><span class="o">-</span><span class="nl">drawRect</span><span class="p">:</span><span class="err">方法来自定义绘制。</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span><span class="nl">drawRect</span><span class="p">:</span> <span class="err">方法没有默认的实现，因为对</span><span class="bp">UIView</span><span class="err">来说，寄宿图并不是必须的，它不在意那到底是单调的颜色还是有一个图片的实例。如果</span><span class="bp">UIView</span><span class="err">检测到</span><span class="o">-</span><span class="nl">drawRect</span><span class="p">:</span> <span class="err">方法被调用了，它就会为视图分配一个寄宿图，这个寄宿图的像素尺寸等于视图大小乘以</span> <span class="n">contentsScale</span><span class="err">的值。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">如果你不需要寄宿图，那就不要创建这个方法了，这会造成</span><span class="n">CPU</span><span class="err">资源和内存的浪费，这也是为什么苹果建议：如果没有自定义绘制的任务就不要在子类中写一个空的</span><span class="o">-</span><span class="nl">drawRect</span><span class="p">:</span><span class="err">方法。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">当视图在屏幕上出现的时候</span> <span class="o">-</span><span class="nl">drawRect</span><span class="p">:</span><span class="err">方法就会被自动调用。</span><span class="o">-</span><span class="nl">drawRect</span><span class="p">:</span><span class="err">方法里面的代码利用</span><span class="n">Core</span> <span class="n">Graphics</span><span class="err">去绘制一个寄宿图，然后内容就会被缓存起来直到它需要被更新（通常是因为开发者调用了</span><span class="o">-</span><span class="n">setNeedsDisplay</span><span class="err">方法，尽管影响到表现效果的属性值被更改时，一些视图类型会被自动重绘，如</span><span class="n">bounds</span><span class="err">属性）。虽然</span><span class="o">-</span><span class="nl">drawRect</span><span class="p">:</span><span class="err">方法是一个</span><span class="bp">UIView</span><span class="err">方法，事实上都是底层的</span><span class="bp">CALayer</span><span class="err">安排了重绘工作和保存了因此产生的图片。</span>
+</span><span class='line'>
+</span><span class='line'><span class="bp">CALayer</span><span class="err">有一个可选的</span><span class="n">delegate</span><span class="err">属性，实现了</span><span class="n">CALayerDelegate</span><span class="err">协议，当</span><span class="bp">CALayer</span><span class="err">需要一个内容特定的信息时，就会从协议中请求。</span><span class="n">CALayerDelegate</span><span class="err">是一个非正式协议，其实就是说没有</span><span class="n">CALayerDelegate</span> <span class="p">@</span><span class="n">protocol</span><span class="err">可以让你在类里面引用啦。你只需要调用你想调用的方法，</span><span class="bp">CALayer</span><span class="err">会帮你做剩下的。（</span><span class="n">delegate</span><span class="err">属性被声明为</span><span class="kt">id</span><span class="err">类型，所有的代理方法都是可选的）。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">当需要被重绘时，</span><span class="bp">CALayer</span><span class="err">会请求它的代理给它一个寄宿图来显示。它通过调用下面这个方法做到的</span><span class="o">:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>objective-c</p>
+
+<p>(void)displayLayer:(CALayer *)layer;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="err">趁着这个机会，如果代理想直接设置`</span><span class="n">contents</span><span class="err">`属性的话，它就可以这么做，不然没有别的方法可以调用了。如果代理不实现`</span><span class="o">-</span><span class="nl">displayLayer</span><span class="p">:</span><span class="err">`方法，</span><span class="bp">CALayer</span><span class="err">就会转而尝试调用下面这个方法：</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>objective-c</p>
+
+<ul>
+<li>(void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx;</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="err">在调用这个方法之前，</span><span class="bp">CALayer</span><span class="err">创建了一个合适尺寸的空寄宿图（尺寸由</span><span class="n">bounds</span><span class="err">和</span><span class="n">contentsScale</span><span class="err">决定）和一个</span><span class="n">Core</span> <span class="n">Graphics</span><span class="err">的绘制上下文环境，为绘制寄宿图做准备，它作为</span><span class="n">ctx</span><span class="err">参数传入。</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">###3、图层几何学</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### 布局</span>
+</span><span class='line'><span class="bp">UIView</span><span class="err">有三个比较重要的布局属性：</span><span class="n">frame</span><span class="err">，</span><span class="n">bounds</span><span class="err">和</span><span class="n">center</span><span class="err">，</span><span class="bp">CALayer</span><span class="err">对应地叫做</span><span class="n">frame</span><span class="err">，</span><span class="n">bounds</span><span class="err">和</span><span class="n">position</span><span class="err">。为了能清楚区分，图层用了“</span><span class="n">position</span><span class="err">”，视图用了“</span><span class="n">center</span><span class="err">”，但是他们都代表同样的值。</span><span class="n">frame</span><span class="err">代表了图层的外部坐标（也就是在父图层上占据的空间），</span><span class="n">bounds</span><span class="err">是内部坐标（</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span><span class="err">通常是图层的左上角），</span><span class="n">center</span><span class="err">和</span><span class="n">position</span><span class="err">都代表了相对于父图层</span><span class="o">*</span><span class="n">anchorPoint</span><span class="o">*</span><span class="err">锚点所在的位置。</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### 锚点 anchorPoint</span>
+</span><span class='line'><span class="err">视图的</span><span class="n">center</span><span class="err">属性和图层的</span><span class="n">position</span><span class="err">属性都指定了</span><span class="n">anchorPoint</span><span class="err">相对于父图层的位置。图层的</span><span class="n">anchorPoint</span><span class="err">通过</span><span class="n">position</span><span class="err">来控制它的</span><span class="n">frame</span><span class="err">的位置，你可以认为</span><span class="n">anchorPoint</span><span class="err">是用来移动图层的把柄。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">默认来说，</span><span class="n">anchorPoint</span><span class="err">位于图层的中点，所以图层的将会以这个点为中心放置。</span><span class="n">anchorPoint</span><span class="err">属性并没有被</span><span class="bp">UIView</span><span class="err">接口暴露出来，这也是视图的</span><span class="n">position</span><span class="err">属性被叫做“</span><span class="n">center</span><span class="err">”的原因。但是图层的</span><span class="n">anchorPoint</span><span class="err">可以被移动，比如你可以把它置于图层</span><span class="n">frame</span><span class="err">的左上角，于是图层的内容将会向右下角的</span><span class="n">position</span><span class="err">方向移动</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">####坐标系</span>
+</span><span class='line'><span class="err">和视图一样，图层在图层树当中也是相对于父图层按层级关系放置，一个图层的`</span><span class="n">position</span><span class="err">`依赖于它父图层的`</span><span class="n">bounds</span><span class="err">`，如果父图层发生了移动，它的所有子图层也会跟着移动。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">这样对于放置图层会更加方便，因为你可以通过移动根图层来将它的子图层作为一个整体来移动，但是有时候你需要知道一个图层的</span><span class="o">*</span><span class="err">绝对</span><span class="o">*</span><span class="err">位置，或者是相对于另一个图层的位置，而不是它当前父图层的位置。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">`</span><span class="bp">CALayer</span><span class="err">`给不同坐标系之间的图层转换提供了一些工具类方法：</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">-</span> <span class="p">(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="nl">convertPoint</span><span class="p">:(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="n">point</span> <span class="nl">fromLayer</span><span class="p">:(</span><span class="bp">CALayer</span> <span class="o">*</span><span class="p">)</span><span class="n">layer</span><span class="p">;</span>
+</span><span class='line'>    <span class="o">-</span> <span class="p">(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="nl">convertPoint</span><span class="p">:(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="n">point</span> <span class="nl">toLayer</span><span class="p">:(</span><span class="bp">CALayer</span> <span class="o">*</span><span class="p">)</span><span class="n">layer</span><span class="p">;</span>
+</span><span class='line'>    <span class="o">-</span> <span class="p">(</span><span class="bp">CGRect</span><span class="p">)</span><span class="nl">convertRect</span><span class="p">:(</span><span class="bp">CGRect</span><span class="p">)</span><span class="n">rect</span> <span class="nl">fromLayer</span><span class="p">:(</span><span class="bp">CALayer</span> <span class="o">*</span><span class="p">)</span><span class="n">layer</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">-</span> <span class="p">(</span><span class="bp">CGRect</span><span class="p">)</span><span class="nl">convertRect</span><span class="p">:(</span><span class="bp">CGRect</span><span class="p">)</span><span class="n">rect</span> <span class="nl">toLayer</span><span class="p">:(</span><span class="bp">CALayer</span> <span class="o">*</span><span class="p">)</span><span class="n">layer</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">这些方法可以把定义在一个图层坐标系下的点或者矩形转换成另一个图层坐标系下的点或者矩形</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">####Z坐标轴</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">和`</span><span class="bp">UIView</span><span class="err">`严格的二维坐标系不同，`</span><span class="bp">CALayer</span><span class="err">`存在于一个三维空间当中。除了我们已经讨论过的`</span><span class="n">position</span><span class="err">`和`</span><span class="n">anchorPoint</span><span class="err">`属性之外，`</span><span class="bp">CALayer</span><span class="err">`还有另外两个属性，`</span><span class="n">zPosition</span><span class="err">`和`</span><span class="n">anchorPointZ</span><span class="err">`，二者都是在</span><span class="n">Z</span><span class="err">轴上描述图层位置的浮点类型。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">注意这里并没有更</span><span class="o">*</span><span class="err">深</span><span class="o">*</span><span class="err">的属性来描述由宽和高做成的`</span><span class="n">bounds</span><span class="err">`了，图层是一个完全扁平的对象，你可以把它们想象成类似于一页二维的坚硬的纸片，用胶水粘成一个空洞，就像三维结构的折纸一样。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">`</span><span class="n">zPosition</span><span class="err">`属性在大多数情况下其实并不常用。在第五章，我们将会涉及`</span><span class="bp">CATransform3D</span><span class="err">`，你会知道如何在三维空间移动和旋转图层，除了做变换之外，`</span><span class="n">zPosition</span><span class="err">`最实用的功能就是改变图层的</span><span class="o">*</span><span class="err">显示顺序</span><span class="o">*</span><span class="err">了。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">通常，图层是根据它们子图层的`</span><span class="n">sublayers</span><span class="err">`出现的顺序来类绘制的，这就是所谓的</span><span class="o">*</span><span class="err">画家的算法</span><span class="o">*--</span><span class="err">就像一个画家在墙上作画</span><span class="o">--</span><span class="err">后被绘制上的图层将会遮盖住之前的图层，但是通过增加图层的`</span><span class="n">zPosition</span><span class="err">`，就可以把图层向相机方向</span><span class="o">*</span><span class="err">前置</span><span class="o">*</span><span class="err">，于是它就在所有其他图层的</span><span class="o">*</span><span class="err">前面</span><span class="o">*</span><span class="err">了（或者至少是小于它的`</span><span class="n">zPosition</span><span class="err">`值的图层的前面）。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">这里所谓的“相机”实际上是相对于用户是视角，这里和</span><span class="n">iPhone</span><span class="err">背后的内置相机没任何关系。</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### Hit Testing</span>
+</span><span class='line'><span class="bp">CALayer</span><span class="err">并不关心任何响应链事件，所以不能直接处理触摸事件或者手势。但是它有一系列的方法帮你处理事件：</span><span class="o">-</span><span class="nl">containsPoint</span><span class="p">:</span><span class="err">和</span><span class="o">-</span><span class="nl">hitTest</span><span class="p">:</span><span class="err">。</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span><span class="nl">containsPoint</span><span class="p">:</span><span class="err">接受一个在本图层坐标系下的</span><span class="bp">CGPoint</span><span class="err">，如果这个点在图层</span><span class="n">frame</span><span class="err">范围内就返回</span><span class="nb">YES</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">###4、视觉效果</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### 圆角</span>
+</span><span class='line'><span class="bp">CALayer</span><span class="err">有一个叫做`</span><span class="n">conrnerRadius</span><span class="err">`的属性控制着图层角的曲率。它是一个浮点数，默认为</span><span class="mi">0</span><span class="err">（为</span><span class="mi">0</span><span class="err">的时候就是直角），但是你可以把它设置成任意值。默认情况下，这个曲率值只影响背景颜色而不影响背景图片或是子图层。不过，如果把`</span><span class="n">masksToBounds</span><span class="err">`设置成</span><span class="nb">YES</span><span class="err">的话，图层里面的所有东西都会被截取。</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### 图层边框</span>
+</span><span class='line'><span class="bp">CALayer</span><span class="err">另外两个非常有用属性就是`</span><span class="n">borderWidth</span><span class="err">`和`</span><span class="n">borderColor</span><span class="err">`。二者共同定义了图层边的绘制样式。这条线（也被称作</span><span class="n">stroke</span><span class="err">）沿着图层的</span><span class="n">bounds</span><span class="err">绘制，同时也包含图层的角。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">`</span><span class="n">borderWidth</span><span class="err">`是以点为单位的定义边框粗细的浮点数，默认为</span><span class="mf">0.</span><span class="n">borderColor</span><span class="err">定义了边框的颜色，默认为黑色。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">`</span><span class="n">borderColor</span><span class="err">`是</span><span class="n">CGColorRef</span><span class="err">类型，而不是</span><span class="bp">UIColor</span><span class="err">，所以它不是</span><span class="n">Cocoa</span><span class="err">的内置对象。不过呢，你肯定也清楚图层引用了</span><span class="n">borderColor</span><span class="err">，虽然属性声明并不能证明这一点。</span><span class="n">CGColorRef</span><span class="err">在引用</span><span class="o">/</span><span class="err">释放时候的行为表现得与</span><span class="bp">NSObject</span><span class="err">极其相似。但是</span><span class="n">Objective</span><span class="o">-</span><span class="n">C</span><span class="err">语法并不支持这一做法，所以</span><span class="n">CGColorRef</span><span class="err">属性即便是强引用也只能通过</span><span class="k">assign</span><span class="err">关键字来声明</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### 阴影</span>
+</span><span class='line'><span class="n">iOS</span><span class="err">的另一个常见特性呢，就是阴影。阴影往往可以达到图层深度暗示的效果。也能够用来强调正在显示的图层和优先级（比如说一个在其他视图之前的弹出框），不过有时候他们只是单纯的装饰目的。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">给`</span><span class="n">shadowOpacity</span><span class="err">`属性一个大于默认值（也就是</span><span class="mi">0</span><span class="err">）的值，阴影就可以显示在任意图层之下。`</span><span class="n">shadowOpacity</span><span class="err">`是一个必须在</span><span class="mf">0.0</span><span class="err">（不可见）和</span><span class="mf">1.0</span><span class="err">（完全不透明）之间的浮点数。如果设置为</span><span class="mf">1.0</span><span class="err">，将会显示一个有轻微模糊的黑色阴影稍微在图层之上。若要改动阴影的表现，你可以使用</span><span class="bp">CALayer</span><span class="err">的另外三个属性：`</span><span class="n">shadowColor</span><span class="err">`，`</span><span class="n">shadowOffset</span><span class="err">`和`</span><span class="n">shadowRadius</span><span class="err">`。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">显而易见，`</span><span class="n">shadowColor</span><span class="err">`属性控制着阴影的颜色，和`</span><span class="n">borderColor</span><span class="err">`和`</span><span class="n">backgroundColor</span><span class="err">`一样，它的类型也是`</span><span class="n">CGColorRef</span><span class="err">`。阴影默认是黑色，大多数时候你需要的阴影也是黑色的（其他颜色的阴影看起来是不是有一点点奇怪。。）。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">`</span><span class="n">shadowOffset</span><span class="err">`属性控制着阴影的方向和距离。它是一个`</span><span class="bp">CGSize</span><span class="err">`的值，宽度控制这阴影横向的位移，高度控制着纵向的位移。`</span><span class="n">shadowOffset</span><span class="err">`的默认值是</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">}</span><span class="err">，意即阴影相对于</span><span class="n">Y</span><span class="err">轴有</span><span class="mi">3</span><span class="err">个点的向上位移。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">为什么要默认向上的阴影呢？尽管</span><span class="n">Core</span> <span class="n">Animation</span><span class="err">是从图层套装演变而来（可以认为是为</span><span class="n">iOS</span><span class="err">创建的私有动画框架），但是呢，它却是在</span><span class="n">Mac</span> <span class="n">OS</span><span class="err">上面世的，前面有提到，二者的</span><span class="n">Y</span><span class="err">轴是颠倒的。这就导致了默认的</span><span class="mi">3</span><span class="err">个点位移的阴影是向上的。在</span><span class="n">Mac</span><span class="err">上，`</span><span class="n">shadowOffset</span><span class="err">`的默认值是阴影向下的，这样你就能理解为什么</span><span class="n">iOS</span><span class="err">上的阴影方向是向上的了</span><span class="p">.</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### shadowPath属性</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">我们已经知道图层阴影并不总是方的，而是从图层内容的形状继承而来。这看上去不错，但是实时计算阴影也是一个非常消耗资源的，尤其是图层有多个子图层，每个图层还有一个有透明效果的寄宿图的时候。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">如果你事先知道你的阴影形状会是什么样子的，你可以通过指定一个`</span><span class="n">shadowPath</span><span class="err">`来提高性能。`</span><span class="n">shadowPath</span><span class="err">`是一个`</span><span class="n">CGPathRef</span><span class="err">`类型（一个指向`</span><span class="bp">CGPath</span><span class="err">`的指针）。`</span><span class="bp">CGPath</span><span class="err">`是一个</span><span class="n">Core</span> <span class="n">Graphics</span><span class="err">对象，用来指定任意的一个矢量图形。我们可以通过这个属性单独于图层形状之外指定阴影的形状。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">创建简单的阴影形状</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> objective-c</p>
+
+<p>@interface ViewController ()</p>
+
+<p>@property (nonatomic, weak) IBOutlet UIView <em>layerView1;
+@property (nonatomic, weak) IBOutlet UIView </em>layerView2;
+@end</p>
+
+<p>@implementation ViewController</p>
+
+<p>-(void)viewDidLoad
+{
+  [super viewDidLoad];</p>
+
+<p>  //enable layer shadows
+  self.layerView1.layer.shadowOpacity = 0.5f;
+  self.layerView2.layer.shadowOpacity = 0.5f;</p>
+
+<p>  //create a square shadow
+  CGMutablePathRef squarePath = CGPathCreateMutable();
+  CGPathAddRect(squarePath, NULL, self.layerView1.bounds);
+  self.layerView1.layer.shadowPath = squarePath;
+  CGPathRelease(squarePath);</p>
+
+<p>  ￼//create a circular shadow
+  CGMutablePathRef circlePath = CGPathCreateMutable();
+  CGPathAddEllipseInRect(circlePath, NULL,self.layerView2.bounds);
+  self.layerView2.layer.shadowPath = circlePath; <br/>
+  CGPathRelease(circlePath);
+}
+@end</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="err">如果是一个矩形或者是圆，用`</span><span class="bp">CGPath</span><span class="err">`会相当简单明了。但是如果是更加复杂一点的图形，`</span><span class="bp">UIBezierPath</span><span class="err">`类会更合适，它是一个由</span><span class="n">UIKit</span><span class="err">提供的在</span><span class="bp">CGPath</span><span class="err">基础上的</span><span class="n">Objective</span><span class="o">-</span><span class="n">C</span><span class="err">包装类。</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### 图层蒙板</span>
+</span><span class='line'><span class="err">通过`</span><span class="n">masksToBounds</span><span class="err">`属性，我们可以沿边界裁剪图形；通过`</span><span class="n">cornerRadius</span><span class="err">`属性，我们还可以设定一个圆角。但是有时候你希望展现的内容不是在一个矩形或圆角矩形。比如，你想展示一个有星形框架的图片，又或者想让一些古卷文字慢慢渐变成背景色，而不是一个突兀的边界。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">使用一个</span><span class="mi">32</span><span class="err">位有</span><span class="n">alpha</span><span class="err">通道的</span><span class="n">png</span><span class="err">图片通常是创建一个无矩形视图最方便的方法，你可以给它指定一个透明蒙板来实现。但是这个方法不能让你以编码的方式动态地生成蒙板，也不能让子图层或子视图裁剪成同样的形状。</span>
+</span><span class='line'>
+</span><span class='line'><span class="bp">CALayer</span><span class="err">有一个属性叫做`</span><span class="n">mask</span><span class="err">`可以解决这个问题。这个属性本身就是个</span><span class="bp">CALayer</span><span class="err">类型，有和其他图层一样的绘制和布局属性。它类似于一个子图层，相对于父图层（即拥有该属性的图层）布局，但是它却不是一个普通的子图层。不同于那些绘制在父图层中的子图层，`</span><span class="n">mask</span><span class="err">`图层定义了父图层的部分可见区域。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">`</span><span class="n">mask</span><span class="err">`图层的`</span><span class="n">Color</span><span class="err">`属性是无关紧要的，真正重要的是图层的轮廓。`</span><span class="n">mask</span><span class="err">`属性就像是一个饼干切割机，`</span><span class="n">mask</span><span class="err">`图层实心的部分会被保留下来，其他的则会被抛弃。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">如果`</span><span class="n">mask</span><span class="err">`图层比父图层要小，只有在`</span><span class="n">mask</span><span class="err">`图层里面的内容才是它关心的，除此以外的一切都会被隐藏起来。</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>objective-c
+@interface ViewController ()</p>
+
+<p>@property (nonatomic, weak) IBOutlet UIImageView *imageView;
+@end</p>
+
+<p>@implementation ViewController</p>
+
+<ul>
+<li><p>(void)viewDidLoad
+{
+[super viewDidLoad];</p>
+
+<p>//create mask layer
+CALayer <em>maskLayer = [CALayer layer];
+maskLayer.frame = self.layerView.bounds;
+UIImage </em>maskImage = [UIImage imageNamed:@&ldquo;Cone.png&rdquo;];
+maskLayer.contents = (__bridge id)maskImage.CGImage;</p>
+
+<p>//apply mask to image layer￼
+self.imageView.layer.mask = maskLayer;
+}
+@end</p></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="cp">#### 组透明</span>
+</span><span class='line'><span class="bp">UIView</span><span class="err">有一个叫做`</span><span class="n">alpha</span><span class="err">`的属性来确定视图的透明度。</span><span class="bp">CALayer</span><span class="err">有一个等同的属性叫做`</span><span class="n">opacity</span><span class="err">`，这两个属性都是影响子层级的。也就是说，如果你给一个图层设置了`</span><span class="n">opacity</span><span class="err">`属性，那它的子图层都会受此影响。</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">###5、专用图层</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#### CAShapeLayer</span>
+</span><span class='line'><span class="bp">CAShapeLayer</span><span class="err">是一个通过矢量图形而不是</span><span class="n">bitmap</span><span class="err">来绘制的图层子类。你指定诸如颜色和线宽等属性，用</span><span class="bp">CGPath</span><span class="err">来定义想要绘制的图形，最后</span><span class="bp">CAShapeLayer</span><span class="err">就自动渲染出来了。当然，你也可以用</span><span class="n">Core</span> <span class="n">Graphics</span><span class="err">直接向原始的</span><span class="n">CALyer</span><span class="err">的内容中绘制一个路径，相比直下，使用</span><span class="bp">CAShapeLayer</span><span class="err">有以下一些优点：</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">+</span> <span class="err">渲染快速。</span><span class="bp">CAShapeLayer</span><span class="err">使用了硬件加速，绘制同一图形会比用</span><span class="n">Core</span> <span class="n">Graphics</span><span class="err">快很多。</span>
+</span><span class='line'><span class="o">+</span> <span class="err">高效使用内存。一个</span><span class="bp">CAShapeLayer</span><span class="err">不需要像普通</span><span class="bp">CALayer</span><span class="err">一样创建一个寄宿图形，所以无论有多大，都不会占用太多的内存。</span>
+</span><span class='line'><span class="o">+</span> <span class="err">不会被图层边界剪裁掉。一个</span><span class="bp">CAShapeLayer</span><span class="err">可以在边界之外绘制。你的图层路径不会像在使用</span><span class="n">Core</span> <span class="n">Graphics</span><span class="err">的普通</span><span class="bp">CALayer</span><span class="err">一样被剪裁掉（如我们在第二章所见）。</span>
+</span><span class='line'><span class="o">+</span> <span class="err">不会出现像素化。当你给</span><span class="bp">CAShapeLayer</span><span class="err">做</span><span class="mi">3</span><span class="n">D</span><span class="err">变换时，它不像一个有寄宿图的普通图层一样变得像素化。</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">###6、隐式动画</span>
+</span><span class='line'><span class="n">Core</span> <span class="n">Animation</span><span class="err">基于一个假设，说屏幕上的任何东西都可以（或者可能）做动画。动画并不需要你在</span><span class="n">Core</span> <span class="n">Animation</span><span class="err">中手动打开，相反需要明确地关闭，否则他会一直存在。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">当你改变</span><span class="bp">CALayer</span><span class="err">的一个可做动画的属性，它并不能立刻在屏幕上体现出来。相反，它是从先前的值平滑过渡到新的值。这一切都是默认的行为，你不需要做额外的操作。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">这看起来这太棒了，似乎不太真实</span><span class="p">,</span><span class="err">所谓的</span><span class="o">*</span><span class="err">隐式</span><span class="o">*</span><span class="err">动画。之所以叫隐式是因为我们并没有指定任何动画的类型。我们仅仅改变了一个属性，然后</span><span class="n">Core</span> <span class="n">Animation</span><span class="err">来决定如何并且何时去做动画。</span><span class="n">Core</span> <span class="n">Animaiton</span><span class="err">同样支持</span><span class="o">*</span><span class="err">显式</span><span class="o">*</span><span class="err">动画，下章详细说明。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">但当你改变一个属性，</span><span class="n">Core</span> <span class="n">Animation</span><span class="err">是如何判断动画类型和持续时间的呢？实际上动画执行的时间取决于当前</span><span class="o">*</span><span class="err">事务</span><span class="o">*</span><span class="err">的设置，动画类型取决于</span><span class="o">*</span><span class="err">图层行为</span><span class="o">*</span><span class="err">。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">事务实际上是</span><span class="n">Core</span> <span class="n">Animation</span><span class="err">用来包含一系列属性动画集合的机制，任何用指定事务去改变可以做动画的图层属性都不会立刻发生变化，而是当事务一旦</span><span class="o">*</span><span class="err">提交</span><span class="o">*</span><span class="err">的时候开始用一个动画过渡到新值。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">事务是通过`</span><span class="bp">CATransaction</span><span class="err">`类来做管理，这个类的设计有些奇怪，不像你从它的命名预期的那样去管理一个简单的事务，而是管理了一叠你不能访问的事务。`</span><span class="bp">CATransaction</span><span class="err">`没有属性或者实例方法，并且也不能用`</span><span class="o">+</span><span class="n">alloc</span><span class="err">`和`</span><span class="o">-</span><span class="n">init</span><span class="err">`方法创建它。但是可以用`</span><span class="o">+</span><span class="n">begin</span><span class="err">`和`</span><span class="o">+</span><span class="n">commit</span><span class="err">`分别来入栈或者出栈。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">任何可以做动画的图层属性都会被添加到栈顶的事务，你可以通过`</span><span class="o">+</span><span class="nl">setAnimationDuration</span><span class="p">:</span><span class="err">`方法设置当前事务的动画时间，或者通过`</span><span class="o">+</span><span class="n">animationDuration</span><span class="err">`方法来获取值（默认</span><span class="mf">0.25</span><span class="err">秒）。</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Core</span> <span class="n">Animation</span><span class="err">在每个</span><span class="o">*</span><span class="n">run</span> <span class="n">loop</span><span class="o">*</span><span class="err">周期中自动开始一次新的事务（</span><span class="n">run</span> <span class="n">loop</span><span class="err">是</span><span class="n">iOS</span><span class="err">负责收集用户输入，处理定时器或者网络事件并且重新绘制屏幕的东西），即使你不显式的用`</span><span class="p">[</span><span class="bp">CATransaction</span> <span class="n">begin</span><span class="p">]</span><span class="err">`开始一次事务，任何在一次</span><span class="n">run</span> <span class="n">loop</span><span class="err">循环中属性的改变都会被集中起来，然后做一次</span><span class="mf">0.25</span><span class="err">秒的动画。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">明白这些之后，我们就可以轻松修改变色动画的时间了。我们当然可以用当前事务的`</span><span class="o">+</span><span class="nl">setAnimationDuration</span><span class="p">:</span><span class="err">`方法来修改动画时间，但在这里我们首先起一个新的事务，于是修改时间就不会有别的副作用。因为修改当前事务的时间可能会导致同一时刻别的动画（如屏幕旋转），所以最好还是在调整动画之前压入一个新的事务。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">试想一下，如果`</span><span class="bp">UIView</span><span class="err">`的属性都有动画特性的话，那么无论在什么时候修改它，我们都应该能注意到的。所以，如果说</span><span class="n">UIKit</span><span class="err">建立在</span><span class="n">Core</span> <span class="n">Animation</span><span class="err">（默认对所有东西都做动画）之上，那么隐式动画是如何被</span><span class="n">UIKit</span><span class="err">禁用掉呢？</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">我们知道</span><span class="n">Core</span> <span class="n">Animation</span><span class="err">通常对`</span><span class="bp">CALayer</span><span class="err">`的所有属性（可动画的属性）做动画，但是`</span><span class="bp">UIView</span><span class="err">`把它关联的图层的这个特性关闭了。为了更好说明这一点，我们需要知道隐式动画是如何实现的。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">我们把改变属性时`</span><span class="bp">CALayer</span><span class="err">`自动应用的动画称作</span><span class="o">*</span><span class="err">行为</span><span class="o">*</span><span class="err">，当`</span><span class="bp">CALayer</span><span class="err">`的属性被修改时候，它会调用`</span><span class="o">-</span><span class="nl">actionForKey</span><span class="p">:</span><span class="err">`方法，传递属性的名称。剩下的操作都在`</span><span class="bp">CALayer</span><span class="err">`的头文件中有详细的说明，实质上是如下几步：</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">*</span> <span class="err">图层首先检测它是否有委托，并且是否实现`</span><span class="n">CALayerDelegate</span><span class="err">`协议指定的`</span><span class="o">-</span><span class="nl">actionForLayer</span><span class="p">:</span><span class="n">forKey</span><span class="err">`方法。如果有，直接调用并返回结果。</span>
+</span><span class='line'><span class="o">*</span> <span class="err">如果没有委托，或者委托没有实现`</span><span class="o">-</span><span class="nl">actionForLayer</span><span class="p">:</span><span class="n">forKey</span><span class="err">`方法，图层接着检查包含属性名称对应行为映射的`</span><span class="n">actions</span><span class="err">`字典。</span>
+</span><span class='line'><span class="o">*</span> <span class="err">如果`</span><span class="n">actions</span><span class="err">字典`没有包含对应的属性，那么图层接着在它的`</span><span class="n">style</span><span class="err">`字典接着搜索属性名。</span>
+</span><span class='line'><span class="o">*</span> <span class="err">最后，如果在`</span><span class="n">style</span><span class="err">`里面也找不到对应的行为，那么图层将会直接调用定义了每个属性的标准行为的`</span><span class="o">-</span><span class="nl">defaultActionForKey</span><span class="p">:</span><span class="err">`方法。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">所以一轮完整的搜索结束之后，`</span><span class="o">-</span><span class="nl">actionForKey</span><span class="p">:</span><span class="err">`要么返回空（这种情况下将不会有动画发生），要么是`</span><span class="bp">CAAction</span><span class="err">`协议对应的对象，最后`</span><span class="bp">CALayer</span><span class="err">`拿这个结果去对先前和当前的值做动画。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">于是这就解释了</span><span class="n">UIKit</span><span class="err">是如何禁用隐式动画的：每个`</span><span class="bp">UIView</span><span class="err">`对它关联的图层都扮演了一个委托，并且提供了`</span><span class="o">-</span><span class="nl">actionForLayer</span><span class="p">:</span><span class="n">forKey</span><span class="err">`的实现方法。当不在一个动画块的实现中，`</span><span class="bp">UIView</span><span class="err">`对所有图层行为返回`</span><span class="nb">nil</span><span class="err">`，但是在动画</span><span class="n">block</span><span class="err">范围之内，它就返回了一个非空值。我们可以用一个</span><span class="n">demo</span><span class="err">做个简单的实验（清单</span><span class="mf">7.5</span><span class="err">）</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">清单</span><span class="mf">7.5</span> <span class="err">测试</span><span class="bp">UIView</span><span class="err">的`</span><span class="nl">actionForLayer</span><span class="p">:</span><span class="nl">forKey</span><span class="p">:</span><span class="err">`实现</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>objective-c
+@interface ViewController ()</p>
+
+<p>@property (nonatomic, weak) IBOutlet UIView *layerView;</p>
+
+<p>@end</p>
+
+<p>@implementation ViewController</p>
+
+<ul>
+<li>(void)viewDidLoad
+{
+  [super viewDidLoad];
+  //test layer action when outside of animation block
+  NSLog(@&ldquo;Outside: %@&rdquo;, [self.layerView actionForLayer:self.layerView.layer forKey:@&ldquo;backgroundColor&rdquo;]);
+  //begin animation block
+  [UIView beginAnimations:nil context:nil];
+  //test layer action when inside of animation block
+  NSLog(@&ldquo;Inside: %@&rdquo;, [self.layerView actionForLayer:self.layerView.layer forKey:@&ldquo;backgroundColor&rdquo;]);
+  //end animation block
+  [UIView commitAnimations];
+}</li>
+</ul>
+
+
+<p>@end</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="err">运行程序，控制台显示结果如下：</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="err">$</span> <span class="n">LayerTest</span><span class="p">[</span><span class="mi">21215</span><span class="o">:</span><span class="n">c07</span><span class="p">]</span> <span class="nl">Outside</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">null</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="err">$</span> <span class="n">LayerTest</span><span class="p">[</span><span class="mi">21215</span><span class="o">:</span><span class="n">c07</span><span class="p">]</span> <span class="nl">Inside</span><span class="p">:</span> <span class="o">&lt;</span><span class="nl">CABasicAnimation</span><span class="p">:</span> <span class="mh">0x757f090</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">于是我们可以预言，当属性在动画块之外发生改变，`</span><span class="bp">UIView</span><span class="err">`直接通过返回`</span><span class="nb">nil</span><span class="err">`来禁用隐式动画。但如果在动画块范围之内，根据动画具体类型返回相应的属性，在这个例子就是`</span><span class="bp">CABasicAnimation</span><span class="err">`（第八章“显式动画”将会提到）。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">当然返回`</span><span class="nb">nil</span><span class="err">`并不是禁用隐式动画唯一的办法，`</span><span class="bp">CATransaction</span><span class="err">`有个方法叫做`</span><span class="o">+</span><span class="nl">setDisableActions</span><span class="p">:</span><span class="err">`，可以用来对所有属性打开或者关闭隐式动画。如果在清单</span><span class="mf">7.2</span><span class="err">的`</span><span class="p">[</span><span class="bp">CATransaction</span> <span class="n">begin</span><span class="p">]</span><span class="err">`之后添加下面的代码，同样也会阻止动画的发生：</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="bp">CATransaction</span> <span class="nl">setDisableActions</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">总结一下，我们知道了如下几点</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">*</span> <span class="err">`</span><span class="bp">UIView</span><span class="err">`关联的图层禁用了隐式动画，对这种图层做动画的唯一办法就是使用`</span><span class="bp">UIView</span><span class="err">`的动画函数（而不是依赖`</span><span class="bp">CATransaction</span><span class="err">`），或者继承`</span><span class="bp">UIView</span><span class="err">`，并覆盖`</span><span class="o">-</span><span class="nl">actionForLayer</span><span class="p">:</span><span class="nl">forKey</span><span class="p">:</span><span class="err">`方法，或者直接创建一个显式动画（具体细节见第八章）。</span>
+</span><span class='line'><span class="o">*</span> <span class="err">对于单独存在的图层，我们可以通过实现图层的`</span><span class="o">-</span><span class="nl">actionForLayer</span><span class="p">:</span><span class="nl">forKey</span><span class="p">:</span><span class="err">`委托方法，或者提供一个`</span><span class="n">actions</span><span class="err">`字典来控制隐式动画。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">我们来对颜色渐变的例子使用一个不同的行为，通过给`</span><span class="n">colorLayer</span><span class="err">`设置一个自定义的`</span><span class="n">actions</span><span class="err">`字典。我们也可以使用委托来实现，但是`</span><span class="n">actions</span><span class="err">`字典可以写更少的代码。那么到底改如何创建一个合适的行为对象呢？</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">行为通常是一个被</span><span class="n">Core</span> <span class="n">Animation</span><span class="o">*</span><span class="err">隐式</span><span class="o">*</span><span class="err">调用的</span><span class="o">*</span><span class="err">显式</span><span class="o">*</span><span class="err">动画对象。这里我们使用的是一个实现了`</span><span class="bp">CATransaction</span><span class="err">`的实例，叫做</span><span class="o">*</span><span class="err">推进过渡</span><span class="o">*</span><span class="err">。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">第八章中将会详细解释过渡，不过对于现在，知道`</span><span class="bp">CATransition</span><span class="err">`响应`</span><span class="bp">CAAction</span><span class="err">`协议，并且可以当做一个图层行为就足够了。结果很赞，不论在什么时候改变背景颜色，新的色块都是从左侧滑入，而不是默认的渐变效果。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">清单</span><span class="mf">7.6</span> <span class="err">实现自定义行为</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>objective-c
+@interface ViewController ()</p>
+
+<p>@property (nonatomic, weak) IBOutlet UIView <em>layerView;
+@property (nonatomic, weak) IBOutlet CALayer </em>colorLayer;</p>
+
+<p>@end</p>
+
+<p>@implementation ViewController</p>
+
+<ul>
+<li><p>(void)viewDidLoad
+{
+  [super viewDidLoad];</p>
+
+<p>  //create sublayer
+  self.colorLayer = [CALayer layer];
+  self.colorLayer.frame = CGRectMake(50.0f, 50.0f, 100.0f, 100.0f);
+  self.colorLayer.backgroundColor = [UIColor blueColor].CGColor;
+  //add a custom action
+  CATransition *transition = [CATransition animation];
+  transition.type = kCATransitionPush;
+  transition.subtype = kCATransitionFromLeft;
+  self.colorLayer.actions = @{@&ldquo;backgroundColor&rdquo;: transition};
+  //add it to our view
+  [self.layerView.layer addSublayer:self.colorLayer];
+}</p></li>
+<li><p>(IBAction)changeColor
+{
+  //randomize the layer background color
+  CGFloat red = arc4random() / (CGFloat)INT_MAX;
+  CGFloat green = arc4random() / (CGFloat)INT_MAX;
+  CGFloat blue = arc4random() / (CGFloat)INT_MAX;
+  self.colorLayer.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0].CGColor;
+}</p></li>
+</ul>
+
+
+<p>@end
+&#8220;`</p>
+
+<h3>7、显式动画</h3>
+
+<p>属性动画作用于图层的某个单一属性，并指定了它的一个目标值，或者一连串将要做动画的值。属性动画分为两种：<em>基础</em>和<em>关键帧</em>。</p>
+
+<p><em>基础</em>：动画其实就是一段时间内发生的改变，最简单的形式就是从一个值改变到另一个值，这也是<code>CABasicAnimation</code>最主要的功能</p>
+
+<p><em>关键帧</em>：<code>CABasicAnimation</code>揭示了大多数隐式动画背后依赖的机制，这的确很有趣，但是显式地给图层添加<code>CABasicAnimation</code>相较于隐式动画而言，只能说费力不讨好。</p>
+
+<p><code>CAKeyframeAnimation</code>是另一种UIKit没有暴露出来但功能强大的类。和<code>CABasicAnimation</code>类似，<code>CAKeyframeAnimation</code>同样是<code>CAPropertyAnimation</code>的一个子类，它依然作用于单一的一个属性，但是和<code>CABasicAnimation</code>不一样的是，它不限制于设置一个起始和结束的值，而是可以根据一连串随意的值来做动画。</p>
+
+<p><em>关键帧</em>起源于传动动画，意思是指主导的动画在显著改变发生时重绘当前帧（也就是<em>关键</em>帧），每帧之间剩下的绘制（可以通过关键帧推算出）将由熟练的艺术家来完成。<code>CAKeyframeAnimation</code>也是同样的道理：你提供了显著的帧，然后Core Animation在每帧之间进行插入。</p>
+
+<h3>8、缓冲</h3>
+
+<h3><code>CAMediaTimingFunction</code></h3>
+
+<p>那么该如何使用缓冲方程式呢？首先需要设置<code>CAAnimation</code>的<code>timingFunction</code>属性，是<code>CAMediaTimingFunction</code>类的一个对象。如果想改变隐式动画的计时函数，同样也可以使用<code>CATransaction</code>的<code>+setAnimationTimingFunction:</code>方法。</p>
+
+<p>这里有一些方式来创建<code>CAMediaTimingFunction</code>，最简单的方式是调用<code>+timingFunctionWithName:</code>的构造方法。这里传入如下几个常量之一：</p>
+
+<pre><code>kCAMediaTimingFunctionLinear 
+kCAMediaTimingFunctionEaseIn 
+kCAMediaTimingFunctionEaseOut 
+kCAMediaTimingFunctionEaseInEaseOut
+kCAMediaTimingFunctionDefault
+</code></pre>
+
+<p><code>kCAMediaTimingFunctionLinear</code>选项创建了一个线性的计时函数，同样也是<code>CAAnimation</code>的<code>timingFunction</code>属性为空时候的默认函数。线性步调对于那些立即加速并且保持匀速到达终点的场景会有意义（例如射出枪膛的子弹），但是默认来说它看起来很奇怪，因为对大多数的动画来说确实很少用到。</p>
+
+<p><code>kCAMediaTimingFunctionEaseIn</code>常量创建了一个慢慢加速然后突然停止的方法。对于之前提到的自由落体的例子来说很适合，或者比如对准一个目标的导弹的发射。</p>
+
+<p><code>kCAMediaTimingFunctionEaseOut</code>则恰恰相反，它以一个全速开始，然后慢慢减速停止。它有一个削弱的效果，应用的场景比如一扇门慢慢地关上，而不是砰地一声。</p>
+
+<p><code>kCAMediaTimingFunctionEaseInEaseOut</code>创建了一个慢慢加速然后再慢慢减速的过程。这是现实世界大多数物体移动的方式，也是大多数动画来说最好的选择。如果只可以用一种缓冲函数的话，那就必须是它了。那么你会疑惑为什么这不是默认的选择，实际上当使用<code>UIView</code>的动画方法时，他的确是默认的，但当创建<code>CAAnimation</code>的时候，就需要手动设置它了。</p>
+
+<p>最后还有一个<code>kCAMediaTimingFunctionDefault</code>，它和<code>kCAMediaTimingFunctionEaseInEaseOut</code>很类似，但是加速和减速的过程都稍微有些慢。它和<code>kCAMediaTimingFunctionEaseInEaseOut</code>的区别很难察觉，可能是苹果觉得它对于隐式动画来说更适合（然后对UIKit就改变了想法，而是使用<code>kCAMediaTimingFunctionEaseInEaseOut</code>作为默认效果），虽然它的名字说是默认的，但还是要记住当创建<em>显式</em>的<code>CAAnimation</code>它并不是默认选项（换句话说，默认的图层行为动画用<code>kCAMediaTimingFunctionDefault</code>作为它们的计时方法）</p>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	
+	  
+		<h2>分享</h2>  
+	  	<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1394259472270132" charset="utf-8"></script>
+<!-- JiaThis Button END -->  
+	  
+	<div class="addthis_toolbox addthis_default_style ">
+	<!-- <a class="addthis_counter addthis_pill_style"></a> &#8211;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+  
+  <section>  
+    <h1>Comments</h1>  
+    <div id="comments" aria-live="polite"><!-- 多说评论框 start -->
+	<div class="ds-thread"</div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"strivingboy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+</div>  
+  </section>  
+ </div>
+			</div>
+			<footer id="footer" class="inner"><p>Copyright &copy; 2015
+
+    strivingboy
+
+
+<span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+</footer>
+		</div>
+	</div>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+<script src="/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.tweet.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.instagram.js" type="text/javascript"></script>
+<script src="/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+<script src="/javascripts/custom.js" type="text/javascript"></script>
+
+
+</body>
+</html>
