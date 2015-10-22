@@ -1,0 +1,204 @@
+---
+layout: post
+title: "iOS9 3D Touch 实现"
+description: "iOS9 3D Touch 实现  3D Touch Demo"
+date: 2015-09-27 15:07:13 +0800
+comments: true
+categories: iOS 技术点
+---
+
+## iOS9 3D Touch 实现
+
+### 3D Touch 是什么?
+
+> With iOS 9, new iPhone models add a third dimension to the user interface.
+> 
++ A user can now press your Home screen icon to immediately access functionality provided by your app.
++ Within your app, a user can now press views to see previews of additional content and gain accelerated access to features.
+
+简单来说3D Touch就是通过区分轻按和重按Home键来进行不同的用户交互。
+
+<!--more-->
+
+
+### 模拟器如何测试?
+
+github 大神写了一个插件在Xcode 7模拟器上调试 3D Touch, 地址：[SBShortcutMenuSimulator](https://github.com/DeskConnect/SBShortcutMenuSimulator)
+
+测试步骤：
+	
++ Step1:终端 git clone https://github.com/DeskConnect/SBShortcutMenuSimulator.git
++ Step2: cd  SBShortcutMenuSimulator
++ Step3: make
++ Step4: 打开写好的程序，模拟器运行
++ Step5: xcrun simctl spawn booted launchctl debug system/com.apple.SpringBoard --environment DYLD_INSERT_LIBRARIES=$PWD/SBShortcutMenuSimulator.dylib
++ Step6:  xcrun simctl spawn booted launchctl stop com.apple.SpringBoard
++ Step7: echo 'strivingboy.-DTouchDemo' | nc 127.0.0.1 8000   注意: 'strivingboy.-DTouchDemo'  ''里边写的是自己项目的Bundle identifier. 
+
+**注意:  每次想要启动快速入口都要重复操作第8步.**
+
+###  应用场景有哪些？
+3D Touch的主要应用分为三块：
+
+####1、Home Screen Quick Actions
+通过主屏幕的应用icon，使用3D Touch呼出一个菜单来展示应用核心功能如：
+
+<img src="./home_screen_quick_actions.png" "width = "126" height = "216" align=center />
+
+菜单其它样式参考： [3D Touch Human Interface Guidelines](https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/3DTouch.html#//apple_ref/doc/uid/TP40006556-CH71)
+
+####2、Peek and Pop
+这个功能可为是一套全新的用户交互机制，它可以预览下一个页面的视图，并且可以进行简单的操作如：
+
+**Indication of peek availability**
+
+<img src="../images/preview_available.png" "width = "126" height = "216" align=center />
+
+** Peek **
+
+<img src="../images/peek.png" "width = "126" height = "216" align=center />
+
+** Peek quick actions**
+
+<img src="../images/peek_quick_actions.png" "width = "126" height = "216" align=center />
+
+####3、Force Properties
+>In iOS 9, the `UITouch` class has two new properties to support custom implementation of 3D Touch in your app: `force` and `maximumPossibleForce`. For the first time on iOS devices, these properties let you detect and respond to touch pressure in the `UIEvent` objects your app receives.
+The force of a touch has a high dynamic range, available as a floating point value to your app.
+
+
+iOS9为供了一个新的交互参数:力度。可以检测某一交互的力度值，来做相应的交互处理。
+
+###  如何实现？
+####1、Home Screen Quick Actions
+其实现有两种方式： 一：静态添加 二：动态添加
+
++ 静态添加只需要在项目中的plist文件中配置，然后安装就可以使用了如下图：
+
+<img src="../images/plist.png" "width = "728" height = "110" align=center />
+
+运行效果如下：
+
+<img src="../images/menu1.png" "width = "126" height = "216" align=center />
+
++ 静态添加即使用代码方式来添加，主要用到以下几个类：
+	+ UIApplicationShortcutIcon：创建ShortcutItem中图片icon
+	+ UIApplicationShortcutItem：创建3D Touch的ShortcutItem
+	+ UIMutableApplicationShortcutItem：创建可变3D Touch的ShortcutItem
+	
+如下代码：
+
+```objective-c
+
+		- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+		    // Override point for customization after application launch.
+		    
+		    [self addShortcutItemDynamic:application];
+		    return YES;
+		}
+		
+		- (void)addShortcutItemDynamic:(UIApplication *)application
+		{
+		    UIApplicationShortcutItem *shareItem = [[UIApplicationShortcutItem alloc] initWithType:@"Share" localizedTitle:@"分享" localizedSubtitle:nil icon:[UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypeShare] userInfo:nil];
+		    
+		    UIApplicationShortcutItem *payItem = [[UIApplicationShortcutItem alloc] initWithType:@"Play" localizedTitle:@"播放" localizedSubtitle:nil icon:[UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypePlay] userInfo:nil];
+		    
+		    UIApplicationShortcutItem *pauseItem = [[UIApplicationShortcutItem alloc] initWithType:@"Pause" localizedTitle:@"暂停" localizedSubtitle:nil icon:[UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypePause] userInfo:nil];
+		    
+		    application.shortcutItems = @[shareItem,payItem,pauseItem];
+		}
+
+```
+
+运行效果如下：
+
+<img src="../images/menu4.png" "width = "126" height = "216" align=center />
+
+相应点击事件实现方法:`- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void(^)(BOOL succeeded))completionHandler`
+
+**注： Quick Actions最多为4个(包含静态和动态)**
+
+
+####2、Peek and Pop
+
++ Step1:检查设备是否支持3D Touch
+
+	ViewContoller提供了一个属性：`traitCollection` 如：
+	
+		- (BOOL)is3DTouchAvailable
+		{
+    		if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
+        	return YES;
+    		}
+    		return NO;
+		}
+    
++ Step2: 注册预览试图
+
+	`- (id <UIViewControllerPreviewing>)registerForPreviewingWithDelegate:(id<UIViewControllerPreviewingDelegate>)delegate sourceView:(UIView *)sourceView NS_AVAILABLE_IOS(9_0)` 就是将sourceView这个视图注册允许使用3D Touch功能
+
++ Step3: 实现协议 `UIViewControllerPreviewingDelegate`
+		- (nullable UIViewController *)previewingContext:(id <UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
+		{
+	   		// 长按需要预览的类容
+		   previewingContext.sourceRect = CGRectMake(0, 0, previewingContext.sourceView.frame.size.width, previewingContext.sourceView.frame.size.height);
+		   PreviewViewController *vc = [[PreviewViewController alloc] initWithNibName:@"PreviewViewController" bundle:nil];
+		   vc.preferredContentSize = CGSizeMake(0, 300);
+		   return vc;
+	   
+		}
+	
+		- (void)previewingContext:(id <UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit
+		{
+			// 继续重按进入的页面
+		    [self.navigationController pushViewController:viewControllerToCommit animated:YES];
+		}
+
++ Step4: 目标控制器PreViewController中以实现`- (NSArray<id<UIPreviewActionItem>> *)previewActionItems`也可以不实现则没有`ActionItem` 如：
+
+		- (NSArray<id<UIPreviewActionItem>> *)previewActionItems
+		{
+	    
+		    UIPreviewAction *action1 = [UIPreviewAction actionWithTitle:@"action1"
+		                                                          style:UIPreviewActionStyleDefault handler:
+		                                ^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController)
+		    {
+		        NSLog(@"action1 selected.");
+		    }];
+		    
+		    UIPreviewAction *action2 = [UIPreviewAction actionWithTitle:@"action2"
+		                                                          style:UIPreviewActionStyleSelected handler:
+		                                ^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController)
+		    {
+		        NSLog(@"action2 selected.");
+		    }];
+		    UIPreviewAction *action3_1 = [UIPreviewAction actionWithTitle:@"action3-1"
+		                                                            style:UIPreviewActionStyleDefault handler:
+		                                  ^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController)
+		    {
+		        NSLog(@"action3-1 selected.");
+		    }];
+		    UIPreviewAction *action3_2 = [UIPreviewAction actionWithTitle:@"action3-2"
+		                                                            style:UIPreviewActionStyleDefault handler:
+		                                  ^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController)
+		    {
+		        NSLog(@"action3-2 selected.");
+		    }];
+		    UIPreviewActionGroup *action3 = [UIPreviewActionGroup actionGroupWithTitle:@"action3" style:UIPreviewActionStyleDestructive actions:@[action3_1, action3_2]];
+		    
+		    return @[action1, action2, action3];
+	    
+		}
+	
+效果如下：
+
+![image](../images/peek-pop.gif)
+
+####3、Force Properties
+
+`UITouch`提供了下面两个属性来支付自定义 3D Touch 功能
+
+	// Force of the touch, where 1.0 represents the force of an average touch
+	@property(nonatomic,readonly) CGFloat force NS_AVAILABLE_IOS(9_0);
+	// Maximum possible force with this input mechanism
+	@property(nonatomic,readonly) CGFloat maximumPossibleForce NS_AVAILABLE_IOS(9_0);
