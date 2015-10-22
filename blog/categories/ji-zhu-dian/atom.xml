@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 技术点 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/ji-zhu-dian/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2015-10-23T00:00:13+08:00</updated>
+  <updated>2015-10-23T00:11:06+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -60,7 +60,7 @@
 
 <p>通过主屏幕的应用icon，使用3D Touch呼出一个菜单来展示应用核心功能如：</p>
 
-<p><img src="http://strivingboy.github.io/images/home_screen_quick_actions.png" "width = "126" height = "216" align=center /></p>
+<p><img src="/images/home_screen_quick_actions.png" alt="image" /></p>
 
 <p>菜单其它样式参考： <a href="https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/3DTouch.html#//apple_ref/doc/uid/TP40006556-CH71">3D Touch Human Interface Guidelines</a></p>
 
@@ -70,15 +70,15 @@
 
 <p><strong>Indication of peek availability</strong></p>
 
-<p><img src="http://strivingboy.github.io/images/preview_available.png" "width = "126" height = "216" align=center /></p>
+<p><img src="/images/preview_available.png" alt="image" /></p>
 
 <p><strong> Peek </strong></p>
 
-<p><img src="http://strivingboy.github.io/images/peek.png" "width = "126" height = "216" align=center /></p>
+<p><img src="/images/peek.png" alt="image" /></p>
 
 <p><strong> Peek quick actions</strong></p>
 
-<p><img src="http://strivingboy.github.io/images/peek_quick_actions.png" "width = "126" height = "216" align=center /></p>
+<p><img src="/images/peek_quick_actions.png" alt="image" /></p>
 
 <h4>3、Force Properties</h4>
 
@@ -98,11 +98,11 @@ The force of a touch has a high dynamic range, available as a floating point val
 </ul>
 
 
-<p><img src="http://strivingboy.github.io/images/plist.png" "width = "728" height = "110" align=center /></p>
+<p><img src="/images/plist.png" alt="image" /></p>
 
 <p>运行效果如下：</p>
 
-<p><img src="http://strivingboy.github.io/images/menu1.png" "width = "126" height = "216" align=center /></p>
+<p><img src="/images/menu1.png" alt="image" /></p>
 
 <ul>
 <li>静态添加即使用代码方式来添加，主要用到以下几个类：
@@ -140,7 +140,7 @@ The force of a touch has a high dynamic range, available as a floating point val
 
 <p>运行效果如下：</p>
 
-<p><img src="http://strivingboy.github.io/images/menu4.png" "width = "126" height = "216" align=center /></p>
+<p><img src="/images/menu4.png" alt="image" /></p>
 
 <p>相应点击事件实现方法:<code>- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void(^)(BOOL succeeded))completionHandler</code></p>
 
@@ -163,7 +163,7 @@ The force of a touch has a high dynamic range, available as a floating point val
 </code></pre></li>
 <li><p>Step2: 注册预览试图</p>
 
-<p>  <code>- (id &lt;UIViewControllerPreviewing&gt;)registerForPreviewingWithDelegate:(id&lt;UIViewControllerPreviewingDelegate&gt;)delegate sourceView:(UIView *)sourceView NS_AVAILABLE_IOS(9_0)</code> 就是将sourceView这个视图注册允许使用3D Touch功能</p></li>
+<p>  <code>-(id&lt;UIViewControllerPreviewing&gt;)registerForPreviewingWithDelegate:(id&lt;UIViewControllerPreviewingDelegate&gt;)delegate sourceView:(UIView *)sourceView NS_AVAILABLE_IOS(9_0)</code> 就是将sourceView这个视图注册允许使用3D Touch功能</p></li>
 <li><p>Step3: 实现协议 <code>UIViewControllerPreviewingDelegate</code></p>
 
 <pre><code>  - (nullable UIViewController *)previewingContext:(id &lt;UIViewControllerPreviewing&gt;)previewingContext viewControllerForLocation:(CGPoint)location
