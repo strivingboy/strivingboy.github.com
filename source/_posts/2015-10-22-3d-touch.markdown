@@ -41,7 +41,7 @@ github 大神写了一个插件在Xcode 7模拟器上调试 3D Touch, 地址：[
 ####1、Home Screen Quick Actions
 通过主屏幕的应用icon，使用3D Touch呼出一个菜单来展示应用核心功能如：
 
-<img src="./home_screen_quick_actions.png" "width = "126" height = "216" align=center />
+<img src="/images/home_screen_quick_actions.png" "width = "126" height = "216" align=center />
 
 菜单其它样式参考： [3D Touch Human Interface Guidelines](https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/3DTouch.html#//apple_ref/doc/uid/TP40006556-CH71)
 
@@ -50,15 +50,15 @@ github 大神写了一个插件在Xcode 7模拟器上调试 3D Touch, 地址：[
 
 **Indication of peek availability**
 
-<img src="../images/preview_available.png" "width = "126" height = "216" align=center />
+<img src="/images/preview_available.png" "width = "126" height = "216" align=center />
 
 ** Peek **
 
-<img src="../images/peek.png" "width = "126" height = "216" align=center />
+<img src="/images/peek.png" "width = "126" height = "216" align=center />
 
 ** Peek quick actions**
 
-<img src="../images/peek_quick_actions.png" "width = "126" height = "216" align=center />
+<img src="/images/peek_quick_actions.png" "width = "126" height = "216" align=center />
 
 ####3、Force Properties
 >In iOS 9, the `UITouch` class has two new properties to support custom implementation of 3D Touch in your app: `force` and `maximumPossibleForce`. For the first time on iOS devices, these properties let you detect and respond to touch pressure in the `UIEvent` objects your app receives.
@@ -73,11 +73,11 @@ iOS9为供了一个新的交互参数:力度。可以检测某一交互的力度
 
 + 静态添加只需要在项目中的plist文件中配置，然后安装就可以使用了如下图：
 
-<img src="../images/plist.png" "width = "728" height = "110" align=center />
+<img src="/images/plist.png" "width = "728" height = "110" align=center />
 
 运行效果如下：
 
-<img src="../images/menu1.png" "width = "126" height = "216" align=center />
+<img src="/images/menu1.png" "width = "126" height = "216" align=center />
 
 + 静态添加即使用代码方式来添加，主要用到以下几个类：
 	+ UIApplicationShortcutIcon：创建ShortcutItem中图片icon
@@ -110,7 +110,7 @@ iOS9为供了一个新的交互参数:力度。可以检测某一交互的力度
 
 运行效果如下：
 
-<img src="../images/menu4.png" "width = "126" height = "216" align=center />
+<img src="/images/menu4.png" "width = "126" height = "216" align=center />
 
 相应点击事件实现方法:`- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void(^)(BOOL succeeded))completionHandler`
 
@@ -190,7 +190,7 @@ iOS9为供了一个新的交互参数:力度。可以检测某一交互的力度
 	
 效果如下：
 
-![image](../images/peek-pop.gif)
+![image](/images/peek-pop.gif)
 
 ####3、Force Properties
 
