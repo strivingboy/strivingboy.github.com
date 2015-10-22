@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ios | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2015-10-22T23:49:38+08:00</updated>
+  <updated>2015-10-22T23:54:28+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -18,9 +18,7 @@
     <link href="http://strivingboy.github.io/blog/2015/10/22/3d-touch/"/>
     <updated>2015-10-22T15:07:13+08:00</updated>
     <id>http://strivingboy.github.io/blog/2015/10/22/3d-touch</id>
-    <content type="html"><![CDATA[<h2>iOS9 3D Touch 实现</h2>
-
-<h3>3D Touch 是什么?</h3>
+    <content type="html"><![CDATA[<h3>3D Touch 是什么?</h3>
 
 <blockquote><p>With iOS 9, new iPhone models add a third dimension to the user interface.</p>
 
