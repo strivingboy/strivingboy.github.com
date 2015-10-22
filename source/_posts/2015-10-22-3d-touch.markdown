@@ -2,12 +2,10 @@
 layout: post
 title: "iOS9 3D Touch 实现"
 description: "iOS9 3D Touch 实现  3D Touch Demo"
-date: 2015-09-27 15:07:13 +0800
+date: 2015-10-22 15:07:13 +0800
 comments: true
 categories: iOS 技术点
 ---
-
-## iOS9 3D Touch 实现
 
 ### 3D Touch 是什么?
 
