@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ios8,day-by-day,翻译 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/ios8-day-by-day-fan-yi/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2015-10-09T10:24:44+08:00</updated>
+  <updated>2015-10-22T23:49:38+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -246,26 +246,6 @@ enum1.prettyFormat() // "Some params: 12, Hello"
 <p>Swfit 是一门功能强大的语言，掌握它的最佳实践、惯用方法以及模式需要一段时间，这篇文章列出了一些从objective-c到swfit常见的困惑.</p>
 
 <p>本文翻译自：<a href="http://www.shinobicontrols.com/blog/posts/2014/07/17/ios8-day-by-day-day-1-blaggers-guide-to-swift">ios8-day-by-day-day-1-blaggers-guide-to-swift</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS8 Day-by-Day 系列文章]]></title>
-    <link href="http://strivingboy.github.io/blog/2014/11/27/ios8daybyday/"/>
-    <updated>2014-11-27T14:12:43+08:00</updated>
-    <id>http://strivingboy.github.io/blog/2014/11/27/ios8daybyday</id>
-    <content type="html"><![CDATA[<p>看完 Kingiol Ding 翻译的<a href="http://blog.kingiol.com/blog/2014/01/06/introducting-ios7-day-by-day/">天天品尝iOS7甜点</a>系列的文章，又看到 ShinobiControls Team 中 Sam Davies 中关于  iOS8 Day-by-Day 系列的文章，(<a href="http://blog.kingiol.com/blog/2014/01/06/introducting-ios7-day-by-day/">介绍在这里</a>)搜了下没有完整的中文的翻译，于是就萌生了翻译改系列文章的念头，意在锻炼下自己的英文水平，同时学习下iOS8相关知识，非常感谢来自 Kingiol Ding 的动力，同时对Sam Davies作者深感敬佩。</p>
-
-<p>今年6月份的<a href="https://developer.apple.com/wwdc/">WWDC 2014</a> 大会可以说是一次软件开发者的盛宴，开放了4000多个api ，给开发者无限的可能性。
-<strong>iOS8 Day-by-Day</strong> 系列文章基本包含了iOS开发者需要知道的所有iOS8新特性以及新技术，下面就逐个介绍这些特性：</p>
-
-<ul>
-<li><a href="/blog/2014/11/27/ios8daybyday-swfit/">Day 1 :: swfit 学习指南</a></li>
-</ul>
-
-
-<!--more-->
-
 ]]></content>
   </entry>
   

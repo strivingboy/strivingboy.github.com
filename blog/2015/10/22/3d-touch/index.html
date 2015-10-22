@@ -1,0 +1,406 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="baidu-site-verification" content="xMu1n6Qhoi" />
+	<meta name="google-site-verification" content="sQM_5H8xp83FnR7Rxee_d5ockt0dT7vE5mtPr3r3eXE" />
+	<title>iOS9 3D Touch 实现 - 小孩的技术博客</title>
+	<meta name="author" content="strivingboy">
+
+	
+	<meta name="description" content="iOS9 3D Touch 实现 3D Touch Demo">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="小孩的技术博客" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://strivingboy.github.io/blog/2015/10/22/3d-touch/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.profilepic').append("<img alt='Profile Picture' src='/images/avatar.png' style='width:160px;'/>");
+		});	
+	</script>
+	
+</div>
+<h1><a href="/">奋斗的小孩</a></h1>
+<p>keep it simple and stupid!<br>donot repeat yourself!</p>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">首页</a></li>
+    <li><a href="/blog/archives">所有文章</a></li>
+    <li><a href="/about.html">关于我</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:striving_boy@163.com" title="Email">Email</a>
+		
+		
+		
+		
+		
+			<a class="github" href="https://github.com/strivingboy" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">iOS9 3D Touch 实现</h1>
+	<div class="entry-content" itemprop="articleBody"><h2>iOS9 3D Touch 实现</h2>
+
+<h3>3D Touch 是什么?</h3>
+
+<blockquote><p>With iOS 9, new iPhone models add a third dimension to the user interface.</p>
+
+<ul>
+<li>A user can now press your Home screen icon to immediately access functionality provided by your app.</li>
+<li>Within your app, a user can now press views to see previews of additional content and gain accelerated access to features.</li>
+</ul>
+</blockquote>
+
+<p>简单来说3D Touch就是通过区分轻按和重按Home键来进行不同的用户交互。</p>
+
+<!--more-->
+
+
+<h3>模拟器如何测试?</h3>
+
+<p>github 大神写了一个插件在Xcode 7模拟器上调试 3D Touch, 地址：<a href="https://github.com/DeskConnect/SBShortcutMenuSimulator">SBShortcutMenuSimulator</a></p>
+
+<p>测试步骤：</p>
+
+<ul>
+<li>Step1:终端 git clone <a href="https://github.com/DeskConnect/SBShortcutMenuSimulator.git">https://github.com/DeskConnect/SBShortcutMenuSimulator.git</a></li>
+<li>Step2: cd  SBShortcutMenuSimulator</li>
+<li>Step3: make</li>
+<li>Step4: 打开写好的程序，模拟器运行</li>
+<li>Step5: xcrun simctl spawn booted launchctl debug system/com.apple.SpringBoard &ndash;environment DYLD_INSERT_LIBRARIES=$PWD/SBShortcutMenuSimulator.dylib</li>
+<li>Step6:  xcrun simctl spawn booted launchctl stop com.apple.SpringBoard</li>
+<li>Step7: echo &lsquo;strivingboy.-DTouchDemo&rsquo; | nc 127.0.0.1 8000   注意: &lsquo;strivingboy.-DTouchDemo&rsquo;  &lsquo;&#8217;里边写的是自己项目的Bundle identifier.</li>
+</ul>
+
+
+<p><strong>注意:  每次想要启动快速入口都要重复操作第8步.</strong></p>
+
+<h3>应用场景有哪些？</h3>
+
+<p>3D Touch的主要应用分为三块：</p>
+
+<h4>1、Home Screen Quick Actions</h4>
+
+<p>通过主屏幕的应用icon，使用3D Touch呼出一个菜单来展示应用核心功能如：</p>
+
+<p><img src="./home_screen_quick_actions.png" "width = "126" height = "216" align=center /></p>
+
+<p>菜单其它样式参考： <a href="https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/3DTouch.html#//apple_ref/doc/uid/TP40006556-CH71">3D Touch Human Interface Guidelines</a></p>
+
+<h4>2、Peek and Pop</h4>
+
+<p>这个功能可为是一套全新的用户交互机制，它可以预览下一个页面的视图，并且可以进行简单的操作如：</p>
+
+<p><strong>Indication of peek availability</strong></p>
+
+<p><img src="../images/preview_available.png" "width = "126" height = "216" align=center /></p>
+
+<p><strong> Peek </strong></p>
+
+<p><img src="../images/peek.png" "width = "126" height = "216" align=center /></p>
+
+<p><strong> Peek quick actions</strong></p>
+
+<p><img src="../images/peek_quick_actions.png" "width = "126" height = "216" align=center /></p>
+
+<h4>3、Force Properties</h4>
+
+<blockquote><p>In iOS 9, the <code>UITouch</code> class has two new properties to support custom implementation of 3D Touch in your app: <code>force</code> and <code>maximumPossibleForce</code>. For the first time on iOS devices, these properties let you detect and respond to touch pressure in the <code>UIEvent</code> objects your app receives.
+The force of a touch has a high dynamic range, available as a floating point value to your app.</p></blockquote>
+
+<p>iOS9为供了一个新的交互参数:力度。可以检测某一交互的力度值，来做相应的交互处理。</p>
+
+<h3>如何实现？</h3>
+
+<h4>1、Home Screen Quick Actions</h4>
+
+<p>其实现有两种方式： 一：静态添加 二：动态添加</p>
+
+<ul>
+<li>静态添加只需要在项目中的plist文件中配置，然后安装就可以使用了如下图：</li>
+</ul>
+
+
+<p><img src="../images/plist.png" "width = "728" height = "110" align=center /></p>
+
+<p>运行效果如下：</p>
+
+<p><img src="../images/menu1.png" "width = "126" height = "216" align=center /></p>
+
+<ul>
+<li>静态添加即使用代码方式来添加，主要用到以下几个类：
+
+<ul>
+<li>UIApplicationShortcutIcon：创建ShortcutItem中图片icon</li>
+<li>UIApplicationShortcutItem：创建3D Touch的ShortcutItem</li>
+<li>UIMutableApplicationShortcutItem：创建可变3D Touch的ShortcutItem</li>
+</ul>
+</li>
+</ul>
+
+
+<p>如下代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'>      <span class="o">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nl">application</span><span class="p">:(</span><span class="bp">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="n">application</span> <span class="nl">didFinishLaunchingWithOptions</span><span class="p">:(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="n">launchOptions</span> <span class="p">{</span>
+</span><span class='line'>          <span class="c1">// Override point for customization after application launch.</span>
+</span><span class='line'>      
+</span><span class='line'>          <span class="p">[</span><span class="nb">self</span> <span class="nl">addShortcutItemDynamic</span><span class="p">:</span><span class="n">application</span><span class="p">];</span>
+</span><span class='line'>          <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">addShortcutItemDynamic</span><span class="p">:(</span><span class="bp">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="n">application</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">UIApplicationShortcutItem</span> <span class="o">*</span><span class="n">shareItem</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIApplicationShortcutItem</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithType</span><span class="p">:</span><span class="s">@&quot;Share&quot;</span> <span class="nl">localizedTitle</span><span class="p">:</span><span class="s">@&quot;分享&quot;</span> <span class="nl">localizedSubtitle</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">icon</span><span class="p">:[</span><span class="n">UIApplicationShortcutIcon</span> <span class="nl">iconWithType</span><span class="p">:</span><span class="n">UIApplicationShortcutIconTypeShare</span><span class="p">]</span> <span class="nl">userInfo</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>      
+</span><span class='line'>          <span class="n">UIApplicationShortcutItem</span> <span class="o">*</span><span class="n">payItem</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIApplicationShortcutItem</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithType</span><span class="p">:</span><span class="s">@&quot;Play&quot;</span> <span class="nl">localizedTitle</span><span class="p">:</span><span class="s">@&quot;播放&quot;</span> <span class="nl">localizedSubtitle</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">icon</span><span class="p">:[</span><span class="n">UIApplicationShortcutIcon</span> <span class="nl">iconWithType</span><span class="p">:</span><span class="n">UIApplicationShortcutIconTypePlay</span><span class="p">]</span> <span class="nl">userInfo</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>      
+</span><span class='line'>          <span class="n">UIApplicationShortcutItem</span> <span class="o">*</span><span class="n">pauseItem</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIApplicationShortcutItem</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithType</span><span class="p">:</span><span class="s">@&quot;Pause&quot;</span> <span class="nl">localizedTitle</span><span class="p">:</span><span class="s">@&quot;暂停&quot;</span> <span class="nl">localizedSubtitle</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">icon</span><span class="p">:[</span><span class="n">UIApplicationShortcutIcon</span> <span class="nl">iconWithType</span><span class="p">:</span><span class="n">UIApplicationShortcutIconTypePause</span><span class="p">]</span> <span class="nl">userInfo</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>      
+</span><span class='line'>          <span class="n">application</span><span class="p">.</span><span class="n">shortcutItems</span> <span class="o">=</span> <span class="l">@[</span><span class="n">shareItem</span><span class="p">,</span><span class="n">payItem</span><span class="p">,</span><span class="n">pauseItem</span><span class="l">]</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行效果如下：</p>
+
+<p><img src="../images/menu4.png" "width = "126" height = "216" align=center /></p>
+
+<p>相应点击事件实现方法:<code>- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void(^)(BOOL succeeded))completionHandler</code></p>
+
+<p><strong>注： Quick Actions最多为4个(包含静态和动态)</strong></p>
+
+<h4>2、Peek and Pop</h4>
+
+<ul>
+<li><p>Step1:检查设备是否支持3D Touch</p>
+
+<p>  ViewContoller提供了一个属性：<code>traitCollection</code> 如：</p>
+
+<pre><code>  - (BOOL)is3DTouchAvailable
+  {
+      if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
+      return YES;
+      }
+      return NO;
+  }
+</code></pre></li>
+<li><p>Step2: 注册预览试图</p>
+
+<p>  <code>- (id &lt;UIViewControllerPreviewing&gt;)registerForPreviewingWithDelegate:(id&lt;UIViewControllerPreviewingDelegate&gt;)delegate sourceView:(UIView *)sourceView NS_AVAILABLE_IOS(9_0)</code> 就是将sourceView这个视图注册允许使用3D Touch功能</p></li>
+<li><p>Step3: 实现协议 <code>UIViewControllerPreviewingDelegate</code></p>
+
+<pre><code>  - (nullable UIViewController *)previewingContext:(id &lt;UIViewControllerPreviewing&gt;)previewingContext viewControllerForLocation:(CGPoint)location
+  {
+      // 长按需要预览的类容
+     previewingContext.sourceRect = CGRectMake(0, 0, previewingContext.sourceView.frame.size.width, previewingContext.sourceView.frame.size.height);
+     PreviewViewController *vc = [[PreviewViewController alloc] initWithNibName:@"PreviewViewController" bundle:nil];
+     vc.preferredContentSize = CGSizeMake(0, 300);
+     return vc;
+
+  }
+
+  - (void)previewingContext:(id &lt;UIViewControllerPreviewing&gt;)previewingContext commitViewController:(UIViewController *)viewControllerToCommit
+  {
+      // 继续重按进入的页面
+      [self.navigationController pushViewController:viewControllerToCommit animated:YES];
+  }
+</code></pre></li>
+<li><p>Step4: 目标控制器PreViewController中以实现<code>- (NSArray&lt;id&lt;UIPreviewActionItem&gt;&gt; *)previewActionItems</code>也可以不实现则没有<code>ActionItem</code> 如：</p>
+
+<pre><code>  - (NSArray&lt;id&lt;UIPreviewActionItem&gt;&gt; *)previewActionItems
+  {
+
+      UIPreviewAction *action1 = [UIPreviewAction actionWithTitle:@"action1"
+                                                            style:UIPreviewActionStyleDefault handler:
+                                  ^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController)
+      {
+          NSLog(@"action1 selected.");
+      }];
+
+      UIPreviewAction *action2 = [UIPreviewAction actionWithTitle:@"action2"
+                                                            style:UIPreviewActionStyleSelected handler:
+                                  ^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController)
+      {
+          NSLog(@"action2 selected.");
+      }];
+      UIPreviewAction *action3_1 = [UIPreviewAction actionWithTitle:@"action3-1"
+                                                              style:UIPreviewActionStyleDefault handler:
+                                    ^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController)
+      {
+          NSLog(@"action3-1 selected.");
+      }];
+      UIPreviewAction *action3_2 = [UIPreviewAction actionWithTitle:@"action3-2"
+                                                              style:UIPreviewActionStyleDefault handler:
+                                    ^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController)
+      {
+          NSLog(@"action3-2 selected.");
+      }];
+      UIPreviewActionGroup *action3 = [UIPreviewActionGroup actionGroupWithTitle:@"action3" style:UIPreviewActionStyleDestructive actions:@[action3_1, action3_2]];
+
+      return @[action1, action2, action3];
+
+  }
+</code></pre></li>
+</ul>
+
+
+<p>效果如下：</p>
+
+<p><img src="../images/peek-pop.gif" alt="image" /></p>
+
+<h4>3、Force Properties</h4>
+
+<p><code>UITouch</code>提供了下面两个属性来支付自定义 3D Touch 功能</p>
+
+<pre><code>// Force of the touch, where 1.0 represents the force of an average touch
+@property(nonatomic,readonly) CGFloat force NS_AVAILABLE_IOS(9_0);
+// Maximum possible force with this input mechanism
+@property(nonatomic,readonly) CGFloat maximumPossibleForce NS_AVAILABLE_IOS(9_0);
+</code></pre>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	
+	  
+		<h2>分享</h2>  
+	  	<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1394259472270132" charset="utf-8"></script>
+<!-- JiaThis Button END -->  
+	  
+	<div class="addthis_toolbox addthis_default_style ">
+	<!-- <a class="addthis_counter addthis_pill_style"></a> &#8211;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+  
+  <section>  
+    <h1>Comments</h1>  
+    <div id="comments" aria-live="polite"><!-- 多说评论框 start -->
+	<div class="ds-thread"</div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"strivingboy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+</div>  
+  </section>  
+ </div>
+			</div>
+			<footer id="footer" class="inner"><p>Copyright &copy; 2015
+
+    strivingboy
+
+
+<span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+</footer>
+		</div>
+	</div>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+<script src="/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.tweet.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.instagram.js" type="text/javascript"></script>
+<script src="/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+<script src="/javascripts/custom.js" type="text/javascript"></script>
+
+
+</body>
+</html>

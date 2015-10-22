@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 技术点 | 小孩的技术博客]]></title>
   <link href="http://strivingboy.github.io/blog/categories/ji-zhu-dian/atom.xml" rel="self"/>
   <link href="http://strivingboy.github.io/"/>
-  <updated>2015-10-09T10:24:44+08:00</updated>
+  <updated>2015-10-22T23:49:38+08:00</updated>
   <id>http://strivingboy.github.io/</id>
   <author>
     <name><![CDATA[strivingboy]]></name>
@@ -12,6 +12,232 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS9 3D Touch 实现]]></title>
+    <link href="http://strivingboy.github.io/blog/2015/10/22/3d-touch/"/>
+    <updated>2015-10-22T15:07:13+08:00</updated>
+    <id>http://strivingboy.github.io/blog/2015/10/22/3d-touch</id>
+    <content type="html"><![CDATA[<h2>iOS9 3D Touch 实现</h2>
+
+<h3>3D Touch 是什么?</h3>
+
+<blockquote><p>With iOS 9, new iPhone models add a third dimension to the user interface.</p>
+
+<ul>
+<li>A user can now press your Home screen icon to immediately access functionality provided by your app.</li>
+<li>Within your app, a user can now press views to see previews of additional content and gain accelerated access to features.</li>
+</ul>
+</blockquote>
+
+<p>简单来说3D Touch就是通过区分轻按和重按Home键来进行不同的用户交互。</p>
+
+<!--more-->
+
+
+<h3>模拟器如何测试?</h3>
+
+<p>github 大神写了一个插件在Xcode 7模拟器上调试 3D Touch, 地址：<a href="https://github.com/DeskConnect/SBShortcutMenuSimulator">SBShortcutMenuSimulator</a></p>
+
+<p>测试步骤：</p>
+
+<ul>
+<li>Step1:终端 git clone <a href="https://github.com/DeskConnect/SBShortcutMenuSimulator.git">https://github.com/DeskConnect/SBShortcutMenuSimulator.git</a></li>
+<li>Step2: cd  SBShortcutMenuSimulator</li>
+<li>Step3: make</li>
+<li>Step4: 打开写好的程序，模拟器运行</li>
+<li>Step5: xcrun simctl spawn booted launchctl debug system/com.apple.SpringBoard &ndash;environment DYLD_INSERT_LIBRARIES=$PWD/SBShortcutMenuSimulator.dylib</li>
+<li>Step6:  xcrun simctl spawn booted launchctl stop com.apple.SpringBoard</li>
+<li>Step7: echo &lsquo;strivingboy.-DTouchDemo&rsquo; | nc 127.0.0.1 8000   注意: &lsquo;strivingboy.-DTouchDemo&rsquo;  &lsquo;&#8217;里边写的是自己项目的Bundle identifier.</li>
+</ul>
+
+
+<p><strong>注意:  每次想要启动快速入口都要重复操作第8步.</strong></p>
+
+<h3>应用场景有哪些？</h3>
+
+<p>3D Touch的主要应用分为三块：</p>
+
+<h4>1、Home Screen Quick Actions</h4>
+
+<p>通过主屏幕的应用icon，使用3D Touch呼出一个菜单来展示应用核心功能如：</p>
+
+<p><img src="./home_screen_quick_actions.png" "width = "126" height = "216" align=center /></p>
+
+<p>菜单其它样式参考： <a href="https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/3DTouch.html#//apple_ref/doc/uid/TP40006556-CH71">3D Touch Human Interface Guidelines</a></p>
+
+<h4>2、Peek and Pop</h4>
+
+<p>这个功能可为是一套全新的用户交互机制，它可以预览下一个页面的视图，并且可以进行简单的操作如：</p>
+
+<p><strong>Indication of peek availability</strong></p>
+
+<p><img src="../images/preview_available.png" "width = "126" height = "216" align=center /></p>
+
+<p><strong> Peek </strong></p>
+
+<p><img src="../images/peek.png" "width = "126" height = "216" align=center /></p>
+
+<p><strong> Peek quick actions</strong></p>
+
+<p><img src="../images/peek_quick_actions.png" "width = "126" height = "216" align=center /></p>
+
+<h4>3、Force Properties</h4>
+
+<blockquote><p>In iOS 9, the <code>UITouch</code> class has two new properties to support custom implementation of 3D Touch in your app: <code>force</code> and <code>maximumPossibleForce</code>. For the first time on iOS devices, these properties let you detect and respond to touch pressure in the <code>UIEvent</code> objects your app receives.
+The force of a touch has a high dynamic range, available as a floating point value to your app.</p></blockquote>
+
+<p>iOS9为供了一个新的交互参数:力度。可以检测某一交互的力度值，来做相应的交互处理。</p>
+
+<h3>如何实现？</h3>
+
+<h4>1、Home Screen Quick Actions</h4>
+
+<p>其实现有两种方式： 一：静态添加 二：动态添加</p>
+
+<ul>
+<li>静态添加只需要在项目中的plist文件中配置，然后安装就可以使用了如下图：</li>
+</ul>
+
+
+<p><img src="../images/plist.png" "width = "728" height = "110" align=center /></p>
+
+<p>运行效果如下：</p>
+
+<p><img src="../images/menu1.png" "width = "126" height = "216" align=center /></p>
+
+<ul>
+<li>静态添加即使用代码方式来添加，主要用到以下几个类：
+
+<ul>
+<li>UIApplicationShortcutIcon：创建ShortcutItem中图片icon</li>
+<li>UIApplicationShortcutItem：创建3D Touch的ShortcutItem</li>
+<li>UIMutableApplicationShortcutItem：创建可变3D Touch的ShortcutItem</li>
+</ul>
+</li>
+</ul>
+
+
+<p>如下代码：</p>
+
+<pre><code class="objective-c">
+        - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+            // Override point for customization after application launch.
+
+            [self addShortcutItemDynamic:application];
+            return YES;
+        }
+
+        - (void)addShortcutItemDynamic:(UIApplication *)application
+        {
+            UIApplicationShortcutItem *shareItem = [[UIApplicationShortcutItem alloc] initWithType:@"Share" localizedTitle:@"分享" localizedSubtitle:nil icon:[UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypeShare] userInfo:nil];
+
+            UIApplicationShortcutItem *payItem = [[UIApplicationShortcutItem alloc] initWithType:@"Play" localizedTitle:@"播放" localizedSubtitle:nil icon:[UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypePlay] userInfo:nil];
+
+            UIApplicationShortcutItem *pauseItem = [[UIApplicationShortcutItem alloc] initWithType:@"Pause" localizedTitle:@"暂停" localizedSubtitle:nil icon:[UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypePause] userInfo:nil];
+
+            application.shortcutItems = @[shareItem,payItem,pauseItem];
+        }
+</code></pre>
+
+<p>运行效果如下：</p>
+
+<p><img src="../images/menu4.png" "width = "126" height = "216" align=center /></p>
+
+<p>相应点击事件实现方法:<code>- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void(^)(BOOL succeeded))completionHandler</code></p>
+
+<p><strong>注： Quick Actions最多为4个(包含静态和动态)</strong></p>
+
+<h4>2、Peek and Pop</h4>
+
+<ul>
+<li><p>Step1:检查设备是否支持3D Touch</p>
+
+<p>  ViewContoller提供了一个属性：<code>traitCollection</code> 如：</p>
+
+<pre><code>  - (BOOL)is3DTouchAvailable
+  {
+      if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
+      return YES;
+      }
+      return NO;
+  }
+</code></pre></li>
+<li><p>Step2: 注册预览试图</p>
+
+<p>  <code>- (id &lt;UIViewControllerPreviewing&gt;)registerForPreviewingWithDelegate:(id&lt;UIViewControllerPreviewingDelegate&gt;)delegate sourceView:(UIView *)sourceView NS_AVAILABLE_IOS(9_0)</code> 就是将sourceView这个视图注册允许使用3D Touch功能</p></li>
+<li><p>Step3: 实现协议 <code>UIViewControllerPreviewingDelegate</code></p>
+
+<pre><code>  - (nullable UIViewController *)previewingContext:(id &lt;UIViewControllerPreviewing&gt;)previewingContext viewControllerForLocation:(CGPoint)location
+  {
+      // 长按需要预览的类容
+     previewingContext.sourceRect = CGRectMake(0, 0, previewingContext.sourceView.frame.size.width, previewingContext.sourceView.frame.size.height);
+     PreviewViewController *vc = [[PreviewViewController alloc] initWithNibName:@"PreviewViewController" bundle:nil];
+     vc.preferredContentSize = CGSizeMake(0, 300);
+     return vc;
+
+  }
+
+  - (void)previewingContext:(id &lt;UIViewControllerPreviewing&gt;)previewingContext commitViewController:(UIViewController *)viewControllerToCommit
+  {
+      // 继续重按进入的页面
+      [self.navigationController pushViewController:viewControllerToCommit animated:YES];
+  }
+</code></pre></li>
+<li><p>Step4: 目标控制器PreViewController中以实现<code>- (NSArray&lt;id&lt;UIPreviewActionItem&gt;&gt; *)previewActionItems</code>也可以不实现则没有<code>ActionItem</code> 如：</p>
+
+<pre><code>  - (NSArray&lt;id&lt;UIPreviewActionItem&gt;&gt; *)previewActionItems
+  {
+
+      UIPreviewAction *action1 = [UIPreviewAction actionWithTitle:@"action1"
+                                                            style:UIPreviewActionStyleDefault handler:
+                                  ^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController)
+      {
+          NSLog(@"action1 selected.");
+      }];
+
+      UIPreviewAction *action2 = [UIPreviewAction actionWithTitle:@"action2"
+                                                            style:UIPreviewActionStyleSelected handler:
+                                  ^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController)
+      {
+          NSLog(@"action2 selected.");
+      }];
+      UIPreviewAction *action3_1 = [UIPreviewAction actionWithTitle:@"action3-1"
+                                                              style:UIPreviewActionStyleDefault handler:
+                                    ^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController)
+      {
+          NSLog(@"action3-1 selected.");
+      }];
+      UIPreviewAction *action3_2 = [UIPreviewAction actionWithTitle:@"action3-2"
+                                                              style:UIPreviewActionStyleDefault handler:
+                                    ^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController)
+      {
+          NSLog(@"action3-2 selected.");
+      }];
+      UIPreviewActionGroup *action3 = [UIPreviewActionGroup actionGroupWithTitle:@"action3" style:UIPreviewActionStyleDestructive actions:@[action3_1, action3_2]];
+
+      return @[action1, action2, action3];
+
+  }
+</code></pre></li>
+</ul>
+
+
+<p>效果如下：</p>
+
+<p><img src="../images/peek-pop.gif" alt="image" /></p>
+
+<h4>3、Force Properties</h4>
+
+<p><code>UITouch</code>提供了下面两个属性来支付自定义 3D Touch 功能</p>
+
+<pre><code>// Force of the touch, where 1.0 represents the force of an average touch
+@property(nonatomic,readonly) CGFloat force NS_AVAILABLE_IOS(9_0);
+// Maximum possible force with this input mechanism
+@property(nonatomic,readonly) CGFloat maximumPossibleForce NS_AVAILABLE_IOS(9_0);
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS9  Universal Links （通用链接）]]></title>
@@ -95,46 +321,6 @@ Universal links let iOS 9 users open your app when they tap links to your websit
 <p><strong> apple 官网地址 </strong></p>
 
 <p><a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html#//apple_ref/doc/uid/TP40016308-CH12-SW2">通用链接 Universal Links</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS9 新特性介绍]]></title>
-    <link href="http://strivingboy.github.io/blog/2015/07/19/ios9/"/>
-    <updated>2015-07-19T15:07:13+08:00</updated>
-    <id>http://strivingboy.github.io/blog/2015/07/19/ios9</id>
-    <content type="html"><![CDATA[<p>本文翻译 <a href="https://www.shinobicontrols.com/blog/ios9-day-by-day-index">iOS9 Day-by-Day</a> 中对iOS9新特性简单介绍下</p>
-
-<ul>
-<li><p><strong>三种搜索API</strong></p>
-
-<p>  <strong>NSUserActivity:</strong>
-  NSUserActivity是iOS 8专为Handoff推出的API，iOS 9之后得到了提升。现在用户只需提供元数据（metadata）就能搜索不同的activity（活动）了。换言之，Spotlight可以将activity编入索引，而NSUserActivity就好比网页浏览器的历史堆栈（history stack），使用户能在Spotlight上搜到最近的活动。</p>
-
-<p>  <strong>Web Markup:</strong>
-  Web Markup在网页上显示App的内容并编入Spotlight索引，如此一来即便没有安装某个App，苹果的索引器也能在网页上搜索特别的标记（markup），在Safari或Spotlight上显示搜索结果。
-显示未安装App的搜索结果是一大亮点，有望为开发者带来更多潜在用户。公布在搜索API上的App深链接则储存在苹果的cloud index中。更多详情，请参阅苹果的（<a href="https://developer.apple.com/library/prerelease/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS9.html#//apple_ref/doc/uid/TP40016198-SW4">Web Markup使用指南</a>）”。</p>
-
-<p>  <strong>CoreSpotlight:</strong>
-  NSUserActivity帮助储存用户历史，而全新的Core Spotlight则能将App中的任何内容编入索引，实质是在用户设备上提供基础的Core Spotlight索引渠道，满足用户另外一个需求。</p></li>
-</ul>
-
-
-<!--more-->
-
-
-<ul>
-<li><p><strong>UI Testing</strong></p>
-
-<p>  在Xcode7中，苹果介绍了一种新的方式来管理你的应用界面的测试工作。UI testing 允许你对 UI 元素进行查找，交互，验证属性和状态。在 Xcode7 中，UI testing 伴随着测试报告，并且和单元测试一起运行。 XCTest 是在 Xcode 5 时融入到测试框架的，在Xcode7 中，新增了对 UI 的测试能力。允许在特定点设置断言，查看UI当时的状态。</p>
-
-<p>  <strong>Accessibility（辅助功能）:</strong>
-  为了 UI Testing 能够工作，框架需要和你的众多元素直接建立连接，然后安排好操作。你可以设定义特别的点，或者在某个 UI 上创建 tweak，然后指定点击或者滑动操作。但是这在不同尺寸设备上就失效了。这时候 accessibility，就能提供帮助了。Accessibility 是苹果自家发布的一个框架，它可以自动记录你的操作流程，允许用户进行丰富的操作。你可以（也应该）让你的元素具备Accessibility的能力。有很多原因，比如说自定义的控件，不能够被自动发现。
-UI Testing 有能力通过你的应用提供给 Accessibility 的特性，来对不同尺寸的设备进行测试提供解决方案。也保证了你在重新组织了一下你的 UI 之后，不必全部重新写一套测试。不仅能够帮助你测试自己的 UI，同时也能够对你的应用，更好的支持有一定身体障碍的人群使用而带来帮助。</p>
-
-<p>  <strong>UI 录制 :</strong>一旦你设置好了你的 accessible UI,你将要创建 UI 的测试项。编写 UI 的测试是非常耗时，无聊的，如果你的 UI 比较复杂，也是非常困难的。感谢 Xcode7, 苹果介绍了 UI Recording. 他允许你新建、或者在已有项目中创建测试。当你打开时，测试代码会随着你在设备或模拟器上操作自动创建。</p></li>
-</ul>
-
 ]]></content>
   </entry>
   
